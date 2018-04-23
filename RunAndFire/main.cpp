@@ -29,11 +29,13 @@ int main()
 				window.close();
 		}
 
+		hero.update(time);
 
 		window.setView(view);
 		window.clear(Color(77, 83, 140));
 
 		window.draw(hero.get_sprite());
+
 		window.display();
 	}
 	return 0;

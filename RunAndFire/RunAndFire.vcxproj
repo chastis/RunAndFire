@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClInclude Include="Entity.h" />
     <ClInclude Include="headers_which_you_need.h" />
+    <ClInclude Include="map.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

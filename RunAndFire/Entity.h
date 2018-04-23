@@ -1,5 +1,6 @@
 #ifndef ENTITY_H
 #define ENTITY_H
+#include "map.h"
 #include "headers_which_you_need.h"
 using namespace sf;
 
@@ -8,9 +9,10 @@ class Entity {
 public:
 	//Картинка; начальные координаты (x,y); размер спрайта; имя персонажа;
 	Entity(Image &image, float X, float Y, int W, int H, String Name);
-	Sprite get_sprite();
 	void control();
-	void update(float);
+	void update(float,Map &);
+	void check_collision(float, float,Map &);
+	Sprite get_sprite();
 private:
 	enum { right, left, up, down, jump, stay } state;
 	float x, y;//координаты игрока х и у

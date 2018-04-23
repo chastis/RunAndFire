@@ -26,10 +26,14 @@ void Entity::control() {
 			state = right; speed = 0.1;
 		}
 		if ((Keyboard::isKeyPressed(Keyboard::Up)) && (onGround)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
-			state = jump; dy = -1; onGround = false;
+			state = jump; dy = -0.6; onGround = false;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Down)) {
 			state = down;
+		}
+		if (Keyboard::isKeyPressed(Keyboard::R)) {
+			x = 0;
+			y = 0;
 		}
 	}
 	else {
@@ -37,17 +41,50 @@ void Entity::control() {
 	}
 }
 
-void Entity::update(float time) {
+void Entity::update(float time, Map & map) {
 	control();
 	switch (state)//различные действия в зависимости от состояния
 	{
-	case right:dx = speed; break;//состояние идти вправо
-	case left:dx = -speed; break;//состояние идти влево		
+	case right: dx = speed; break;//состояние идти вправо
+	case left: dx = -speed; break;//состояние идти влево	
+	case down: dx = 0; break;
+	//case stay: dx = 0; dy = 0; break;
 	}
 	x += dx*time;
+	check_collision(dx, 0, map);
 	y += dy*time;
+	check_collision(0, dy, map);
+
 	sprite.setPosition(x + w / 2, y + h / 2); //задаем позицию спрайта в место его центра
 	if (health <= 0) { life = false; }
 	speed = 0;
-	//dy = dy + 0.0015*time;//постоянно притягиваемся к земле
+	dy = dy + 0.0015*time;//постоянно притягиваемся к земле
+}
+
+void Entity::check_collision(float dx, float dy, Map & map) {
+	for (int i = y / 32; i < (y + h) / 32; i++) {
+		for (int j = x / 32; j < (x + w) / 32; j++) {
+			if (map.get(i,j) == 'w')
+			{
+				if (dy>0)
+				{
+					y = i * 32 - h;
+					this->dy = 0;
+					onGround = true;
+				}
+				if (dy<0)
+				{
+					y = i * 32 + 32;
+				}
+				if (dx>0)
+				{
+					x = j * 32 - w;
+				}
+				if (dx < 0)
+				{
+					x = j * 32 + 32;
+				}
+			}
+		}
+	}
 }

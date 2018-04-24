@@ -46,7 +46,7 @@ int Bullet::check_collision(std::vector<Golem> & golems) {
 	for (int i = 0; i < golems.size(); i++) {
 		if (x >= golems[i].get_x() && x <= golems[i].get_x() + golems[i].get_w() &&
 			y >= golems[i].get_y() && y <= golems[i].get_y() + golems[i].get_h()) {
-			golems[i].health = golems[i].health - damage;
+			if (dx > 0 && golems[i].get_right() || dx < 0 && !golems[i].get_right()) golems[i].health = golems[i].health - damage;
 			return -1;
 		}
 	}

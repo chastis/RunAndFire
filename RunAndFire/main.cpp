@@ -52,8 +52,8 @@ int main()
 		for (int i = 0; i < golems.size(); i++) {
 			golems[i].update(time, map);
 		}
-		hero.update(time, map,golems);
-		std::cout << hero.health << std::endl;
+		hero.update(time, map, golems);
+		//std::cout << hero.health << std::endl;
 		window.setView(view);
 		window.clear(Color(77, 83, 140));
 
@@ -70,6 +70,17 @@ int main()
 			Font font;//шрифт 
 			font.loadFromFile("CyrilicOld.TTF");//передаем нашему шрифту файл шрифта
 			Text text("YOU WIN!", font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
+			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
+			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
+			window.draw(text);
+			text.setString("congrats");
+			text.setPosition(0, 20);
+			window.draw(text);
+		}
+		if (!hero.alive()) {
+			Font font;//шрифт 
+			font.loadFromFile("CyrilicOld.TTF");//передаем нашему шрифту файл шрифта
+			Text text("YOU DIED!", font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
 			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 			window.draw(text);

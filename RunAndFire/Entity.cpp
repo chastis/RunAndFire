@@ -4,7 +4,7 @@ using namespace sf;
 
 Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) {
 	x = X; y = Y; w = W; h = H; name = Name;
-	speed = 0; health = 100; dx = 0; dy = 0;
+	speed = 0; health = 100; dx = 0; dy = 0; static_speed = 0.1; static_jump = 0.6; static_g = 0.0015;
 	life = true; onGround = false; space_pressed = false; sprite_right = true; with_mob = false;
 	is_right = true;
 	texture.loadFromImage(image);
@@ -22,18 +22,31 @@ Sprite Entity::get_sprite() {
 	return sprite;
 }
 
+void Entity::Restart() {
+	if (Keyboard::isKeyPressed(Keyboard::R)) {
+		x = -13;
+		y = 0;
+		dx = 0;
+		dy = 0;
+		health = 100;
+		if (!life) if (is_right) sprite.rotate(-90);
+				   else sprite.rotate(90);
+		life = true;
+		
+	}
+}
 //функция управления персонажем
 void Entity::control() {
 	
 	if (Keyboard::isKeyPressed && !with_mob) {//если нажата клавиша
 		if (Keyboard::isKeyPressed(Keyboard::Left)) {//лево
-			state = left; speed = 0.1; is_right = false;
+			state = left; speed = static_speed; is_right = false;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Right)) {//право
-			state = right; speed = 0.1; is_right = true;
+			state = right; speed = static_speed; is_right = true;
 		}
 		if ((Keyboard::isKeyPressed(Keyboard::Up)) && (onGround)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
-			state = jump; dy = -0.6; onGround = false;
+			state = jump; dy = -static_jump; onGround = false;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Down)) {
 			state = down;
@@ -51,37 +64,47 @@ void Entity::control() {
 	else {
 		state = stay;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::R)) {
-		x = 0;
-		y = 0;
-		dx = 0;
-		dy = 0;
-	}
+	Restart();
 }
 
+
 void Entity::update(float time, Map & map, std::vector<Golem> & golems) {
-	control();
-	switch (state)//различные действия в зависимости от состояния
-	{
-	case right: dx = speed; break;//состояние идти вправо
-	case left: dx = -speed; break;//состояние идти влево	
-	case down: dx = 0; break;
-	//case stay: dx = 0; dy = 0; break;
-	}
-	if (is_right && !sprite_right || !is_right && sprite_right) {
-		sprite.scale(-1, 1); sprite_right = !sprite_right;
-	}
-	x += dx*time;
-	check_collision(dx, 0, map);
-	y += dy*time;
-	check_collision(0, dy, map);
+	Restart();
+	if (life) {
+		control();
+		switch (state)//различные действия в зависимости от состояния
+		{
+		case right: dx = speed; break;//состояние идти вправо
+		case left: dx = -speed; break;//состояние идти влево	
+		case down: dx = 0; break;
+			//case stay: dx = 0; dy = 0; break;
+		}
+		if (is_right && !sprite_right || !is_right && sprite_right) {
+			sprite.scale(-1, 1); sprite_right = !sprite_right;
+		}
+		x += dx*time;
+		check_collision(dx, 0, map);
+		y += dy*time;
+		check_collision(0, dy, map);
 
-	check_collision(golems);
+		check_collision(golems);
 
-	sprite.setPosition(x + w / 2, y + h / 2); //задаем позицию спрайта в место его центра
-	if (health <= 0) { life = false; }
-	speed = 0;
-	dy = dy + 0.0015*time;//постоянно притягиваемся к земле
+		sprite.setPosition(x + w / 2, y + h / 2); //задаем позицию спрайта в место его центра
+		speed = 0;
+		dy = dy + static_g*time;//постоянно притягиваемся к земле
+		if (health <= 0) {
+			life = false;
+			if (is_right) sprite.rotate(90);
+			else sprite.rotate(-90);
+			//dy = 0;//персонаж не будет подпрыгивать если умирает над врагом
+		}
+	}
+	else if (!onGround) {
+		y += dy*time;
+		check_collision(0, dy, map);
+		sprite.setPosition(x + w / 2, y + h / 2);
+		dy = dy + static_g*time;
+	}
 }
 
 void Entity::check_collision(float dx, float dy, Map & map) {
@@ -126,12 +149,12 @@ void Entity::check_collision(std::vector<Golem> & golems) {
 			with_mob = true;
 
 			if (golems[i].get_right()) {
-				dx = -0.2;
-				dy = -0.3;
+				dx = -static_speed * 2;
+				dy = -static_jump / 2;
 			}
 			else {
-				dx = 0.2;
-				dy = -0.3;
+				dx = static_speed * 2;
+				dy = -static_jump / 2;
 			}
 
 		}
@@ -140,7 +163,7 @@ void Entity::check_collision(std::vector<Golem> & golems) {
 
 void Entity::fire() {
 	
-	Bullet temp(bullet_texture, sprite_right ? x+w : x, y+h/3, 13, 10, "piu",is_right);
+	Bullet temp(bullet_texture, sprite_right ? x + w : x, y + h / 3, 13, 10, "piu", is_right);
 	bul.push_back(temp);
 }
 
@@ -152,4 +175,8 @@ void Entity::draw_bullet(float time, Map & map, RenderWindow & window, std::vect
    			bul.erase(bul.begin() + i); i--; }
 		if (bul.size() == 0) return;
 	}
+}
+
+bool Entity::alive() {
+	return life;
 }

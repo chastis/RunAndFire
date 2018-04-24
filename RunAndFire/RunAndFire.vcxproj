@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="functions.h" />
     <ClInclude Include="Golem.h" />
     <ClInclude Include="headers_which_you_need.h" />
     <ClInclude Include="map.h" />

@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "functions.h"
 using namespace sf;
 
 Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) {
@@ -116,20 +117,15 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 
 void Entity::check_collision(std::vector<Golem> & golems) {
 	for (int i = 0; i < golems.size(); i++) {
-		if (x >= golems[i].get_x() && x <= golems[i].get_x() + golems[i].get_w() &&// golem <- I
-			y + h/2 >= golems[i].get_y() && y + h <= golems[i].get_y() + golems[i].get_h() ||
-			x + w >= golems[i].get_x() && x + w <= golems[i].get_x() + golems[i].get_w() &&// I -> golem
-			y + h >= golems[i].get_y() && y + h <= golems[i].get_y() + golems[i].get_h()){
+		float gx = golems[i].get_x(), gy = golems[i].get_y(), gh = golems[i].get_h(), gw = golems[i].get_w();
+		if (square_in_square(x, y, w, h, gx, gy, gw, gh) ||
+			square_in_square(gx, gy, gw, gh, x, y, w, h) ){
 			
-			health -= golems[i].get_damage();
+			if (!with_mob) health -= golems[i].get_damage();
 			golems[i].change_direction();
 			with_mob = true;
 
-			/*if (!onGround) {
-				dy = -0.3;
-				with_mob = false;
-			}
-			else */if (golems[i].get_right()) {
+			if (golems[i].get_right()) {
 				dx = -0.2;
 				dy = -0.3;
 			}

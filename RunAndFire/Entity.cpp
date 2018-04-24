@@ -102,7 +102,7 @@ void Entity::update(float time, Map & map, std::vector<Golem> & golems) {
 	}
 	else if (!onGround) {
 		y += dy*time;
-		std::cout << dy << std::endl;
+		//std::cout << dy << std::endl;
 		check_collision(0, dy, map);
 		sprite.setPosition(x + w / 2, y + h / 2);
 		dy = dy + static_g*time;
@@ -123,6 +123,7 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 					onGround = true;
 					if (with_mob) this->dx = 0;
 					with_mob = false;
+					return;
 				}
 				if (dy<0)
 				{
@@ -190,6 +191,6 @@ bool Entity::alive() {
 	return life;
 }
 
-bool Entity::empty_ammo() {
-	return (bullets_quantity == 0);
+int Entity::ammo() {
+	return bullets_quantity;
 }

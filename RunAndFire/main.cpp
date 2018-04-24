@@ -3,6 +3,7 @@
 #include "Golem.h"
 #include "map.h"
 #include <vector>
+//#include <sstream>
 using namespace sf;
 
 int main()
@@ -88,11 +89,18 @@ int main()
 			text.setPosition(0, 20);
 			window.draw(text);
 		}
-		if (hero.empty_ammo()) {
+		{
 			Font font;//шрифт 
 			font.loadFromFile("CyrilicOld.TTF");//передаем нашему шрифту файл шрифта
 			Text text("AMMO IS EMPTY!", font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
-			text.setFillColor(Color::Red);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
+			String str;
+			str = "Bullets : ";
+			str.insert(str.getSize(), std::to_string(hero.ammo()));
+			text.setFillColor(Color::Red);
+			if (hero.ammo() > 0) {
+				text.setFillColor(Color::Black);
+				text.setString(str);
+			}
 			text.setPosition(440, 00);
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 			window.draw(text);

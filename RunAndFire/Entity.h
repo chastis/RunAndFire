@@ -21,7 +21,7 @@ public:
 	void draw_bullet(float time, Map & map, RenderWindow & window, std::vector<Golem> & golems);
 	bool alive();
 	void Restart();
-	bool empty_ammo();
+	int ammo();
 private:
 	std::vector<Bullet> bul;
 	int health, bullets_quantity;

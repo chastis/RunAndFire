@@ -36,6 +36,7 @@ void Entity::Restart() {
 		
 	}
 }
+
 //функция управления персонажем
 void Entity::control() {
 	
@@ -68,8 +69,7 @@ void Entity::control() {
 	Restart();
 }
 
-
-void Entity::update(float time, Map & map, std::vector<Golem> & golems) {
+void Entity::update(float time, Map & map, std::vector<Golem> & golems, Loot & loot) {
 	Restart();
 	if (life) {
 		control();
@@ -89,11 +89,12 @@ void Entity::update(float time, Map & map, std::vector<Golem> & golems) {
 		check_collision(0, dy, map);
 
 		check_collision(golems);
+		check_collision(loot);
 
 		sprite.setPosition(x + w / 2, y + h / 2); //задаем позицию спрайта в место его центра
 		speed = 0;
 		dy = dy + static_g*time;//постоянно притягиваемся к земле
-		if (health <= 0) {
+		if (health <= 0 || y > 500) {
 			life = false;
 			if (is_right) sprite.rotate(90);
 			else sprite.rotate(-90);
@@ -147,12 +148,24 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 	}
 }
 
+void Entity::check_collision(Loot & loot) {
+	for (int i = 0; i < loot.ammos.size(); i++) {
+		float gx = loot.ammos[i].x, gy = loot.ammos[i].y, gh = loot.ammo_get_h(), gw = loot.ammo_get_w();
+		if (square_in_square(x, y, w, h, gx, gy, gw, gh) ||
+			square_in_square(gx, gy, gw, gh, x, y, w, h) ){
+				
+			loot.ammo_aword(bullets_quantity);
+			loot.ammos.erase(loot.ammos.begin() + i); i--;
+		}
+	}
+}
+
 void Entity::check_collision(std::vector<Golem> & golems) {
 	for (int i = 0; i < golems.size(); i++) {
 		float gx = golems[i].get_x(), gy = golems[i].get_y(), gh = golems[i].get_h(), gw = golems[i].get_w();
 		if (square_in_square(x, y, w, h, gx, gy, gw, gh) ||
-			square_in_square(gx, gy, gw, gh, x, y, w, h) ){
-			
+			square_in_square(gx, gy, gw, gh, x, y, w, h)) {
+
 			if (!with_mob) health -= golems[i].get_damage();
 			golems[i].change_direction();
 			with_mob = true;
@@ -169,6 +182,7 @@ void Entity::check_collision(std::vector<Golem> & golems) {
 		}
 	}
 }
+
 
 void Entity::fire() {
 	

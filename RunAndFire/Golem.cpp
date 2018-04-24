@@ -8,6 +8,18 @@ Golem::Golem(Image &image, float X, float Y, int W, int H, String Name) : Monste
 	damage = 100;
 }
 
+void Golem::set(Image &image, float X, float Y, int W, int H, String Name){
+	x = X; y = Y; w = W; h = H; name = Name;
+	speed = 0.05; health = 50; dx = -0.05; dy = 0; damage = 100;
+	life = true; onGround = false;
+	texture.loadFromImage(image);
+	sprite.setTexture(texture);
+	sprite.setOrigin(w / 2, h / 2);
+	sprite.setPosition(x + w / 2, x + h / 2);
+
+	sprite.setTextureRect(IntRect(130, 3, w, h));
+	is_right = 0;
+}
 
 void Golem::update(float time, Map & map) {
 

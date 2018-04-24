@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "Golem.h"
 #include "map.h"
+#include "loot.h"
 #include <vector>
 //#include <sstream>
 using namespace sf;
@@ -20,18 +21,21 @@ int main()
 	monster_Image.createMaskFromColor(Color(255, 255, 255));
 
 	std::vector<Golem> golems;
-	//{
-		Golem golem(monster_Image, 64, 170, 28, 34, "Golem1");
-		golems.push_back(golem);
-		Golem golem2(monster_Image, 150, 332, 28, 34, "Golem2");
-		golems.push_back(golem2);
-	//}
+	Golem golem(monster_Image, 64, 170, 28, 34, "Golem1");
+	golems.push_back(golem);
+	golem.set(monster_Image, 150, 332, 28, 34, "Golem2");
+	golems.push_back(golem);
 
 
 	Image mapImage; mapImage.loadFromFile("images/map.png");
 	mapImage.createMaskFromColor(Color(255, 255, 255));
 	Map map(mapImage);
 
+	Image lootImage; lootImage.loadFromFile("images/loot.png");
+	lootImage.createMaskFromColor(Color(255, 255, 255));
+	Loot loot(lootImage);
+	loot.ammo_add(96, 320);
+	loot.ammo_add(576, 416);
 
 	Clock clock;
 	while (window.isOpen())
@@ -53,12 +57,13 @@ int main()
 		for (int i = 0; i < golems.size(); i++) {
 			golems[i].update(time, map);
 		}
-		hero.update(time, map, golems);
+		hero.update(time, map, golems, loot);
 		//std::cout << hero.health << std::endl;
 		window.setView(view);
 		window.clear(Color(77, 83, 140));
 
 		map.draw_map(window);
+		loot.ammo_draw(window);
 		window.draw(hero.get_sprite());
 		hero.draw_bullet(time, map, window, golems);
 		for (int i = 0; i < golems.size(); i++) {
@@ -106,7 +111,7 @@ int main()
 			window.draw(text);
 			text.setString("congrats");
 			text.setPosition(440, 20);
-			window.draw(text);
+			if (hero.ammo() == 0) window.draw(text);
 		}
 		for (int i = 0; i < golems.size(); i++) {
 			window.draw(golems[i].get_sprite());

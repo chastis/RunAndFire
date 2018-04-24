@@ -124,6 +124,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Golem.cpp" />
+    <ClCompile Include="loot.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Monster.cpp" />
   </ItemGroup>
@@ -133,6 +134,7 @@
     <ClInclude Include="functions.h" />
     <ClInclude Include="Golem.h" />
     <ClInclude Include="headers_which_you_need.h" />
+    <ClInclude Include="loot.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="Monster.h" />
   </ItemGroup>

@@ -1,6 +1,6 @@
 #include "headers_which_you_need.h"
 #include "Entity.h"
-#include "Monster.h"
+#include "Golem.h"
 #include "map.h"
 using namespace sf;
 
@@ -16,7 +16,7 @@ int main()
 
 	Image monster_Image; monster_Image.loadFromFile("images/Monster.png");
 	monster_Image.createMaskFromColor(Color(255, 255, 255));
-	Monster golem(monster_Image, 20, 20, 28, 34, "Golem");
+	Golem golem(monster_Image, 20, 20, 28, 34, "Golem");
 
 	Image mapImage; mapImage.loadFromFile("images/map.png");
 	mapImage.createMaskFromColor(Color(255, 255, 255));

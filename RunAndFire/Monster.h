@@ -9,10 +9,8 @@ class Monster {
 public:
 	//Картинка; начальные координаты (x,y); размер спрайта; имя персонажа;
 	Monster(Image &image, float X, float Y, int W, int H, String Name);
-	void update(float, Map &);
-	void check_collision(float, float, Map &);
 	Sprite get_sprite();
-private:
+protected:
 	float x, y;
 	float dx, dy, speed;
 	int w, h, health;

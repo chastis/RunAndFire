@@ -2,19 +2,9 @@
 using namespace sf;
 
 Golem::Golem(Image &image, float X, float Y, int W, int H, String Name) : Monster(image, X, Y, W, H, Name) {
-	x = X; y = Y; w = W; h = H; name = Name;
-	speed = 0.05; health = 100; dx = 0.05; dy = 0;
-	life = true; onGround = false;
-	texture.loadFromImage(image);
-	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(130, 3, w, h));
-	sprite.setOrigin(w / 2, h / 2);
-	sprite.setPosition(x + w / 2, x + h / 2);
 }
 
-Sprite Golem::get_sprite() {
-	return sprite;
-}
 
 void Golem::update(float time, Map & map) {
 

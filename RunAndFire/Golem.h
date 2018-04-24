@@ -12,7 +12,10 @@ public:
 	Golem(Image &image, float X, float Y, int W, int H, String Name);
 	void update(float, Map &);
 	void check_collision(float, float, Map &);
+	void change_direction();
+	bool get_right();
 private:
+	bool is_right;
 	/*
 	float x, y;
 	float dx, dy, speed;

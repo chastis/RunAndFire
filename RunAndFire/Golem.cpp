@@ -3,6 +3,9 @@ using namespace sf;
 
 Golem::Golem(Image &image, float X, float Y, int W, int H, String Name) : Monster(image, X, Y, W, H, Name) {
 	sprite.setTextureRect(IntRect(130, 3, w, h));
+	dx = -dx;
+	is_right = 0;
+	damage = 1;
 }
 
 
@@ -37,14 +40,24 @@ void Golem::check_collision(float dx, float dy, Map & map) {
 				if (dx>0)
 				{
 					x = j * 32 - w;
-					this->dx = -speed;
+					change_direction();
 				}
 				if (dx < 0)
 				{
 					x = j * 32 + 32;
-					this->dx = speed;
+					change_direction();
 				}
 			}
 		}
 	}
+}
+
+void Golem::change_direction() {
+	dx = -dx;
+	sprite.scale(-1, 1);
+	is_right = !is_right;
+}
+
+bool Golem::get_right() {
+	return is_right;
 }

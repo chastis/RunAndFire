@@ -1,6 +1,7 @@
 #ifndef BULLET_H
 #define BULLET_H
 #include "map.h"
+#include "Golem.h"
 #include "headers_which_you_need.h"
 using namespace sf;
 
@@ -8,14 +9,15 @@ using namespace sf;
 class Bullet {
 public:
 	//Картинка; начальные координаты (x,y); размер спрайта; имя персонажа;
-	Bullet(Texture & texture, float X, float Y, int W, int H, String Name, bool is_right, int key);
-	int update(float, Map &);
-	int check_collision(float, float, Map &);
+	Bullet(Texture & texture, float X, float Y, int W, int H, String Name, bool is_righty);
+	int update(float, Map &, std::vector<Golem> & golems);
+	int check_collision(Map &);
+	int Bullet::check_collision(std::vector<Golem> & golems);
 	Sprite get_sprite();
 private:
 	float x, y;
 	float dx, dy, speed;
-	int w, h, key;
+	int w, h, damage;
 	bool onGround;
 	Sprite sprite;
 	String name;

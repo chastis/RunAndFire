@@ -5,11 +5,16 @@ Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) {
 	x = X; y = Y; w = W; h = H; name = Name;
 	speed = 0; health = 100; dx = 0; dy = 0;
 	life = true; onGround = false;
+	is_right = true;
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(3, 18, w, h));
 	sprite.setOrigin(w / 2, h / 2);
-	sprite.setPosition(w / 2, h / 2);
+	sprite.setPosition(x + w / 2, x + h / 2);
+
+	Image bullet_Image; bullet_Image.loadFromFile("images/bullets.png");
+	bullet_Image.createMaskFromColor(Color(0, 0, 0));
+	bullet_texture.loadFromImage(bullet_Image);
 }
 
 Sprite Entity::get_sprite() {
@@ -20,10 +25,10 @@ Sprite Entity::get_sprite() {
 void Entity::control() {
 	if (Keyboard::isKeyPressed) {//если нажата клавиша
 		if (Keyboard::isKeyPressed(Keyboard::Left)) {//лево
-			state = left; speed = 0.1;
+			state = left; speed = 0.1; is_right = false;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Right)) {//право
-			state = right; speed = 0.1;
+			state = right; speed = 0.1; is_right = true;
 		}
 		if ((Keyboard::isKeyPressed(Keyboard::Up)) && (onGround)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
 			state = jump; dy = -0.6; onGround = false;
@@ -34,6 +39,9 @@ void Entity::control() {
 		if (Keyboard::isKeyPressed(Keyboard::R)) {
 			x = 0;
 			y = 0;
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Space)) {
+			fire();
 		}
 	}
 	else {
@@ -75,6 +83,7 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 				if (dy<0)
 				{
 					y = i * 32 + 32;
+					this->dy = 0;
 				}
 				if (dx>0)
 				{
@@ -86,5 +95,21 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 				}
 			}
 		}
+	}
+}
+
+void Entity::fire() {
+	
+	Bullet temp(bullet_texture, x, y, 12, 12, "piu",is_right,bul.size());
+	bul.push_back(temp);
+}
+
+void Entity::draw_bullet(float time, Map & map, RenderWindow & window) {
+	for (int i = 0; i < bul.size(); i++) {
+		window.draw(bul[i].get_sprite());
+		int temp = bul[i].update(time, map);
+		if (temp == -1) { 
+   			bul.erase(bul.begin() + i); i--; }
+		if (bul.size() == 0) return;
 	}
 }

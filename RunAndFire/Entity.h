@@ -21,10 +21,10 @@ public:
 	void draw_bullet(float time, Map & map, RenderWindow & window, std::vector<Golem> & golems);
 	bool alive();
 	void Restart();
-	
+	bool empty_ammo();
 private:
 	std::vector<Bullet> bul;
-	int health;
+	int health, bullets_quantity;
 	enum { right, left, up, down, jump, stay } state;
 	float x, y;//координаты игрока х и у
 	float dx, dy, speed , static_speed, static_jump, static_g;//скорость персонажа в текущий момент относительно осей, и стандартная скорость персонажа

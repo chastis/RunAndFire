@@ -39,7 +39,8 @@ public:
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < w; j++) {
 				if ((tittle[i][j] == 'w')) sprite.setTextureRect(IntRect(64, 0, 32, 32));
-				if ((tittle[i][j] == '0')) sprite.setTextureRect(IntRect(162, 0, 32, 32));
+				if ((tittle[i][j] == '0')) sprite.setTextureRect(IntRect(192, 0, 32, 32));
+				if ((tittle[i][j] == 'd')) sprite.setTextureRect(IntRect(161, 0, 32, 32));
 				sprite.setPosition(j * 32, i * 32);//именно такой порядок, не веришь?
 
 				window.draw(sprite);
@@ -55,6 +56,9 @@ public:
 	}
 	int get_h() {
 		return h;
+	}
+	void set(int x, int y, char a) {
+		tittle[x][y] = a;
 	}
 private:
 	Texture texture;

@@ -88,6 +88,18 @@ int main()
 			text.setPosition(0, 20);
 			window.draw(text);
 		}
+		if (hero.empty_ammo()) {
+			Font font;//шрифт 
+			font.loadFromFile("CyrilicOld.TTF");//передаем нашему шрифту файл шрифта
+			Text text("AMMO IS EMPTY!", font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
+			text.setFillColor(Color::Red);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
+			text.setPosition(440, 00);
+			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
+			window.draw(text);
+			text.setString("congrats");
+			text.setPosition(440, 20);
+			window.draw(text);
+		}
 		for (int i = 0; i < golems.size(); i++) {
 			window.draw(golems[i].get_sprite());
 		}

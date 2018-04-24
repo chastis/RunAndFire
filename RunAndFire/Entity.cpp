@@ -3,7 +3,7 @@
 using namespace sf;
 
 Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) {
-	x = X; y = Y; w = W; h = H; name = Name;
+	x = X; y = Y; w = W; h = H; name = Name; bullets_quantity = 3;
 	speed = 0; health = 100; dx = 0; dy = 0; static_speed = 0.1; static_jump = 0.6; static_g = 0.0015;
 	life = true; onGround = false; space_pressed = false; sprite_right = true; with_mob = false;
 	is_right = true;
@@ -29,6 +29,7 @@ void Entity::Restart() {
 		dx = 0;
 		dy = 0;
 		health = 100;
+		bullets_quantity = 3;
 		if (!life) if (is_right) sprite.rotate(-90);
 				   else sprite.rotate(90);
 		life = true;
@@ -52,7 +53,7 @@ void Entity::control() {
 			state = down;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Space) && !space_pressed) {
-			fire();
+			if (bullets_quantity > 0) { fire(); }
 			space_pressed = true;
 		}
 		//тут шото не так
@@ -101,6 +102,7 @@ void Entity::update(float time, Map & map, std::vector<Golem> & golems) {
 	}
 	else if (!onGround) {
 		y += dy*time;
+		std::cout << dy << std::endl;
 		check_collision(0, dy, map);
 		sprite.setPosition(x + w / 2, y + h / 2);
 		dy = dy + static_g*time;
@@ -110,8 +112,10 @@ void Entity::update(float time, Map & map, std::vector<Golem> & golems) {
 void Entity::check_collision(float dx, float dy, Map & map) {
 	for (int i = y / 32; i < (y + h) / 32; i++) {
 		for (int j = x / 32; j < (x + w) / 32; j++) {
+			onGround = false;
 			if (map.get(i,j) == 'w')
 			{
+				
 				if (dy>0)
 				{
 					y = i * 32 - h;
@@ -133,6 +137,10 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 				{
 					x = j * 32 + 32;
 				}
+			}
+			if (map.get(i, j) == 'd') {
+				map.set(i, j, '0');
+				bullets_quantity += 2;
 			}
 		}
 	}
@@ -164,6 +172,7 @@ void Entity::check_collision(std::vector<Golem> & golems) {
 void Entity::fire() {
 	
 	Bullet temp(bullet_texture, sprite_right ? x + w : x, y + h / 3, 13, 10, "piu", is_right);
+	bullets_quantity--;
 	bul.push_back(temp);
 }
 
@@ -179,4 +188,8 @@ void Entity::draw_bullet(float time, Map & map, RenderWindow & window, std::vect
 
 bool Entity::alive() {
 	return life;
+}
+
+bool Entity::empty_ammo() {
+	return (bullets_quantity == 0);
 }

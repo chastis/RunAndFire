@@ -36,6 +36,7 @@ int main()
 	Loot loot(lootImage);
 	loot.ammo_add(96, 320);
 	loot.ammo_add(576, 416);
+	loot.ammo_add(500, 416);
 
 	Clock clock;
 	while (window.isOpen())
@@ -63,7 +64,8 @@ int main()
 		window.clear(Color(77, 83, 140));
 
 		map.draw_map(window);
-		loot.ammo_draw(window);
+		//loot.ammo_draw(window);
+		window.draw(loot);
 		window.draw(hero.get_sprite());
 		hero.draw_bullet(time, map, window, golems);
 		for (int i = 0; i < golems.size(); i++) {

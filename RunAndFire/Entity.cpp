@@ -150,7 +150,7 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 
 void Entity::check_collision(Loot & loot) {
 	for (int i = 0; i < loot.ammos.size(); i++) {
-		float gx = loot.ammos[i].x, gy = loot.ammos[i].y, gh = loot.ammo_get_h(), gw = loot.ammo_get_w();
+		float gx = loot.ammos[i].x, gy = loot.ammos[i].y, gh = loot.get_rect().height, gw = loot.get_rect().width;
 		if (square_in_square(x, y, w, h, gx, gy, gw, gh) ||
 			square_in_square(gx, gy, gw, gh, x, y, w, h) ){
 				

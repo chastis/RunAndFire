@@ -7,7 +7,6 @@ using namespace sf;
 class Loot : public sf::Drawable{
 public:
 	Loot(Image & image);
-	void ammo_draw(RenderWindow & window);
 	void ammo_add(float x, float y);
 	Rect<float> get_rect();
 	void ammo_aword(int & );

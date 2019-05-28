@@ -18,7 +18,7 @@ public:
 	void check_collision(float, float,Map &);
 	void check_collision(std::vector<Golem> &);
 	void check_collision(Loot &);
-	Sprite get_sprite();
+	Sprite& get_sprite();
 	void fire();
 	void draw_bullet(float time, Map & map, RenderWindow & window, std::vector<Golem> & golems);
 	bool alive();

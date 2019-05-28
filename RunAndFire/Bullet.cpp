@@ -31,14 +31,22 @@ int Bullet::update(float time, Map & map, std::vector<Golem> & golems) {
 }
 
 int Bullet::check_collision(Map & map) {
-	for (int i = y / 32; i < (y + h) / 32; i++) {
-		for (int j = x / 32; j < (x + w) / 32; j++) {
-			if (map.get(i, j) == 'w')
-			{
-				return -1;
+	try {
+		for (int i = y / TITLE_SIZE; i < (y + h) / TITLE_SIZE; i++) {
+			for (int j = x / TITLE_SIZE; j < (x + w) / TITLE_SIZE; j++) {
+				if (map[i][j] == 'w')
+				{
+					return -1;
+				}
 			}
 		}
 	}
+	catch (...) {
+		return -1;
+	}
+
+	
+
 	return 0;
 }
 

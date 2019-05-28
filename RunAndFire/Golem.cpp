@@ -35,28 +35,28 @@ void Golem::update(float time, Map & map) {
 }
 
 void Golem::check_collision(float dx, float dy, Map & map) {
-	for (int i = y / 32; i < (y + h) / 32; i++) {
-		for (int j = x / 32; j < (x + w) / 32; j++) {
-			if (map.get(i, j) == 'w')
+	for (int i = y / TITLE_SIZE; i < (y + h) / TITLE_SIZE; i++) {
+		for (int j = x / TITLE_SIZE; j < (x + w) / TITLE_SIZE; j++) {
+			if (map[i][j] == 'w')
 			{
 				if (dy>0)
 				{
-					y = i * 32 - h;
+					y = i * TITLE_SIZE - h;
 					this->dy = 0;
 					onGround = true;
 				}
 				if (dy<0)
 				{
-					y = i * 32 + 32;
+					y = i * TITLE_SIZE + TITLE_SIZE;
 				}
 				if (dx>0)
 				{
-					x = j * 32 - w;
+					x = j * TITLE_SIZE - w;
 					change_direction();
 				}
 				if (dx < 0)
 				{
-					x = j * 32 + 32;
+					x = j * TITLE_SIZE + TITLE_SIZE;
 					change_direction();
 				}
 			}

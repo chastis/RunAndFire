@@ -18,7 +18,7 @@ Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) {
 	bullet_texture.loadFromImage(bullet_Image);
 }
 
-Sprite Entity::get_sprite() {
+Sprite& Entity::get_sprite() {
 	return sprite;
 }
 
@@ -111,40 +111,45 @@ void Entity::update(float time, Map & map, std::vector<Golem> & golems, Loot & l
 }
 
 void Entity::check_collision(float dx, float dy, Map & map) {
-	for (int i = y / 32; i < (y + h) / 32; i++) {
-		for (int j = x / 32; j < (x + w) / 32; j++) {
-			onGround = false;
-			if (map.get(i,j) == 'w')
-			{
-				
-				if (dy>0)
+	try {
+		for (int i = y / TITLE_SIZE; i < (y + h) / TITLE_SIZE; i++) {
+			for (int j = x / TITLE_SIZE; j < (x + w) / TITLE_SIZE; j++) {
+				onGround = false;
+				if (map[i][j] == 'w')
 				{
-					y = i * 32 - h;
-					this->dy = 0;
-					onGround = true;
-					if (with_mob) this->dx = 0;
-					with_mob = false;
-					return;
+
+					if (dy > 0)
+					{
+						y = i * TITLE_SIZE - h;
+						this->dy = 0;
+						onGround = true;
+						if (with_mob) this->dx = 0;
+						with_mob = false;
+						return;
+					}
+					if (dy < 0)
+					{
+						y = i * TITLE_SIZE + TITLE_SIZE;
+						this->dy = 0;
+					}
+					if (dx > 0)
+					{
+						x = j * TITLE_SIZE - w;
+					}
+					if (dx < 0)
+					{
+						x = j * TITLE_SIZE + TITLE_SIZE;
+					}
 				}
-				if (dy<0)
-				{
-					y = i * 32 + 32;
-					this->dy = 0;
+				if (map[i][j] == 'd') {
+					map[i][j] = '0';
+					bullets_quantity += 2;
 				}
-				if (dx>0)
-				{
-					x = j * 32 - w;
-				}
-				if (dx < 0)
-				{
-					x = j * 32 + 32;
-				}
-			}
-			if (map.get(i, j) == 'd') {
-				map.set(i, j, '0');
-				bullets_quantity += 2;
 			}
 		}
+	}
+	catch (...) {
+		return;
 	}
 }
 

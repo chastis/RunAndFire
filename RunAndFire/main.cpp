@@ -16,6 +16,8 @@ int main()
 	Image hero_Image; hero_Image.loadFromFile("images/MilesTailsPrower.gif");
 	hero_Image.createMaskFromColor(Color(0, 0, 0));
 	Entity hero(hero_Image, -13, 190, 42, 33, "Hero");
+	hero.get_sprite().setScale(0.5, 0.5);
+	//std::cout << hero.get_sprite().set
 
 	Image monster_Image; monster_Image.loadFromFile("images/Monster.png");
 	monster_Image.createMaskFromColor(Color(255, 255, 255));
@@ -29,7 +31,7 @@ int main()
 
 	Image mapImage; mapImage.loadFromFile("images/map.png");
 	mapImage.createMaskFromColor(Color(255, 255, 255));
-	Map map(mapImage);
+	Map map(mapImage, 30, 20);
 
 	Image lootImage; lootImage.loadFromFile("images/loot.png");
 	lootImage.createMaskFromColor(Color(255, 255, 255));

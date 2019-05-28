@@ -31,7 +31,7 @@ private:
 	float x, y;//координаты игрока х и у
 	float dx, dy, speed , static_speed, static_jump, static_g;//скорость персонажа в текущий момент относительно осей, и стандартная скорость персонажа
 	int w, h;//размеры спрайта и кол-во здоровья персонажа
-	bool life, onGround, is_right, space_pressed, sprite_right, with_mob;
+	bool life, onGround, is_right, space_pressed, sprite_right, with_mob, up_pressed, up_pressed_second_time;
 	Texture texture;
 	Sprite sprite;
 	String name;

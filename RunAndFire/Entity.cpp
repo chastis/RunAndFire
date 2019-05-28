@@ -6,7 +6,7 @@ Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) : doub
 	clock.restart();
 	x = X; y = Y; w = W; h = H; name = Name; bullets_quantity = 3;	
 	speed = 0; health = PLAYER_HP ; dx = 0; dy = 0; static_speed = 0.2f; static_jump = 0.6f; static_g = 0.0015f;
-	life = true; onGround = false; space_pressed = false; sprite_right = true; with_mob = false;
+	life = true; onGround = false; space_pressed = false; sprite_right = true; with_mob = false; up_pressed = false, up_pressed_second_time = false;
 	is_right = true;
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
@@ -52,9 +52,16 @@ void Entity::control() {
 		if (Keyboard::isKeyPressed(Keyboard::Right)) {//право
 			state = right; speed = static_speed; is_right = true;
 		}
-		if ((Keyboard::isKeyPressed(Keyboard::Up)) && (onGround || doubleJump)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
-			state = jump; dy = -static_jump; onGround = false; doubleJump = false;
+		if (Keyboard::isKeyPressed(Keyboard::Up) && !up_pressed && !up_pressed_second_time && !onGround)
+		{
+			up_pressed_second_time = true;
+			up_pressed = true;
+			std::cout << "pressed!" << std::endl;
 		}
+		if ((Keyboard::isKeyPressed(Keyboard::Up)) && (onGround || doubleJump)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
+			state = jump; dy = -static_jump; onGround = false; doubleJump = false; up_pressed = true;
+		}
+		
 		if (Keyboard::isKeyPressed(Keyboard::Down)) {
 			state = down;
 		}
@@ -67,6 +74,12 @@ void Entity::control() {
 		if (!Keyboard::isKeyPressed(Keyboard::Space) && space_pressed) {
 			space_pressed = false;
 		}
+		if (!Keyboard::isKeyPressed(Keyboard::Up) && up_pressed)
+		{
+			up_pressed = false;
+			//up_pressed_second_time = false;	
+		}
+		
 	}
 	else {
 		state = stay;
@@ -76,10 +89,12 @@ void Entity::control() {
 
 void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
 	Restart();
+	/*
 	if (clock.getElapsedTime().asMilliseconds() > 1000 / PLAYER_GUN_SPEED && space_pressed) {
 		space_pressed = false;
 		clock.restart();
 	}
+	*/
 	if (life) {
 		control();
 		switch (state)//различные действия в зависимости от состояния
@@ -110,9 +125,15 @@ void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> &
 			dy = -0.5;
 			//dy = 0;//персонаж не будет подпрыгивать если умирает над врагом
 		}
+		if (onGround)
+		{
+			up_pressed_second_time = false;
+		}
 	}
 	else if (!onGround) {
 		y += dy*time;
+		//up_pressed = false;
+		//up_pressed_second_time = false;
 		//std::cout << dy << std::endl;
 		check_collision(0, dy, map);
 		sprite.setPosition(x + w / 2, y + h / 2);
@@ -153,10 +174,11 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 						x = static_cast<float>(j * TITLE_SIZE + TITLE_SIZE);
 					}
 				}
-				if (map[i][j] == 'd') {
+				if (map[i][j] == 'd' && up_pressed_second_time) {
 					map[i][j] = '0';
-					bullets_quantity += 2;
+					//bullets_quantity += 2;
 					doubleJump = true;
+					up_pressed_second_time = false;
 				}
 			}
 		}

@@ -14,13 +14,13 @@ public:
 	//Картинка; начальные координаты (x,y); размер спрайта; имя персонажа;
 	Entity(Image &image, float X, float Y, int W, int H, String Name);
 	void control();
-	void update(float,Map &, std::vector<Golem> &, Loot & loot);
+	void update(float,Map &, std::vector<std::unique_ptr<Golem>> &, Loot & loot);
 	void check_collision(float, float,Map &);
-	void check_collision(std::vector<Golem> &);
+	void check_collision(std::vector<std::unique_ptr<Golem>> &);
 	void check_collision(Loot &);
 	Sprite& get_sprite();
 	void fire();
-	void draw_bullet(float time, Map & map, RenderWindow & window, std::vector<Golem> & golems);
+	void draw_bullet(float time, Map & map, RenderWindow & window, std::vector<std::unique_ptr<Golem>> & golems);
 	bool alive();
 	void Restart();
 	int ammo();
@@ -36,5 +36,7 @@ private:
 	Sprite sprite;
 	String name;
 	Texture bullet_texture;
+	bool doubleJump;
+	Clock clock;
 };
 #endif

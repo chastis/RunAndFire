@@ -5,6 +5,6 @@
 #include <fstream>
 #include <vector>
 #include <exception>
-
+#include <memory>
 
 #endif

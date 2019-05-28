@@ -5,16 +5,16 @@ Golem::Golem(Image &image, float X, float Y, int W, int H, String Name) : Monste
 	sprite.setTextureRect(IntRect(130, 3, w, h));
 	dx = -dx;
 	is_right = 0;
-	damage = 100;
+	damage = GOLEM_DMG;
 }
 
 void Golem::set(Image &image, float X, float Y, int W, int H, String Name){
 	x = X; y = Y; w = W; h = H; name = Name;
-	speed = 0.05; health = 50; dx = -0.05; dy = 0; damage = 100;
+	speed = 0.05f; health = 50; dx = -0.05f; dy = 0.f; damage = GOLEM_DMG;
 	life = true; onGround = false;
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
-	sprite.setOrigin(w / 2, h / 2);
+	sprite.setOrigin(w / 2.f, h / 2.f);
 	sprite.setPosition(x + w / 2, x + h / 2);
 
 	sprite.setTextureRect(IntRect(130, 3, w, h));
@@ -32,7 +32,7 @@ void Golem::update(float time, Map & map)
 	sprite.setPosition(x + w / 2, y + h / 2); //задаем позицию спрайта в место его центра
 	if (health <= 0) { life = false; }
 	//speed = 0;
-	dy = dy + 0.0015*time;//постоянно притягиваемся к земле
+	dy = dy + 0.0015f * time;//постоянно притягиваемся к земле
 }
 
 void Golem::check_collision(float dx, float dy, Map & map) {

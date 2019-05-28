@@ -5,28 +5,30 @@
 #include "loot.h"
 #include <vector>
 //#include <sstream>
+
+#undef _ITERATOR_DEBUG_LEVEL
+#define _ITERATOR_DEBUG_LEVEL 0
+
 using namespace sf;
 
 int main()
 {
 	RenderWindow window(VideoMode(640, 480), "Run and Fire!");
 	View view; view.reset(FloatRect(0, 0, 640, 480));
-	//view.setCenter(200, 240);
 	
+	Clock clock;
+
 	Image hero_Image; hero_Image.loadFromFile("images/MilesTailsPrower.gif");
 	hero_Image.createMaskFromColor(Color(0, 0, 0));
 	Entity hero(hero_Image, -13, 190, 42, 33, "Hero");
 	hero.get_sprite().setScale(0.5, 0.5);
-	//std::cout << hero.get_sprite().set
 
 	Image monster_Image; monster_Image.loadFromFile("images/Monster.png");
 	monster_Image.createMaskFromColor(Color(255, 255, 255));
 
-	std::vector<Golem> golems;
-	Golem golem(monster_Image, 64, 170, 28, 34, "Golem1");
-	golems.push_back(golem);
-	golem.set(monster_Image, 150, 332, 28, 34, "Golem2");
-	golems.push_back(golem);
+	std::vector<std::unique_ptr<Golem>> golems;
+	golems.push_back(std::make_unique<Golem>(monster_Image, 64, 170, 28, 34, "Golem1"));
+	golems.push_back(std::make_unique<Golem>(monster_Image, 150, 332, 28, 34, "Golem2"));
 
 
 	Image mapImage; mapImage.loadFromFile("images/map.png");
@@ -40,7 +42,7 @@ int main()
 	loot.ammo_add(576, 416);
 	loot.ammo_add(500, 416);
 
-	Clock clock;
+	bool bossSpawned = false;
 	while (window.isOpen())
 	{
 
@@ -58,27 +60,30 @@ int main()
 
 		
 		for (int i = 0; i < golems.size(); i++) {
-			golems[i].update(time, map);
+			golems[i]->update(time, map);
 		}
 		hero.update(time, map, golems, loot);
 		//std::cout << hero.health << std::endl;
 		window.setView(view);
 		window.clear(Color(77, 83, 140));
 
-		map.draw_map(window);
+		window.draw(map);
 		//loot.ammo_draw(window);
 		window.draw(loot);
 		window.draw(hero.get_sprite());
 		hero.draw_bullet(time, map, window, golems);
 		for (int i = 0; i < golems.size(); i++) {
-			if (!golems[i].get_life()) {
+			if (!golems[i]->get_life()) {
 				golems.erase(golems.begin() + i); i--;
+				if (golems.empty() && !bossSpawned) {
+					golems.push_back(std::make_unique<BossGolem>(monster_Image, 150, 332, 28, 34, "Boss"));
+					bossSpawned = true;
+				}
 			}
-			//std::cout << "golem " << i << " - " << golems[i].health << std::endl;
 		}
 		if (golems.size() == 0) {
 			Font font;//шрифт 
-			font.loadFromFile("CyrilicOld.TTF");//передаем нашему шрифту файл шрифта
+			font.loadFromFile("terminal.TTF");//передаем нашему шрифту файл шрифта
 			Text text("YOU WIN!", font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
 			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
@@ -89,7 +94,7 @@ int main()
 		}
 		if (!hero.alive()) {
 			Font font;//шрифт 
-			font.loadFromFile("CyrilicOld.TTF");//передаем нашему шрифту файл шрифта
+			font.loadFromFile("terminal.TTF");//передаем нашему шрифту файл шрифта
 			Text text("YOU DIED!", font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
 			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
@@ -100,7 +105,7 @@ int main()
 		}
 		{
 			Font font;//шрифт 
-			font.loadFromFile("CyrilicOld.TTF");//передаем нашему шрифту файл шрифта
+			font.loadFromFile("terminal.TTF");//передаем нашему шрифту файл шрифта
 			Text text("AMMO IS EMPTY!", font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
 			String str;
 			str = "Bullets : ";
@@ -118,7 +123,7 @@ int main()
 			if (hero.ammo() == 0) window.draw(text);
 		}
 		for (int i = 0; i < golems.size(); i++) {
-			window.draw(golems[i].get_sprite());
+			window.draw(golems[i]->get_sprite());
 		}
 
 	

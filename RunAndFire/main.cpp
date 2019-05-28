@@ -55,7 +55,10 @@ int main()
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
+			{
+				//std::this_thread::sleep_for(std::chrono::seconds(3));
 				window.close();
+			}
 		}
 
 		
@@ -129,5 +132,6 @@ int main()
 	
 		window.display();
 	}
+	//for (auto& thread : threads) thread.join();
 	return 0;
 }

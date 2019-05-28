@@ -23,7 +23,7 @@ public:
 				//tittle[i][j] = temp;
 			}
 		}
-
+		std::cout << h << " " << w << std::endl;
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < w; j++) {
 				std::cout << tittle[i][j];

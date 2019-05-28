@@ -3,8 +3,8 @@
 using namespace sf;
 
 Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) {
-	x = X; y = Y; w = W; h = H; name = Name; bullets_quantity = 3;
-	speed = 0; health = 100; dx = 0; dy = 0; static_speed = 0.1; static_jump = 0.6; static_g = 0.0015;
+	x = X; y = Y; w = W; h = H; name = Name; bullets_quantity = 3;	
+	speed = 0; health = 100; dx = 0; dy = 0; static_speed = 0.2; static_jump = 0.6; static_g = 0.0015;
 	life = true; onGround = false; space_pressed = false; sprite_right = true; with_mob = false;
 	is_right = true;
 	texture.loadFromImage(image);
@@ -12,7 +12,9 @@ Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) {
 	sprite.setTextureRect(IntRect(3, 18, w, h));
 	sprite.setOrigin(w / 2, h / 2);
 	sprite.setPosition(x + w / 2, x + h / 2);
-
+	//
+	w /= 2; h /= 2;
+	//
 	Image bullet_Image; bullet_Image.loadFromFile("images/bullets.png");
 	bullet_Image.createMaskFromColor(Color(0, 0, 0));
 	bullet_texture.loadFromImage(bullet_Image);
@@ -39,7 +41,9 @@ void Entity::Restart() {
 
 //функция управления персонажем
 void Entity::control() {
-	
+	//467 53
+	//493 100
+	//34 47
 	if (Keyboard::isKeyPressed && !with_mob) {//если нажата клавиша
 		if (Keyboard::isKeyPressed(Keyboard::Left)) {//лево
 			state = left; speed = static_speed; is_right = false;
@@ -98,6 +102,7 @@ void Entity::update(float time, Map & map, std::vector<Golem> & golems, Loot & l
 			life = false;
 			if (is_right) sprite.rotate(90);
 			else sprite.rotate(-90);
+			dy = -0.5;
 			//dy = 0;//персонаж не будет подпрыгивать если умирает над врагом
 		}
 	}
@@ -123,7 +128,11 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 						y = i * TITLE_SIZE - h;
 						this->dy = 0;
 						onGround = true;
-						if (with_mob) this->dx = 0;
+						if (with_mob) {
+							//?
+							//this->dy = -0.5;
+							//this->dx = 0.5;
+						}
 						with_mob = false;
 						return;
 					}

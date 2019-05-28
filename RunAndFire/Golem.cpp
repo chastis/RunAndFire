@@ -21,7 +21,8 @@ void Golem::set(Image &image, float X, float Y, int W, int H, String Name){
 	is_right = 0;
 }
 
-void Golem::update(float time, Map & map) {
+void Golem::update(float time, Map & map)
+{
 
 	x += dx*time;
 	check_collision(dx, 0, map);
@@ -35,32 +36,39 @@ void Golem::update(float time, Map & map) {
 }
 
 void Golem::check_collision(float dx, float dy, Map & map) {
-	for (int i = y / TITLE_SIZE; i < (y + h) / TITLE_SIZE; i++) {
-		for (int j = x / TITLE_SIZE; j < (x + w) / TITLE_SIZE; j++) {
-			if (map[i][j] == 'w')
-			{
-				if (dy>0)
+	try
+	{
+		for (int i = y / TITLE_SIZE; i < (y + h) / TITLE_SIZE; i++) {
+			for (int j = x / TITLE_SIZE; j < (x + w) / TITLE_SIZE; j++) {
+				if (map[i][j] == 'w')
 				{
-					y = i * TITLE_SIZE - h;
-					this->dy = 0;
-					onGround = true;
-				}
-				if (dy<0)
-				{
-					y = i * TITLE_SIZE + TITLE_SIZE;
-				}
-				if (dx>0)
-				{
-					x = j * TITLE_SIZE - w;
-					change_direction();
-				}
-				if (dx < 0)
-				{
-					x = j * TITLE_SIZE + TITLE_SIZE;
-					change_direction();
+					if (dy > 0)
+					{
+						y = i * TITLE_SIZE - h;
+						this->dy = 0;
+						onGround = true;
+					}
+					if (dy < 0)
+					{
+						y = i * TITLE_SIZE + TITLE_SIZE;
+					}
+					if (dx > 0)
+					{
+						x = j * TITLE_SIZE - w;
+						change_direction();
+					}
+					if (dx < 0)
+					{
+						x = j * TITLE_SIZE + TITLE_SIZE;
+						change_direction();
+					}
 				}
 			}
 		}
+	}
+	catch (...)
+	{
+		return;
 	}
 }
 

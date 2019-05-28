@@ -31,7 +31,7 @@ int main()
 
 	Image mapImage; mapImage.loadFromFile("images/map.png");
 	mapImage.createMaskFromColor(Color(255, 255, 255));
-	Map map(mapImage, 30, 20);
+	Map map(mapImage, 30, 40);
 
 	Image lootImage; lootImage.loadFromFile("images/loot.png");
 	lootImage.createMaskFromColor(Color(255, 255, 255));

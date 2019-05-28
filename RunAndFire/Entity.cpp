@@ -56,7 +56,6 @@ void Entity::control() {
 		{
 			up_pressed_second_time = true;
 			up_pressed = true;
-			std::cout << "pressed!" << std::endl;
 		}
 		if ((Keyboard::isKeyPressed(Keyboard::Up)) && (onGround || doubleJump)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
 			state = jump; dy = -static_jump; onGround = false; doubleJump = false; up_pressed = true;
@@ -179,6 +178,19 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 					//bullets_quantity += 2;
 					doubleJump = true;
 					up_pressed_second_time = false;
+					auto reset = [&](int i, int j)
+					{
+						/*Clock c;
+						while (c.getElapsedTime().asSeconds() <= 3)
+						{
+
+						}*/
+						std::this_thread::sleep_for(std::chrono::seconds(3));
+						map[i][j] = 'd';
+					};
+					//std::thread t1(reset,i,j);
+					static std::vector<std::thread> threads;
+					threads.emplace_back(reset, i, j);
 				}
 			}
 		}

@@ -132,6 +132,5 @@ int main()
 	
 		window.display();
 	}
-	//for (auto& thread : threads) thread.join();
 	return 0;
 }

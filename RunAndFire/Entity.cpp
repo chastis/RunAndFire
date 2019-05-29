@@ -175,33 +175,22 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 				}
 				if (map[i][j] == 'd' && up_pressed_second_time) {
 					map[i][j] = '0';
-					//bullets_quantity += 2;
 					doubleJump = true;
 					up_pressed_second_time = false;
 					auto reset = [&](int i, int j)
 					{
-						std::cout << "thread " << i << " " << j << "start" << std::endl;
 						std::this_thread::sleep_for(std::chrono::seconds(3));
 						map[i][j] = 'd';
-						std::cout << "thread " << i << " " << j << "end" << std::endl;
 					};
 					
 					static int count = 0;
 					if (count + 1 > MAX_DOUBLE_JUMP_POINTS)
 					{
-						std::cout << "try to do" << std::endl;
 						threads[(count + 1) % MAX_DOUBLE_JUMP_POINTS]->join();
-						//delete threads[(count + 1) % MAX_DOUBLE_JUMP_POINTS];
-						threads[(count + 1) % MAX_DOUBLE_JUMP_POINTS].release();
-						std::cout << "end to do" << std::endl;
+						delete threads[(count + 1) % MAX_DOUBLE_JUMP_POINTS];
 					}
-					std::cout << "hm1" << std::endl;
-					if (threads[count % MAX_DOUBLE_JUMP_POINTS] != nullptr)
-						threads[count % MAX_DOUBLE_JUMP_POINTS]->detach();
-					threads[count % MAX_DOUBLE_JUMP_POINTS] = std::make_unique<std::thread>(reset, i, j);
-					threads[count++ % MAX_DOUBLE_JUMP_POINTS]->detach();
-					//threads[count++ % MAX_DOUBLE_JUMP_POINTS] = new std::thread(reset, i, j);
-					//threads[(count + 1) % MAX_DOUBLE_JUMP_POINTS].join();
+					threads[count++ % MAX_DOUBLE_JUMP_POINTS] = new std::thread(reset, i, j);
+
 				}
 			}
 		}

@@ -28,5 +28,6 @@ enum class Directions { u, d, l, r, ur, ul, dr, dl };
 
 extern bool gameOn;
 extern bool bossSpawned;
+extern bool isLevelPassed;
 extern size_t level_counter;
 #endif //HELPERS_H

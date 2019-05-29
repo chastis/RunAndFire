@@ -15,6 +15,7 @@ public:
 	bool isInter();
 	void move();
 	void reset();
+	void change(std::string);
 private:
 	bool interaction;
 	Texture texture;

@@ -51,7 +51,57 @@ int main()
 		if (!menu.is_menu())
 		{
 			if (music.getStatus() == sf::Music::Status::Stopped) music.play();
-			if (level_counter >= 2) menu.open(1);
+			if (level_counter > 2) menu.open(1);
+			if (level_counter == 2 && isLevelPassed) 
+			{
+				std::cout << "Hello! ";
+				bool flag = false;
+				long long red = 0, green = 0, blue = 0;
+				int plus = 1;
+				for (long long i = 0; i < 1000; i++)
+				{
+					
+					window.clear(sf::Color(green, red, blue));
+					if (red == -1)
+					{
+						red++;
+						plus = 1;
+					}
+					else if (red == 128)
+					{
+						if (green == -1)
+						{
+							green++;
+							red--;
+						}
+						else if (green == 128)
+						{
+							if (blue == -1)
+							{
+								blue++;
+								green--;
+							}
+							else if (blue == 128)
+							{
+								plus = -1;
+								blue--;
+							}
+							else blue += plus;
+						}
+						else green += plus;
+					}
+					else red += plus;
+					window.display();
+					//std::cout << i << std::endl;
+				}
+				std::cout << "lvl2" << std::endl;
+				
+				//std::this_thread::sleep_for(std::chrono::seconds(3));
+				map->change("map2");
+				hero.Restart( * map, golems, loot);
+				isLevelPassed = false;
+				clock.restart();
+			}
 			auto time = static_cast<float>(clock.getElapsedTime().asMicroseconds());
 
 			clock.restart();
@@ -176,6 +226,7 @@ int main()
 			window.clear();
 			menu.draw(window);
 			clock.restart();
+			isLevelPassed = false;
 		}
 		window.display();
 	}

@@ -92,3 +92,8 @@ void Map::reset()
 	}
 	interaction = false;
 }
+void Map::change(std::string Name)
+{
+	name = Name;
+	reset();
+}

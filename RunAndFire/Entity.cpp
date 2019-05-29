@@ -3,9 +3,11 @@
 using namespace sf;
 
 bool bossSpawned;
+bool isLevelPassed;
 size_t level_counter = 1;
 
 Entity::Entity(Image &image, float X, float Y, int W, int H, String Name){
+	isLevelPassed = false;
 	doubleJump = false;
 	up_pressed = false;
 	up_pressed_second_time = false;
@@ -41,8 +43,9 @@ Sprite& Entity::get_sprite() {
 }
 
 void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
-		level_counter = 1;
+		isLevelPassed = false;
 		bossSpawned = false;
+		
 		spawn(map);
 		map.reset();
 		dx = 0;
@@ -56,13 +59,10 @@ void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Lo
 		life = true;
 		loot.clear();
 		golems.clear();
-		loot.ammo_add(96, 320);
-		loot.ammo_add(576, 416);
-		loot.ammo_add(500, 416);
-		loot.ammo_add(576, 150);
 		Image monster_Image; monster_Image.loadFromFile("images/Monster.png");
 		monster_Image.createMaskFromColor(Color(255, 255, 255));
 		golems_spawn(monster_Image, 28, 34, golems, map);
+		loot_spawn(loot, map);
 }
 
 //функция управления персонажем
@@ -269,11 +269,13 @@ void Entity::check_collision(Loot & loot) {
 	}
 	for (size_t i = 0; i < loot.portals.size(); i++) {
 		float gx = loot.portals[i].x, gy = loot.portals[i].y, gh = loot.get_rect().height, gw = loot.get_rect().width;
-		if (square_in_square(x, y, static_cast<float>(w), static_cast<float>(h), gx, gy, gw, gh) ||
-			square_in_square(gx, gy, gw, gh, x, y, static_cast<float>(w), static_cast<float>(h))) {
-			level_counter++;
-			std::cout << level_counter << std::endl;
-		}
+		if (!isLevelPassed)
+			if (square_in_square(x, y, static_cast<float>(w), static_cast<float>(h), gx, gy, gw, gh) ||
+				square_in_square(gx, gy, gw, gh, x, y, static_cast<float>(w), static_cast<float>(h))) {
+				level_counter++;
+				std::cout << level_counter << std::endl;
+				isLevelPassed = true;
+			}
 	}
 }
 

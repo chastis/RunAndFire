@@ -92,3 +92,16 @@ void Loot::update(Map & map) {
 		
 	}
 }
+
+void loot_spawn(Loot &loot, Map & map)
+{
+	loot.clear();
+	for (int i = 0; i < map.get_h(); i++) {
+		for (int j = 0; j < map.get_w(); j++) {
+			if (map[i][j] == 'l')
+			{
+				loot.ammo_add(j * TITLE_SIZE, (i - 2) * TITLE_SIZE);
+			}
+		}
+	}
+}

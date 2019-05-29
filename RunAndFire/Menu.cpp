@@ -171,7 +171,10 @@ void Menu::work(sf::Vector2f pos, sf::RenderWindow &window, Entity & player, Map
 		//newgame
 		case 1:
 		{
+			level_counter = 1;
+			map.change("map1");
 			player.Restart(map, golems, loot);
+			
 			_is_menu = false;
 			break;
 		}

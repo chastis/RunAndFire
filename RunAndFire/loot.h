@@ -24,4 +24,6 @@ private:
 	Sprite ammo_sprite;
 };
 
+void loot_spawn(Loot &loot, Map & map);
+
 #endif

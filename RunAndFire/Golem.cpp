@@ -108,4 +108,5 @@ void golems_spawn(Image &image, int W, int H, std::vector<std::unique_ptr<Golem>
 			}
 		}
 	}
+	golems.resize(1);
 }

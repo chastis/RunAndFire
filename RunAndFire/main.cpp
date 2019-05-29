@@ -79,8 +79,17 @@ int main()
 			}
 		}
 		Text text("Level "s + std::to_string(level_counter), *font, FONT_SIZE);
+		text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
+		text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 		if (golems.size() == 0) {
-			text.setString("YOU WIN!");//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
+			text.setString("YOU WIN!");//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)	
+			window.draw(text);
+			text.setString("congrats");
+			text.setPosition(0, 20);	
+			window.draw(text);
+		}
+		else if (!hero.alive()) {
+			text.setString("YOU DIED!");//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
 			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 			window.draw(text);
@@ -88,12 +97,11 @@ int main()
 			text.setPosition(0, 20);
 			window.draw(text);
 		}
-		if (!hero.alive()) {
-			text.setString("YOU DIED!");//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
-			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
-			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
+		else
+		{
 			window.draw(text);
-			text.setString("congrats");
+			if (bossSpawned) text.setString("Boss can be defeated only from the top");
+			else text.setString("Golems can be defeated in behind");
 			text.setPosition(0, 20);
 			window.draw(text);
 		}

@@ -27,7 +27,7 @@ public:
 private:
 	std::vector<Bullet> bul;
 	int health, bullets_quantity;
-	enum { right, left, up, down, jump, stay } state;
+	State state;
 	float x, y;//координаты игрока х и у
 	float dx, dy, speed , static_speed, static_jump, static_g;//скорость персонажа в текущий момент относительно осей, и стандартная скорость персонажа
 	int w, h;//размеры спрайта и кол-во здоровья персонажа

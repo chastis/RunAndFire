@@ -77,6 +77,7 @@ int main()
 		hero.draw_bullet(time, map, window, golems);
 		for (int i = 0; i < golems.size(); i++) {
 			if (!golems[i]->get_life()) {
+				loot.ammo_add(golems[i]->get_x(), golems[i]->get_y());
 				golems.erase(golems.begin() + i); i--;
 				if (golems.empty() && !bossSpawned) {
 					golems.push_back(std::make_unique<BossGolem>(monster_Image, 150, 332, 28, 34, "Boss"));

@@ -2,6 +2,7 @@
 using namespace sf;
 
 Monster::Monster(Image &image, float X, float Y, int W, int H, String Name) {
+	type = Monsters::none;
 	x = X; y = Y; w = W; h = H; name = Name;
 	speed = 0.05; health = 50; dx = 0.05; dy = 0; damage = 75;
 	life = true; onGround = false;
@@ -32,4 +33,7 @@ bool Monster::get_life() {
 }
 int Monster::get_damage() {
 	return damage;
+}
+Monsters Monster::get_type() {
+	return type;
 }

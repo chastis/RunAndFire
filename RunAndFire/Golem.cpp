@@ -2,6 +2,7 @@
 using namespace sf;
 
 Golem::Golem(Image &image, float X, float Y, int W, int H, String Name) : Monster(image, X, Y, W, H, Name) {
+	type = Monsters::golem;
 	sprite.setTextureRect(IntRect(130, 3, w, h));
 	dx = -dx;
 	is_right = 0;

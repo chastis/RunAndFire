@@ -1,10 +1,26 @@
 #include "Bullet.h"
 using namespace sf;
 
-Bullet::Bullet(Texture & texture, float X, float Y, int W, int H, String Name, bool is_right) {
+Bullet::Bullet(Texture & texture, float X, float Y, int W, int H, String Name, State state, bool is_right) {
 	x = X; y = Y; w = W; h = H; name = Name; damage = 25;
-	if (is_right) dx = 0.2f; else { dx = -0.2f; sprite.scale(-1.f, 1.f); }
-	speed = 0.2f; dy = 0.f;
+	if (state == State::down)
+	{
+		dy = 0.4f;
+		dx = 0.f;
+		sprite.rotate(90.f);
+	}
+	else if (is_right)
+	{
+		dy = 0.f;
+		dx = 0.2f;
+	}
+	else
+	{
+		dy = 0.f;
+		dx = -0.2f;
+		sprite.setScale(-1.f, 1.f);
+	}
+	speed = 0.2f; 
 	onGround = false;
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(280, 215, w, h));
@@ -55,7 +71,17 @@ int Bullet::check_collision(std::vector<std::unique_ptr<Golem>> & golems) {
 	for (size_t i = 0; i < golems.size(); i++) {
 		if (x >= golems[i]->get_x() && x <= golems[i]->get_x() + golems[i]->get_w() &&
 			y >= golems[i]->get_y() && y <= golems[i]->get_y() + golems[i]->get_h()) {
-			if (dx > 0 && golems[i]->get_right() || dx < 0 && !golems[i]->get_right()) golems[i]->health = golems[i]->health - damage;
+			switch (golems[i]->get_type())
+			{
+			case Monsters::golem:
+				if (dx > 0 && golems[i]->get_right() || dx < 0 && !golems[i]->get_right() || dx == 0) golems[i]->health = golems[i]->health - damage;
+				break;
+			case Monsters::bossGolem:
+				if (dx == 0) golems[i]->health = golems[i]->health - damage;
+				break;
+			case Monsters::none:
+				break;
+			}
 			return -1;
 		}
 	}

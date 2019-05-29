@@ -4,7 +4,7 @@ using namespace sf;
 
 Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) : doubleJump(false) {
 	clock.restart();
-	x = X; y = Y; w = W; h = H; name = Name; bullets_quantity = 3;	
+	x = X; y = Y; w = W; h = H; name = Name; bullets_quantity = PLAYER_BULLETS;	
 	speed = 0; health = PLAYER_HP ; dx = 0; dy = 0; static_speed = 0.2f; static_jump = 0.6f; static_g = 0.0015f;
 	life = true; onGround = false; space_pressed = false; sprite_right = true; with_mob = false; up_pressed = false, up_pressed_second_time = false;
 	is_right = true;
@@ -31,8 +31,8 @@ void Entity::Restart() {
 		y = 0;
 		dx = 0;
 		dy = 0;
-		health = 100;
-		bullets_quantity = 3;
+		health = PLAYER_HP;
+		bullets_quantity = PLAYER_BULLETS;
 		if (!life) if (is_right) sprite.rotate(-90);
 				   else sprite.rotate(90);
 		life = true;
@@ -47,10 +47,10 @@ void Entity::control() {
 	//34 47
 	if (!with_mob) {//если нажата клавиша
 		if (Keyboard::isKeyPressed(Keyboard::Left)) {//лево
-			state = left; speed = static_speed; is_right = false;
+			state = State::left; speed = static_speed; is_right = false;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Right)) {//право
-			state = right; speed = static_speed; is_right = true;
+			state = State::right; speed = static_speed; is_right = true;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Up) && !up_pressed && !up_pressed_second_time && !onGround)
 		{
@@ -58,11 +58,11 @@ void Entity::control() {
 			up_pressed = true;
 		}
 		if ((Keyboard::isKeyPressed(Keyboard::Up)) && (onGround || doubleJump)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
-			state = jump; dy = -static_jump; onGround = false; doubleJump = false; up_pressed = true;
+			state = State::jump; dy = -static_jump; onGround = false; doubleJump = false; up_pressed = true;
 		}
 		
 		if (Keyboard::isKeyPressed(Keyboard::Down)) {
-			state = down;
+			state = State::down;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Space) && !space_pressed) {
 			if (bullets_quantity > 0) { fire(); }
@@ -81,7 +81,7 @@ void Entity::control() {
 		
 	}
 	else {
-		state = stay;
+		state = State::stay;
 	}
 	Restart();
 }
@@ -98,9 +98,9 @@ void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> &
 		control();
 		switch (state)//различные действия в зависимости от состояния
 		{
-		case right: dx = speed; break;//состояние идти вправо
-		case left: dx = -speed; break;//состояние идти влево	
-		case down: dx = 0; break;
+		case State::right: dx = speed; break;//состояние идти вправо
+		case State::left: dx = -speed; break;//состояние идти влево	
+		case State::down: dx = 0; break;
 			//case stay: dx = 0; dy = 0; break;
 		}
 		if (is_right && !sprite_right || !is_right && sprite_right) {
@@ -238,7 +238,17 @@ void Entity::check_collision(std::vector<std::unique_ptr<Golem>> & golems) {
 
 void Entity::fire() {
 	
-	Bullet temp(bullet_texture, sprite_right ? x + w : x, y + h / 3, 13, 10, "piu", is_right);
+	int t_x, t_y;
+	if (state == State::down)
+	{
+		t_x = x + w / 2;
+		t_y = y + h;
+	}
+	else {
+		t_x = sprite_right ? x + w : x;
+		t_y = y + h / 3;
+	}
+	Bullet temp(bullet_texture, t_x, t_y, 13, 10, "piu", state, is_right);
 	bullets_quantity--;
 	bul.push_back(temp);
 }

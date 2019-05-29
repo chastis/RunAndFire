@@ -17,7 +17,9 @@ public:
 	int get_h();
 	bool get_life();
 	int get_damage();
+	Monsters get_type();
 protected:
+	Monsters type;
 	float x, y;
 	float dx, dy, speed;
 	int w, h;

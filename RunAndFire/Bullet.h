@@ -10,7 +10,7 @@ using namespace sf;
 class Bullet {
 public:
 	//Картинка; начальные координаты (x,y); размер спрайта; имя персонажа;
-	Bullet(Texture & texture, float X, float Y, int W, int H, String Name, bool is_righty);
+	Bullet(Texture & texture, float X, float Y, int W, int H, String Name, State state, bool is_right);
 	int update(float, Map &, std::vector<std::unique_ptr<Golem>> & golems);
 	int check_collision(Map &);
 	int Bullet::check_collision(std::vector<std::unique_ptr<Golem>> & golems);

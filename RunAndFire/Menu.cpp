@@ -66,8 +66,11 @@ Menu::Menu()
 	_is_menu = true;
 	Buttons * b_exit = new Buttons("exit.png", 320, 300, true);
 	Buttons * b_new_game = new Buttons("newgame.png", 320, 200, true);
+	Buttons * b_win = new Buttons("win.png", 320, 250, true);
 	_buttons.push_back(b_exit);
 	_buttons.push_back(b_new_game);
+	_buttons.push_back(b_win);
+	reset();
 }
 
 Menu::~Menu()
@@ -83,10 +86,11 @@ bool Menu::is_menu()
 	return _is_menu;
 }
 
-void Menu::open()
+void Menu::open(bool isWin)
 {
+	if (isWin) winReset();
+	else reset();
 	_is_menu = true;
-	reset();
 }
 
 void Menu::close()
@@ -137,6 +141,18 @@ void Menu::reset()
 	}
 }
 
+void Menu::winReset()
+{
+	for (int i = 0; i < _buttons.size(); i++)
+	{
+		if (i == 2)
+			_buttons[i]->_visible = true;
+		else
+			//another are not visible
+			_buttons[i]->_visible = false;
+	}
+}
+
 void Menu::work(sf::Vector2f pos, sf::RenderWindow &window, Entity & player, Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot)
 {
 	//button's functions
@@ -157,6 +173,13 @@ void Menu::work(sf::Vector2f pos, sf::RenderWindow &window, Entity & player, Map
 		{
 			player.Restart(map, golems, loot);
 			_is_menu = false;
+			break;
+		}
+		case 2:
+		{
+			_buttons[0]->_visible = true;
+			_buttons[1]->_visible = true;
+			_buttons[2]->_visible = false;
 			break;
 		}
 		}

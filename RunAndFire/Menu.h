@@ -45,7 +45,7 @@ public:
 	//do menu open?
 	bool is_menu();
 	//reset and open menu
-	void open();
+	void open(bool isWin = false);
 	//close menu
 	void close();
 	//check is mouse in the buttons or not
@@ -57,6 +57,7 @@ public:
 	void work(sf::Vector2f pos, sf::RenderWindow &window, Entity & player, Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot);
 	//reset to fisrt menu page
 	void reset();
+	void winReset();
 private:
 	//menu are showing
 	bool _is_menu;

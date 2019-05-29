@@ -3,6 +3,7 @@
 using namespace sf;
 
 bool bossSpawned;
+size_t level_counter = 1;
 
 Entity::Entity(Image &image, float X, float Y, int W, int H, String Name){
 	doubleJump = false;
@@ -40,6 +41,7 @@ Sprite& Entity::get_sprite() {
 }
 
 void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
+		level_counter = 1;
 		bossSpawned = false;
 		spawn(map);
 		map.reset();
@@ -262,6 +264,14 @@ void Entity::check_collision(Loot & loot) {
 				
 			loot.ammo_aword(bullets_quantity);
 			loot.ammos.erase(loot.ammos.begin() + i); i--;
+		}
+	}
+	for (size_t i = 0; i < loot.portals.size(); i++) {
+		float gx = loot.portals[i].x, gy = loot.portals[i].y, gh = loot.get_rect().height, gw = loot.get_rect().width;
+		if (square_in_square(x, y, static_cast<float>(w), static_cast<float>(h), gx, gy, gw, gh) ||
+			square_in_square(gx, gy, gw, gh, x, y, static_cast<float>(w), static_cast<float>(h))) {
+			level_counter++;
+			std::cout << level_counter << std::endl;
 		}
 	}
 }

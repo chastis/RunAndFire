@@ -17,7 +17,6 @@ int main()
 	gameOn = true;
 	RenderWindow window(VideoMode(640, 480), "Run and Fire!");
 	View view; view.reset(FloatRect(0, 0, 640, 480));
-	int level_counter = 1;
 
 	init();
 
@@ -42,12 +41,12 @@ int main()
 	loot.ammo_add(500, 416);
 
 	Menu menu;
-	bool hui = true;
+	bool isWin = false;
 	while (window.isOpen())
 	{
 		if (!menu.is_menu())
 		{
-			hui = false;
+			if (level_counter >= 2) menu.open(1);
 			auto time = static_cast<float>(clock.getElapsedTime().asMicroseconds());
 
 			clock.restart();
@@ -59,7 +58,10 @@ int main()
 				if (event.type == sf::Event::Closed)
 					window.close();
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				{
 					menu.open();
+					isWin = false;
+				}
 
 
 				

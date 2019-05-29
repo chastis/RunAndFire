@@ -12,8 +12,11 @@ public:
 	int get_w();
 	int get_h();
 	std::vector<char>& operator[](size_t);
-
+	bool isInter();
+	void move();
+	void reset();
 private:
+	bool interaction;
 	Texture texture;
 	Sprite sprite;
 	int h, w;

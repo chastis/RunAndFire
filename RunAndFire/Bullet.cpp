@@ -78,7 +78,7 @@ int Bullet::check_collision(Map & map) {
 			if (i < 0 || i >= map.get_h()) continue;
 			for (int j = static_cast<int>(x / TITLE_SIZE); j < (x + w) / TITLE_SIZE; j++) {
 				if (j < 0 || j >= map.get_w()) continue;
-				if (map[i][j] == 'w')
+				if (map[i][j] == 'w' || map[i][j] == 'v' && !map.isInter())
 				{
 					return -1;
 				}

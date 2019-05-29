@@ -42,8 +42,8 @@ Sprite& Entity::get_sprite() {
 void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
 	if (Keyboard::isKeyPressed(Keyboard::R)) {
 		bossSpawned = false;
-		x = -13;
-		y = 0;
+		spawn(map);
+		map.reset();
 		dx = 0;
 		dy = 0;
 		health = PLAYER_HP;
@@ -60,8 +60,7 @@ void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Lo
 		loot.ammo_add(500, 416);
 		Image monster_Image; monster_Image.loadFromFile("images/Monster.png");
 		monster_Image.createMaskFromColor(Color(255, 255, 255));
-		golems.push_back(std::make_unique<Golem>(monster_Image, 64.f, 170.f, 28, 34, "Golem1"));
-		golems.push_back(std::make_unique<Golem>(monster_Image, 150.f, 332.f, 28, 34, "Golem2"));
+		golems_spawn(monster_Image, 28, 34, golems, map);
 		
 	}
 }
@@ -199,7 +198,7 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 		for (int j = static_cast<int>(x / TITLE_SIZE); j < (x + w) / TITLE_SIZE; j++) {
 			if (j < 0 || j >= map.get_w()) continue;
 			onGround = false;
-			if (map[i][j] == 'w')
+			if (map[i][j] == 'w' || map[i][j] == 'v' && !map.isInter())
 			{
 
 				if (dy > 0)
@@ -232,6 +231,8 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 					doubleJump = true;
 					up_pressed_second_time = false;
 					crates.push_back(std::make_pair(Point(i, j), std::chrono::high_resolution_clock::now()));
+					//!!!!
+					if (j == 2) map.move();
 				}
 				if (map[i][j] == 'h') {
 					map[i][j] = '0';
@@ -361,4 +362,16 @@ void Entity::draw(sf::RenderTarget & target, sf::RenderStates states) const
 
 int Entity::hp() {
 	return health;
+}
+void Entity::spawn(Map & map)
+{
+	for (int i = 0; i < map.get_h(); i++) {
+		for (int j = 0; j < map.get_w(); j++) {
+			if (map[i][j] == 'b')
+			{
+				x = j * TITLE_SIZE;
+				y = i * TITLE_SIZE;
+			}
+		}
+	}
 }

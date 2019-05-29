@@ -47,7 +47,8 @@ void Loot::clear() {
 void Loot::update(Map & map) {
 	for (size_t i = 0; i < ammos.size(); i++)
 	{
-		if (map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] != 'w')
+		if (map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] != 'w' ||
+			map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE]  == 'v' && !map.isInter())
 		{
 			ammos[i].y += 0.1;
 		}

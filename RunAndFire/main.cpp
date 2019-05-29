@@ -16,22 +16,22 @@ int main()
 	gameOn = true;
 	RenderWindow window(VideoMode(640, 480), "Run and Fire!");
 	View view; view.reset(FloatRect(0, 0, 640, 480));
+	int level_counter = 1;
 
 	init();
-	
+
 	Clock clock;
 
 	Image hero_Image; hero_Image.loadFromFile("images/MilesTailsPrower.gif");
 	hero_Image.createMaskFromColor(Color(0, 0, 0));
 	Entity hero(hero_Image, -13, 190, 42, 33, "Hero");
 	hero.get_sprite().setScale(0.5, 0.5);
-
+	hero.spawn(*map);
 	Image monster_Image; monster_Image.loadFromFile("images/Monster.png");
 	monster_Image.createMaskFromColor(Color(255, 255, 255));
 
 	std::vector<std::unique_ptr<Golem>> golems;
-	golems.push_back(std::make_unique<Golem>(monster_Image, 64.f, 170.f, 28, 34, "Golem1"));
-	golems.push_back(std::make_unique<Golem>(monster_Image, 150.f, 332.f, 28, 34, "Golem2"));
+	golems_spawn(monster_Image, 28, 34, golems, *map);
 
 	Image lootImage; lootImage.loadFromFile("images/loot.png");
 	lootImage.createMaskFromColor(Color(255, 255, 255));
@@ -54,7 +54,7 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-		
+
 		for (size_t i = 0; i < golems.size(); i++) {
 			golems[i]->update(time, *map);
 		}
@@ -73,13 +73,14 @@ int main()
 				loot.ammo_add(golems[i]->get_x(), golems[i]->get_y());
 				golems.erase(golems.begin() + i); i--;
 				if (golems.empty() && !bossSpawned) {
-					golems.push_back(std::make_unique<BossGolem>(monster_Image, 150.f, 332.f, 28, 34, "Boss"));
+					golems.push_back(std::make_unique<BossGolem>(monster_Image, 500, -100, 28, 34, "Boss"));
 					bossSpawned = true;
 				}
 			}
 		}
+		Text text("Level "s + std::to_string(level_counter), *font, FONT_SIZE);
 		if (golems.size() == 0) {
-			Text text("YOU WIN!", *font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
+			text.setString("YOU WIN!");//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
 			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 			window.draw(text);
@@ -88,7 +89,7 @@ int main()
 			window.draw(text);
 		}
 		if (!hero.alive()) {
-			Text text("YOU DIED!", *font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
+			text.setString("YOU DIED!");//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
 			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 			window.draw(text);
@@ -109,12 +110,14 @@ int main()
 			text.setPosition(440, 00);
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 			window.draw(text);
+
 			text.setString("congrats");
 			text.setPosition(440, 20);
 			if (hero.ammo() == 0) window.draw(text);
 		}
-		Text text("HP: ", *font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
-		text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
+		int red = 255 * (1 - hero.hp() / static_cast<float>(PLAYER_HP));
+		int green = 255 * (hero.hp() / static_cast<float>(PLAYER_HP));
+		text.setFillColor(Color(red, green, 0));//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 		text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 		String str = "HP: ";
 		str.insert(str.getSize(), std::to_string(hero.hp()));
@@ -124,7 +127,7 @@ int main()
 		for (size_t i = 0; i < golems.size(); i++) {
 			window.draw(golems[i]->get_sprite());
 		}
-		
+
 		window.display();
 	}
 	gameOn = false;

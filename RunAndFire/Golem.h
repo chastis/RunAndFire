@@ -20,4 +20,6 @@ private:
 	bool is_right;
 	
 };
+
+void golems_spawn(Image &image, int W, int H, std::vector<std::unique_ptr<Golem>> &, Map &);
 #endif

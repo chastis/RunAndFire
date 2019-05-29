@@ -40,7 +40,6 @@ Sprite& Entity::get_sprite() {
 }
 
 void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
-	if (Keyboard::isKeyPressed(Keyboard::R)) {
 		bossSpawned = false;
 		spawn(map);
 		map.reset();
@@ -61,8 +60,6 @@ void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Lo
 		Image monster_Image; monster_Image.loadFromFile("images/Monster.png");
 		monster_Image.createMaskFromColor(Color(255, 255, 255));
 		golems_spawn(monster_Image, 28, 34, golems, map);
-		
-	}
 }
 
 //функция управления персонажем
@@ -148,7 +145,8 @@ void Entity::control() {
 }
 
 void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
-	Restart(map, golems, loot);
+	if (Keyboard::isKeyPressed(Keyboard::R))
+		Restart(map, golems, loot);
 	loot.update(map);
 	if (life) {
 		control();

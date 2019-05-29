@@ -1,6 +1,7 @@
 #ifndef LOOT_H
 #define LOOT_H
 #include "helpers.h"
+#include "map.h"
 #include <vector>
 using namespace sf;
 
@@ -14,6 +15,7 @@ public:
 	std::vector<Point> ammos;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	void clear();
+	void update(Map &);
 private:
 	float ammo_w, ammo_h;
 	Texture texture;

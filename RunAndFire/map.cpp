@@ -39,9 +39,12 @@ void Map::draw(RenderTarget& window, RenderStates state) const {
 	for (int i = 0; i < h; i++) {
 		for (int j = 0; j < w; j++) {
 			switch (tittle[i][j]) {
-			case 'w': temp_strite.setTextureRect(IntRect(64, 0, TITLE_SIZE, TITLE_SIZE)); break;
-			case '0': temp_strite.setTextureRect(IntRect(192, 0, TITLE_SIZE, TITLE_SIZE)); break;
-			case 'd': temp_strite.setTextureRect(IntRect(161, 0, TITLE_SIZE, TITLE_SIZE)); break;
+			case 'w': temp_strite.setTextureRect(IntRect(0, 0, TITLE_SIZE, TITLE_SIZE)); break;
+			case '0': temp_strite.setTextureRect(IntRect(81, 0, TITLE_SIZE, TITLE_SIZE)); break;
+			case 'd': temp_strite.setTextureRect(IntRect(49, 0, TITLE_SIZE, TITLE_SIZE)); break;
+			case 'b': temp_strite.setTextureRect(IntRect(65, 0, TITLE_SIZE, TITLE_SIZE)); break;
+			case 'p': temp_strite.setTextureRect(IntRect(81, 0, TITLE_SIZE, TITLE_SIZE)); break;
+			case 's': temp_strite.setTextureRect(IntRect(33, 0, TITLE_SIZE, TITLE_SIZE)); break;
 			}
 			temp_strite.setPosition(static_cast<float>(j * TITLE_SIZE), static_cast<float>(i * TITLE_SIZE));//именно такой порядок, не веришь?
 			window.draw(temp_strite);

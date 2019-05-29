@@ -11,7 +11,7 @@ Entity::Entity(Image &image, float X, float Y, int W, int H, String Name){
 	clock.restart();
 	x = X; y = Y; w = W; h = H; name = Name;
 	bullets_quantity = PLAYET_BULLETS;
-	speed = 0; health = PLAYER_HP ; dx = 0; dy = 0; static_speed = 0.2f; static_jump = 0.6f; static_g = 0.0015f;
+	speed = 0; health = PLAYER_HP ; dx = 0; dy = 0; static_speed = 0.2f; static_jump = 0.6f;
 	life = true; onGround = false; space_pressed = false; sprite_right = true; with_mob = false;
 	is_right = true;
 	texture.loadFromImage(image);
@@ -47,6 +47,7 @@ void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Lo
 		dx = 0;
 		dy = 0;
 		health = PLAYER_HP;
+		state = State::jump;
 		//hp_text.setString(HP_TEXT + std::to_string(health));
 		bullets_quantity = PLAYET_BULLETS;
 		if (!life) if (is_right) sprite.rotate(-90);
@@ -149,6 +150,7 @@ void Entity::control() {
 
 void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
 	Restart(map, golems, loot);
+	loot.update(map);
 	if (life) {
 		control();
 		switch (state)//различные действия в зависимости от состояния
@@ -171,7 +173,7 @@ void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> &
 
 		sprite.setPosition(x + w / 2, y + h / 2); //задаем позицию спрайта в место его центра
 		speed = 0;
-		dy = dy + static_g*time;//постоянно притягиваемся к земле
+		dy = dy + STATIC_G*time;//постоянно притягиваемся к земле
 		if (health <= 0 || y > 500) {
 			life = false;
 			health = 0;
@@ -187,7 +189,7 @@ void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> &
 		//std::cout << dy << std::endl;
 		check_collision(0, dy, map);
 		sprite.setPosition(x + w / 2, y + h / 2);
-		dy = dy + static_g*time;
+		dy = dy + STATIC_G*time;
 	}
 }
 
@@ -223,17 +225,25 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 					x = static_cast<float>(j * TITLE_SIZE + TITLE_SIZE);
 				}
 			}
-			if (map[i][j] == 'd' && up_pressed_second_time) {
-				map[i][j] = '0';
-				doubleJump = true;
-				up_pressed_second_time = false;
-				crates.push_back(std::make_pair(Point(i, j), std::chrono::high_resolution_clock::now()));
-			}
-			if (map[i][j] == 'h') {
-				map[i][j] = '0';
-				health += MED_KIT_HP_BOOST;
-				if (health > PLAYER_HP) health = PLAYER_HP;
-				//hp_text.setString(HP_TEXT + std::to_string(health));
+			if (life)
+			{
+				if (map[i][j] == 'd' && up_pressed_second_time) {
+					map[i][j] = '0';
+					doubleJump = true;
+					up_pressed_second_time = false;
+					crates.push_back(std::make_pair(Point(i, j), std::chrono::high_resolution_clock::now()));
+				}
+				if (map[i][j] == 'h') {
+					map[i][j] = '0';
+					health += MED_KIT_HP_BOOST;
+					if (health > PLAYER_HP) health = PLAYER_HP;
+					//hp_text.setString(HP_TEXT + std::to_string(health));
+				}
+				if (map[i][j] == 's') {
+					life = false;
+					health = 0;
+					dy = -static_jump / 4.f;
+				}
 			}
 		}
 	}

@@ -43,3 +43,13 @@ void Loot::draw(sf::RenderTarget & target, sf::RenderStates states) const
 void Loot::clear() {
 	ammos.clear();
 }
+
+void Loot::update(Map & map) {
+	for (size_t i = 0; i < ammos.size(); i++)
+	{
+		if (map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] != 'w')
+		{
+			ammos[i].y += 0.1;
+		}
+	}
+}

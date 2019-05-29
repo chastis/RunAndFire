@@ -3,16 +3,24 @@
 #define HELPERS_H
 #include "headers_which_you_need.h"
 
-constexpr int TITLE_SIZE = 16;
-constexpr int PLAYER_GUN_SPEED = 3; // per second
-constexpr int GOLEM_DMG = 45;
-constexpr int PLAYER_HP = 100;
-constexpr int MAX_DOUBLE_JUMP_POINTS = 15;
-constexpr int PLAYER_BULLETS = 100;
+constexpr auto TITLE_SIZE			= 16;
+constexpr auto PLAYER_GUN_SPEED		= 3; // per second
+constexpr auto GOLEM_DMG			= 45;
+constexpr auto PLAYER_HP			= 100;
+constexpr auto MAX_DJBOXES_COUNT	= 15;
+constexpr auto CRATES_RESPAWN		= 3000ll; // in milliseconds
+constexpr auto MED_KIT_HP_BOOST		= 50;
+constexpr auto MAP_H				= 30;
+constexpr auto MAP_W				= 40;
+constexpr auto PLAYET_BULLETS		= 100;
+constexpr auto MAP_FILE				= "images/map.png";
+constexpr auto FONT_FILE			= "terminal.TTF";
+
+using Point = sf::Vector2f;
+enum class LootType { AMMO, HP };
 enum class State { right, left, up, down, jump, stay };
 enum class Monsters { none, golem, bossGolem };
-using Point = sf::Vector2f;
-static std::vector<std::thread *> threads(MAX_DOUBLE_JUMP_POINTS);
 
+static bool gameOn = true;
 
 #endif //HELPERS_H

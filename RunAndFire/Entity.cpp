@@ -2,11 +2,11 @@
 #include "functions.h"
 using namespace sf;
 
-Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) : doubleJump(false) {
+Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) : doubleJump(false), up_pressed(false), up_pressed_second_time(false) {
 	clock.restart();
-	x = X; y = Y; w = W; h = H; name = Name; bullets_quantity = PLAYER_BULLETS;	
+	x = X; y = Y; w = W; h = H; name = Name; bullets_quantity = PLAYET_BULLETS;
 	speed = 0; health = PLAYER_HP ; dx = 0; dy = 0; static_speed = 0.2f; static_jump = 0.6f; static_g = 0.0015f;
-	life = true; onGround = false; space_pressed = false; sprite_right = true; with_mob = false; up_pressed = false, up_pressed_second_time = false;
+	life = true; onGround = false; space_pressed = false; sprite_right = true; with_mob = false;
 	is_right = true;
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
@@ -32,7 +32,7 @@ void Entity::Restart() {
 		dx = 0;
 		dy = 0;
 		health = PLAYER_HP;
-		bullets_quantity = PLAYER_BULLETS;
+		bullets_quantity = PLAYET_BULLETS;
 		if (!life) if (is_right) sprite.rotate(-90);
 				   else sprite.rotate(90);
 		life = true;
@@ -60,7 +60,6 @@ void Entity::control() {
 		if ((Keyboard::isKeyPressed(Keyboard::Up)) && (onGround || doubleJump)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
 			state = State::jump; dy = -static_jump; onGround = false; doubleJump = false; up_pressed = true;
 		}
-		
 		if (Keyboard::isKeyPressed(Keyboard::Down)) {
 			state = State::down;
 		}
@@ -76,9 +75,8 @@ void Entity::control() {
 		if (!Keyboard::isKeyPressed(Keyboard::Up) && up_pressed)
 		{
 			up_pressed = false;
-			//up_pressed_second_time = false;	
+			//up_pressed_second_time = false;  
 		}
-		
 	}
 	else {
 		state = State::stay;
@@ -88,12 +86,6 @@ void Entity::control() {
 
 void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
 	Restart();
-	/*
-	if (clock.getElapsedTime().asMilliseconds() > 1000 / PLAYER_GUN_SPEED && space_pressed) {
-		space_pressed = false;
-		clock.restart();
-	}
-	*/
 	if (life) {
 		control();
 		switch (state)//различные действия в зависимости от состояния
@@ -124,15 +116,10 @@ void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> &
 			dy = -0.5;
 			//dy = 0;//персонаж не будет подпрыгивать если умирает над врагом
 		}
-		if (onGround)
-		{
-			up_pressed_second_time = false;
-		}
+		if (onGround) up_pressed_second_time = false;
 	}
 	else if (!onGround) {
 		y += dy*time;
-		//up_pressed = false;
-		//up_pressed_second_time = false;
 		//std::cout << dy << std::endl;
 		check_collision(0, dy, map);
 		sprite.setPosition(x + w / 2, y + h / 2);
@@ -141,62 +128,55 @@ void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> &
 }
 
 void Entity::check_collision(float dx, float dy, Map & map) {
-	try {
-		for (int i = static_cast<int>(y / TITLE_SIZE); i < (y + h) / TITLE_SIZE; i++) {
-			if (i < 0 || i >= map.get_h()) continue;
-			for (int j = static_cast<int>(x / TITLE_SIZE); j < (x + w) / TITLE_SIZE; j++) {
-				if (j < 0 || j >= map.get_w()) continue;
-				onGround = false;
-				if (map[i][j] == 'w')
+	for (int i = static_cast<int>(y / TITLE_SIZE); i < (y + h) / TITLE_SIZE; i++) {
+		if (i < 0 || i >= map.get_h()) continue;
+		for (int j = static_cast<int>(x / TITLE_SIZE); j < (x + w) / TITLE_SIZE; j++) {
+			if (j < 0 || j >= map.get_w()) continue;
+			onGround = false;
+			if (map[i][j] == 'w')
+			{
+
+				if (dy > 0)
 				{
-
-					if (dy > 0)
-					{
-						y = static_cast<float>(i * TITLE_SIZE - h);
-						this->dy = 0;
-						this->dx = 0;
-						onGround = true;
-						with_mob = false;
-						return;
-					}
-					if (dy < 0)
-					{
-						y = static_cast<float>(i * TITLE_SIZE + TITLE_SIZE);
-						this->dy = 0;
-					}
-					if (dx > 0)
-					{
-						x = static_cast<float>(j * TITLE_SIZE - w);
-					}
-					if (dx < 0)
-					{
-						x = static_cast<float>(j * TITLE_SIZE + TITLE_SIZE);
-					}
+					y = static_cast<float>(i * TITLE_SIZE - h);
+					this->dy = 0;
+					this->dx = 0;
+					onGround = true;
+					with_mob = false;
+					return;
 				}
-				if (map[i][j] == 'd' && up_pressed_second_time) {
-					map[i][j] = '0';
-					doubleJump = true;
-					up_pressed_second_time = false;
-					auto reset = [&](int i, int j)
-					{
-						std::this_thread::sleep_for(std::chrono::seconds(3));
-						map[i][j] = 'd';
-					};
-					
-					static int count = 0;
-					if (count + 1 > MAX_DOUBLE_JUMP_POINTS)
-					{
-						threads[(count + 1) % MAX_DOUBLE_JUMP_POINTS]->join();
-						delete threads[(count + 1) % MAX_DOUBLE_JUMP_POINTS];
-					}
-					threads[count++ % MAX_DOUBLE_JUMP_POINTS] = new std::thread(reset, i, j);
-
+				if (dy < 0)
+				{
+					y = static_cast<float>(i * TITLE_SIZE + TITLE_SIZE);
+					this->dy = 0;
 				}
+				if (dx > 0)
+				{
+					x = static_cast<float>(j * TITLE_SIZE - w);
+				}
+				if (dx < 0)
+				{
+					x = static_cast<float>(j * TITLE_SIZE + TITLE_SIZE);
+				}
+			}
+			if (map[i][j] == 'd' && up_pressed_second_time) {
+				map[i][j] = '0';
+				doubleJump = true;
+				up_pressed_second_time = false;
+				crates.push_back(std::make_pair(Point(i, j), std::chrono::high_resolution_clock::now()));
+			}
+			if (map[i][j] == 'h') {
+				map[i][j] = '0';
+				health += MED_KIT_HP_BOOST;
+				if (health > PLAYER_HP) health = PLAYER_HP;
 			}
 		}
 	}
-	catch (std::exception) {
-		return;
+	if (!crates.empty()) {	
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - crates.front().second).count() > CRATES_RESPAWN) {
+			map[crates.front().first.x][crates.front().first.y] = 'd';
+			crates.erase(crates.begin());
+		}
 	}
 }
 
@@ -216,19 +196,19 @@ void Entity::check_collision(std::vector<std::unique_ptr<Golem>> & golems) {
 	for (size_t i = 0; i < golems.size(); i++) {
 		float gx = golems[i]->get_x(), gy = golems[i]->get_y(), gh = static_cast<float>(golems[i]->get_h()), gw = static_cast<float>(golems[i]->get_w());
 		if (square_in_square(x, y, static_cast<float>(w), static_cast<float>(h), gx, gy, gw, gh) ||
-			square_in_square(gx, gy, gw, gh, x, y, w, h)) {
+			square_in_square(gx, gy, gw, gh, x, y, static_cast<float>(w), static_cast<float>(h))) {
 
 			if (!with_mob) health -= golems[i]->get_damage();
 			if (golems[i]->get_right() && !this->is_right || !golems[i]->get_right() && this->is_right) golems[i]->change_direction();
 			with_mob = true;
 
 			if (golems[i]->get_right()) {
-				dx = -static_speed * 1.5;
-				dy = -static_jump / 4;
+				dx = -static_speed * 1.5f;
+				dy = -static_jump / 4.f;
 			}
 			else {
-				dx = static_speed * 1.5;
-				dy = -static_jump / 4;
+				dx = static_speed * 1.5f;
+				dy = -static_jump / 4.f;
 			}
 
 		}
@@ -237,7 +217,7 @@ void Entity::check_collision(std::vector<std::unique_ptr<Golem>> & golems) {
 
 
 void Entity::fire() {
-	
+
 	int t_x, t_y;
 	if (state == State::down)
 	{

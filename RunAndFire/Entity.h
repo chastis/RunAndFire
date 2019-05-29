@@ -26,6 +26,7 @@ public:
 	int ammo();
 private:
 	std::vector<Bullet> bul;
+	std::vector<std::pair<Point, std::chrono::high_resolution_clock::time_point>> crates;
 	int health, bullets_quantity;
 	State state;
 	float x, y;//координаты игрока х и у

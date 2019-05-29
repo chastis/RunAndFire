@@ -1,5 +1,5 @@
-#ifndef MAP_H
-#define MAP_H
+#ifndef CLASS_MAP_H
+#define CLASS_MAP_H
 #include "helpers.h"
 using namespace sf;
 

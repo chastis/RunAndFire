@@ -18,8 +18,8 @@ public:
 	bool get_life();
 	int get_damage();
 	Monsters get_type();
+	//virtual void spawm_loot() = 0;
 protected:
-	Monsters type;
 	float x, y;
 	float dx, dy, speed;
 	int w, h;
@@ -28,5 +28,7 @@ protected:
 	Texture texture;
 	Sprite sprite;
 	String name;
+	LootType loot;
+	Monsters type;
 };
 #endif

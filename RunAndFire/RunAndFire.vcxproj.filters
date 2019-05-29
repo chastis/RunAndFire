@@ -71,6 +71,9 @@
     <ClInclude Include="BossGolem.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="globals.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="terminal.TTF">

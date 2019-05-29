@@ -18,5 +18,6 @@ public:
 	bool get_right();
 private:
 	bool is_right;
+	
 };
 #endif

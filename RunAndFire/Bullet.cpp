@@ -20,7 +20,7 @@ Bullet::Bullet(Texture & texture, float X, float Y, int W, int H, String Name, S
 		dx = -0.2f;
 		sprite.setScale(-1.f, 1.f);
 	}
-	speed = 0.2f; 
+	speed = 0.2f;
 	onGround = false;
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(280, 215, w, h));
@@ -33,15 +33,15 @@ Sprite Bullet::get_sprite() {
 }
 
 int Bullet::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> & golems) {
-	x += dx*time;
+	x += dx * time;
 	if (check_collision(map) == -1) return -1;
 	if (check_collision(golems) == -1) return -1;
 
-	y += dy*time;
+	y += dy * time;
 	if (check_collision(map) == -1) return -1;
 	if (check_collision(golems) == -1) return -1;
 
-	sprite.setPosition(x + w / 2, y + h / 2); //задаем позицию спрайта в место его центра
+	sprite.setPosition(x + w / 2, y + h / 2);
 	return 0;
 }
 
@@ -62,7 +62,7 @@ int Bullet::check_collision(Map & map) {
 		return -1;
 	}
 
-	
+
 
 	return 0;
 }

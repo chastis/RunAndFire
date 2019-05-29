@@ -4,7 +4,6 @@
 #include "Golem.h"
 #include "Bullet.h"
 #include "loot.h"
-#include <vector>
 #include "headers_which_you_need.h"
 using namespace sf;
 
@@ -22,13 +21,14 @@ public:
 	void fire();
 	void draw_bullet(float time, Map & map, RenderWindow & window, std::vector<std::unique_ptr<Golem>> & golems);
 	bool alive();
-	void Restart();
+	void Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot);
 	int ammo();
 private:
 	std::vector<Bullet> bul;
 	std::vector<std::pair<Point, std::chrono::high_resolution_clock::time_point>> crates;
 	int health, bullets_quantity;
 	State state;
+	Direcions dir;
 	float x, y;//координаты игрока х и у
 	float dx, dy, speed , static_speed, static_jump, static_g;//скорость персонажа в текущий момент относительно осей, и стандартная скорость персонажа
 	int w, h;//размеры спрайта и кол-во здоровья персонажа

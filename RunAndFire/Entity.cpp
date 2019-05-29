@@ -8,6 +8,7 @@ Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) : doub
 	speed = 0; health = PLAYER_HP ; dx = 0; dy = 0; static_speed = 0.2f; static_jump = 0.6f; static_g = 0.0015f;
 	life = true; onGround = false; space_pressed = false; sprite_right = true; with_mob = false;
 	is_right = true;
+	dir = Direcions::r;
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(3, 18, w, h));
@@ -25,7 +26,7 @@ Sprite& Entity::get_sprite() {
 	return sprite;
 }
 
-void Entity::Restart() {
+void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
 	if (Keyboard::isKeyPressed(Keyboard::R)) {
 		x = -13;
 		y = 0;
@@ -36,7 +37,15 @@ void Entity::Restart() {
 		if (!life) if (is_right) sprite.rotate(-90);
 				   else sprite.rotate(90);
 		life = true;
-		
+		loot.clear();
+		golems.clear();
+		loot.ammo_add(96, 320);
+		loot.ammo_add(576, 416);
+		loot.ammo_add(500, 416);
+		Image monster_Image; monster_Image.loadFromFile("images/Monster.png");
+		monster_Image.createMaskFromColor(Color(255, 255, 255));
+		golems.push_back(std::make_unique<Golem>(monster_Image, 64.f, 170.f, 28, 34, "Golem1"));
+		golems.push_back(std::make_unique<Golem>(monster_Image, 150.f, 332.f, 28, 34, "Golem2"));
 	}
 }
 
@@ -46,46 +55,84 @@ void Entity::control() {
 	//493 100
 	//34 47
 	if (!with_mob) {//если нажата клавиша
-		if (Keyboard::isKeyPressed(Keyboard::Left)) {//лево
+		if (Keyboard::isKeyPressed(Keyboard::A)) {//лево
 			state = State::left; speed = static_speed; is_right = false;
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Right)) {//право
+		if (Keyboard::isKeyPressed(Keyboard::D)) {//право
 			state = State::right; speed = static_speed; is_right = true;
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Up) && !up_pressed && !up_pressed_second_time && !onGround)
+		if (Keyboard::isKeyPressed(Keyboard::Space) && !up_pressed && !up_pressed_second_time && !onGround)
 		{
 			up_pressed_second_time = true;
 			up_pressed = true;
 		}
-		if ((Keyboard::isKeyPressed(Keyboard::Up)) && (onGround || doubleJump)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
+		if ((Keyboard::isKeyPressed(Keyboard::Space)) && (onGround || doubleJump)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
 			state = State::jump; dy = -static_jump; onGround = false; doubleJump = false; up_pressed = true;
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Down)) {
+		if (Keyboard::isKeyPressed(Keyboard::S)) {
 			state = State::down;
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Space) && !space_pressed) {
-			if (bullets_quantity > 0) { fire(); }
-			space_pressed = true;
+		if (Keyboard::isKeyPressed(Keyboard::W)) {
+			state = State::up;
 		}
-		//тут шото не так
-		// условие (1) не должно никогда выполняться
-		if (!Keyboard::isKeyPressed(Keyboard::Space) && space_pressed) {
-			space_pressed = false;
-		}
-		if (!Keyboard::isKeyPressed(Keyboard::Up) && up_pressed)
+		if (!Keyboard::isKeyPressed(Keyboard::Space) && up_pressed)
 		{
 			up_pressed = false;
 			//up_pressed_second_time = false;  
 		}
+		//fire
+		if ((Keyboard::isKeyPressed(Keyboard::Up)
+			|| Keyboard::isKeyPressed(Keyboard::Down)
+			|| Keyboard::isKeyPressed(Keyboard::Left)
+			|| Keyboard::isKeyPressed(Keyboard::Right)))
+		{
+			if (!space_pressed)
+			{
+				if (Keyboard::isKeyPressed(Keyboard::Up) && Keyboard::isKeyPressed(Keyboard::Left)) {
+					is_right = false;
+					dir = Direcions::ul;
+				}
+				else if (Keyboard::isKeyPressed(Keyboard::Up) && Keyboard::isKeyPressed(Keyboard::Right)) {
+					is_right = true;
+					dir = Direcions::ur;
+				}
+				else if (Keyboard::isKeyPressed(Keyboard::Down) && Keyboard::isKeyPressed(Keyboard::Left)) {
+					is_right = false;
+					dir = Direcions::dl;
+				}
+				else if (Keyboard::isKeyPressed(Keyboard::Down) && Keyboard::isKeyPressed(Keyboard::Right)) {
+					is_right = true;
+					dir = Direcions::dr;
+				}
+				else if (Keyboard::isKeyPressed(Keyboard::Up)) {
+					dir = Direcions::u;
+				}
+				else if (Keyboard::isKeyPressed(Keyboard::Down)) {
+					dir = Direcions::d;
+				}
+				else if (Keyboard::isKeyPressed(Keyboard::Left)) {
+					is_right = false;
+					dir = Direcions::l;
+				}
+				else if (Keyboard::isKeyPressed(Keyboard::Right)) {
+					is_right = true;
+					dir = Direcions::r;
+				}
+				if (bullets_quantity > 0) { fire(); }
+				space_pressed = true;
+			}
+		}
+		else if (space_pressed) space_pressed = false;
+		
 	}
 	else {
 		state = State::stay;
 	}
-	Restart();
+	//Restart();
 }
 
 void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
-	Restart();
+	Restart(map,golems,loot);
 	if (life) {
 		control();
 		switch (state)//различные действия в зависимости от состояния
@@ -219,16 +266,42 @@ void Entity::check_collision(std::vector<std::unique_ptr<Golem>> & golems) {
 void Entity::fire() {
 
 	int t_x, t_y;
-	if (state == State::down)
+	switch (dir)
 	{
+	case Direcions::u:
+		t_x = x + w / 2;
+		t_y = y;
+		break;
+	case Direcions::d:
 		t_x = x + w / 2;
 		t_y = y + h;
-	}
-	else {
-		t_x = sprite_right ? x + w : x;
+		break;
+	case Direcions::l:
+		t_x = x;
 		t_y = y + h / 3;
+		break;
+	case Direcions::r:
+		t_x = x + w;
+		t_y = y + h / 3;
+		break;
+	case Direcions::ur:
+		t_x = x + w;
+		t_y = y;
+		break;
+	case Direcions::ul:
+		t_x = x;
+		t_y = y;
+		break;
+	case Direcions::dr:
+		t_x = x + w;
+		t_y = y + h;
+		break;
+	case Direcions::dl:
+		t_x = x;
+		t_y = y + h;
+		break;
 	}
-	Bullet temp(bullet_texture, t_x, t_y, 13, 10, "piu", state, is_right);
+	Bullet temp(bullet_texture, t_x, t_y, 13, 10, "piu", dir);
 	bullets_quantity--;
 	bul.push_back(temp);
 }

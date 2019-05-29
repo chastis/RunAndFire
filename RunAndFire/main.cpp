@@ -36,7 +36,6 @@ int main()
 	loot.ammo_add(96, 320);
 	loot.ammo_add(576, 416);
 	loot.ammo_add(500, 416);
-
 	bool bossSpawned = false;
 	while (window.isOpen())
 	{

@@ -13,7 +13,7 @@ public:
 	int ammo_aword();
 	std::vector<Point> ammos;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
+	void clear();
 private:
 	float ammo_w, ammo_h;
 	Texture texture;

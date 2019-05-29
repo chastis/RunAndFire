@@ -57,19 +57,38 @@ void Loot::clear() {
 void Loot::update(Map & map) {
 	for (size_t i = 0; i < ammos.size(); i++)
 	{
-		if (map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] != 'w' ||
-			map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE]  == 'v' && !map.isInter())
+		if (map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] != 'w')
 		{
-			ammos[i].y += 0.1;
+			if (map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] != 'v' ||
+				map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] == 'v' && map.isInter())
+			{
+				ammos[i].y += 0.1;
+			}
+			
 		}
+		else
+		{
+			continue;
+		}
+		
+		
 		
 	}
 	for (size_t i = 0; i < portals.size(); i++)
 	{
-		if (map[static_cast<int>(portals[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(portals[i].x + ammo_w / 2) / TITLE_SIZE] != 'w' ||
-			map[static_cast<int>(portals[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(portals[i].x + ammo_w / 2) / TITLE_SIZE] == 'v' && !map.isInter())
+		if (map[static_cast<int>(portals[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(portals[i].x + ammo_w / 2) / TITLE_SIZE] != 'w')
 		{
-			portals[i].y += 0.1;
+			if (map[static_cast<int>(portals[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(portals[i].x + ammo_w / 2) / TITLE_SIZE] != 'v' ||
+				map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] == 'v' && map.isInter())
+			{
+				portals[i].y += 0.1;
+			}
+			
 		}
+		else
+		{
+			continue;
+		}
+		
 	}
 }

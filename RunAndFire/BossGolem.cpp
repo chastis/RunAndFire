@@ -12,18 +12,22 @@ BossGolem::BossGolem(Image & image, float X, float Y, int W, int H, String Name)
 
 void BossGolem::update(float time, Map & map)
 {
+	//sprite.setScale(1.f, 1.f);
 	switch (health)
 	{
 	case 100:
 		x += dx*time;
 		break;
 	case 75:
+		sprite.setTextureRect(IntRect(133, 84, w/2, h/2));
 		x += 2*dx*time;
 		break;
 	case 50:
+		sprite.setTextureRect(IntRect(194, 84, w/2, h/2));
 		x += 4*dx*time;
 		break;
 	case 25:
+		sprite.setTextureRect(IntRect(223, 85, w/2, h/2));
 		x += 6*dx*time;
 		break;
 	default:
@@ -31,6 +35,7 @@ void BossGolem::update(float time, Map & map)
 		break;
 		
 	}
+	//sprite.setScale(2.f, 2.f);
 	//std::cout << health << std::endl;
 	//x += dx*time;
 	check_collision(dx, 0, map);

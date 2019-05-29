@@ -59,6 +59,7 @@ void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Lo
 		loot.ammo_add(96, 320);
 		loot.ammo_add(576, 416);
 		loot.ammo_add(500, 416);
+		loot.ammo_add(576, 150);
 		Image monster_Image; monster_Image.loadFromFile("images/Monster.png");
 		monster_Image.createMaskFromColor(Color(255, 255, 255));
 		golems_spawn(monster_Image, 28, 34, golems, map);

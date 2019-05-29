@@ -1,12 +1,12 @@
 #include "map.h"
 
-Map::Map(Image & image, int H, int W, std::string name) : tittle(H, std::vector<char>(W, 0)) {
+Map::Map(Image & image, int H, int W, std::string Name) : tittle(H, std::vector<char>(W, 0)) {
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
 	interaction = false;
 	h = H;
 	w = W;
-
+	name = Name;
 	//auto start = std::chrono::high_resolution_clock::now();
 	std::ifstream fin("maps/" + name + ".txt");
 	for (int i = 0; i < h; i++) {
@@ -81,5 +81,14 @@ void Map::move()
 }
 void Map::reset()
 {
+	std::ifstream fin("maps/" + name + ".txt");
+	for (int i = 0; i < h; i++) {
+		std::string line;
+		std::getline(fin, line);
+		for (int j = 0; j < w; j++) {
+			tittle[i][j] = line[j];
+			//fin >> tittle[i][j];
+		}
+	}
 	interaction = false;
 }

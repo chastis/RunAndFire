@@ -20,6 +20,7 @@ private:
 	Texture texture;
 	Sprite sprite;
 	int h, w;
+	std::string name;
 	std::vector<std::vector<char>> tittle;
 };
 

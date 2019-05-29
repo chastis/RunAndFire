@@ -27,13 +27,14 @@ void Golem::update(float time, Map & map)
 
 	switch (health)
 	{
-	case 50:
+	case 50:	
 		x += dx*time;
 		break;
 	case 25:
+		sprite.setTextureRect(IntRect(133, 84, w, h));
 		x += 2 * dx*time;
 		break;
-	default:
+	default:	
 		x += dx*time;
 		break;
 
@@ -120,5 +121,4 @@ void golems_spawn(Image &image, int W, int H, std::vector<std::unique_ptr<Golem>
 			}
 		}
 	}
-	golems.resize(1);
 }

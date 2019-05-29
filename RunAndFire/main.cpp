@@ -40,12 +40,17 @@ int main()
 	loot.ammo_add(576, 416);
 	loot.ammo_add(500, 416);
 
+	sf::Music music;
+	music.openFromFile("gamno.wav");
+	music.play();
+	music.setLoop(true);
 	Menu menu;
 	bool isWin = false;
 	while (window.isOpen())
 	{
 		if (!menu.is_menu())
 		{
+			if (music.getStatus() == sf::Music::Status::Stopped) music.play();
 			if (level_counter >= 2) menu.open(1);
 			auto time = static_cast<float>(clock.getElapsedTime().asMicroseconds());
 
@@ -149,6 +154,7 @@ int main()
 		}
 		else
 		{
+			music.stop();
 			//menu;
 			sf::Vector2i pixelPos = sf::Mouse::getPosition(window); //coord of mouse (in px)
 			sf::Vector2f pos = window.mapPixelToCoords(pixelPos); //coord of mous (transform)

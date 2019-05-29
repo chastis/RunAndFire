@@ -40,7 +40,6 @@ void Loot::draw(sf::RenderTarget & target, sf::RenderStates states) const
 	}
 }
 
-void Loot::clear()
-{
+void Loot::clear() {
 	ammos.clear();
 }

@@ -80,4 +80,9 @@
       <Filter>Файлы ресурсов</Filter>
     </Font>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="maps\map1.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

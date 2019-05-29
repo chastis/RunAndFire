@@ -10,6 +10,7 @@
 #include <chrono>
 #include <thread>
 #include <future>
+#include <string>
 
 
 #endif

@@ -2,24 +2,37 @@
 #include "functions.h"
 using namespace sf;
 
-Entity::Entity(Image &image, float X, float Y, int W, int H, String Name) : doubleJump(false), up_pressed(false), up_pressed_second_time(false) {
+bool bossSpawned;
+
+Entity::Entity(Image &image, float X, float Y, int W, int H, String Name){
+	doubleJump = false;
+	up_pressed = false;
+	up_pressed_second_time = false;
 	clock.restart();
-	x = X; y = Y; w = W; h = H; name = Name; bullets_quantity = PLAYET_BULLETS;
+	x = X; y = Y; w = W; h = H; name = Name;
+	bullets_quantity = PLAYET_BULLETS;
 	speed = 0; health = PLAYER_HP ; dx = 0; dy = 0; static_speed = 0.2f; static_jump = 0.6f; static_g = 0.0015f;
 	life = true; onGround = false; space_pressed = false; sprite_right = true; with_mob = false;
 	is_right = true;
-	dir = Direcions::r;
 	texture.loadFromImage(image);
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(3, 18, w, h));
 	sprite.setOrigin(w / 2.f, h / 2.f);
 	sprite.setPosition(x + w / 2.f, x + h / 2.f);
-	//
 	w /= 2; h /= 2;
-	//
 	Image bullet_Image; bullet_Image.loadFromFile("images/bullets.png");
 	bullet_Image.createMaskFromColor(Color(0, 0, 0));
 	bullet_texture.loadFromImage(bullet_Image);
+
+	Text text("HP: ", *font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пиксел€х);//сам объект текст (не строка)
+	text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
+	text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
+	String str = HP_TEXT;
+	str.insert(str.getSize(), std::to_string(health));
+	text.setString(str);
+	text.setPosition(440, 30);
+	hp_text = text;
+	
 }
 
 Sprite& Entity::get_sprite() {
@@ -28,11 +41,13 @@ Sprite& Entity::get_sprite() {
 
 void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
 	if (Keyboard::isKeyPressed(Keyboard::R)) {
+		bossSpawned = false;
 		x = -13;
 		y = 0;
 		dx = 0;
 		dy = 0;
 		health = PLAYER_HP;
+		//hp_text.setString(HP_TEXT + std::to_string(health));
 		bullets_quantity = PLAYET_BULLETS;
 		if (!life) if (is_right) sprite.rotate(-90);
 				   else sprite.rotate(90);
@@ -46,6 +61,7 @@ void Entity::Restart(Map & map, std::vector<std::unique_ptr<Golem>> & golems, Lo
 		monster_Image.createMaskFromColor(Color(255, 255, 255));
 		golems.push_back(std::make_unique<Golem>(monster_Image, 64.f, 170.f, 28, 34, "Golem1"));
 		golems.push_back(std::make_unique<Golem>(monster_Image, 150.f, 332.f, 28, 34, "Golem2"));
+		
 	}
 }
 
@@ -90,40 +106,40 @@ void Entity::control() {
 			{
 				if (Keyboard::isKeyPressed(Keyboard::Up) && Keyboard::isKeyPressed(Keyboard::Left)) {
 					is_right = false;
-					dir = Direcions::ul;
+					dir = Directions::ul;
 				}
 				else if (Keyboard::isKeyPressed(Keyboard::Up) && Keyboard::isKeyPressed(Keyboard::Right)) {
 					is_right = true;
-					dir = Direcions::ur;
+					dir = Directions::ur;
 				}
 				else if (Keyboard::isKeyPressed(Keyboard::Down) && Keyboard::isKeyPressed(Keyboard::Left)) {
 					is_right = false;
-					dir = Direcions::dl;
+					dir = Directions::dl;
 				}
 				else if (Keyboard::isKeyPressed(Keyboard::Down) && Keyboard::isKeyPressed(Keyboard::Right)) {
 					is_right = true;
-					dir = Direcions::dr;
+					dir = Directions::dr;
 				}
 				else if (Keyboard::isKeyPressed(Keyboard::Up)) {
-					dir = Direcions::u;
+					dir = Directions::u;
 				}
 				else if (Keyboard::isKeyPressed(Keyboard::Down)) {
-					dir = Direcions::d;
+					dir = Directions::d;
 				}
 				else if (Keyboard::isKeyPressed(Keyboard::Left)) {
 					is_right = false;
-					dir = Direcions::l;
+					dir = Directions::l;
 				}
 				else if (Keyboard::isKeyPressed(Keyboard::Right)) {
 					is_right = true;
-					dir = Direcions::r;
+					dir = Directions::r;
 				}
 				if (bullets_quantity > 0) { fire(); }
 				space_pressed = true;
 			}
 		}
 		else if (space_pressed) space_pressed = false;
-		
+
 	}
 	else {
 		state = State::stay;
@@ -132,7 +148,7 @@ void Entity::control() {
 }
 
 void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot) {
-	Restart(map,golems,loot);
+	Restart(map, golems, loot);
 	if (life) {
 		control();
 		switch (state)//различные действи€ в зависимости от состо€ни€
@@ -158,6 +174,7 @@ void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> &
 		dy = dy + static_g*time;//посто€нно прит€гиваемс€ к земле
 		if (health <= 0 || y > 500) {
 			life = false;
+			health = 0;
 			if (is_right) sprite.rotate(90);
 			else sprite.rotate(-90);
 			dy = -0.5;
@@ -216,6 +233,7 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 				map[i][j] = '0';
 				health += MED_KIT_HP_BOOST;
 				if (health > PLAYER_HP) health = PLAYER_HP;
+				//hp_text.setString(HP_TEXT + std::to_string(health));
 			}
 		}
 	}
@@ -246,6 +264,7 @@ void Entity::check_collision(std::vector<std::unique_ptr<Golem>> & golems) {
 			square_in_square(gx, gy, gw, gh, x, y, static_cast<float>(w), static_cast<float>(h))) {
 
 			if (!with_mob) health -= golems[i]->get_damage();
+			if (health < 0) health = 0;
 			if (golems[i]->get_right() && !this->is_right || !golems[i]->get_right() && this->is_right) golems[i]->change_direction();
 			with_mob = true;
 
@@ -260,6 +279,7 @@ void Entity::check_collision(std::vector<std::unique_ptr<Golem>> & golems) {
 
 		}
 	}
+	//hp_text.setString(HP_TEXT + std::to_string(health));
 }
 
 
@@ -268,35 +288,35 @@ void Entity::fire() {
 	int t_x, t_y;
 	switch (dir)
 	{
-	case Direcions::u:
+	case Directions::u:
 		t_x = x + w / 2;
 		t_y = y;
 		break;
-	case Direcions::d:
+	case Directions::d:
 		t_x = x + w / 2;
 		t_y = y + h;
 		break;
-	case Direcions::l:
+	case Directions::l:
 		t_x = x;
 		t_y = y + h / 3;
 		break;
-	case Direcions::r:
+	case Directions::r:
 		t_x = x + w;
 		t_y = y + h / 3;
 		break;
-	case Direcions::ur:
+	case Directions::ur:
 		t_x = x + w;
 		t_y = y;
 		break;
-	case Direcions::ul:
+	case Directions::ul:
 		t_x = x;
 		t_y = y;
 		break;
-	case Direcions::dr:
+	case Directions::dr:
 		t_x = x + w;
 		t_y = y + h;
 		break;
-	case Direcions::dl:
+	case Directions::dl:
 		t_x = x;
 		t_y = y + h;
 		break;
@@ -322,4 +342,13 @@ bool Entity::alive() {
 
 int Entity::ammo() {
 	return bullets_quantity;
+}
+
+void Entity::draw(sf::RenderTarget & target, sf::RenderStates states) const
+{
+	target.draw(sprite, states);
+}
+
+int Entity::hp() {
+	return health;
 }

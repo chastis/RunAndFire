@@ -8,8 +8,11 @@
 
 using namespace sf;
 
+bool gameOn;
+
 int main()
 {
+	bossSpawned = false;
 	gameOn = true;
 	RenderWindow window(VideoMode(640, 480), "Run and Fire!");
 	View view; view.reset(FloatRect(0, 0, 640, 480));
@@ -36,7 +39,7 @@ int main()
 	loot.ammo_add(96, 320);
 	loot.ammo_add(576, 416);
 	loot.ammo_add(500, 416);
-	bool bossSpawned = false;
+
 	while (window.isOpen())
 	{
 
@@ -63,7 +66,7 @@ int main()
 		window.draw(*map);
 		//loot.ammo_draw(window);
 		window.draw(loot);
-		window.draw(hero.get_sprite());
+		window.draw(hero);
 		hero.draw_bullet(time, *map, window, golems);
 		for (size_t i = 0; i < golems.size(); i++) {
 			if (!golems[i]->get_life()) {
@@ -110,10 +113,18 @@ int main()
 			text.setPosition(440, 20);
 			if (hero.ammo() == 0) window.draw(text);
 		}
+		Text text("HP: ", *font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
+		text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
+		text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
+		String str = "HP: ";
+		str.insert(str.getSize(), std::to_string(hero.hp()));
+		text.setString(str);
+		text.setPosition(440, 25);
+		window.draw(text);
 		for (size_t i = 0; i < golems.size(); i++) {
 			window.draw(golems[i]->get_sprite());
 		}
-
+		
 		window.display();
 	}
 	gameOn = false;

@@ -1,46 +1,46 @@
 #include "Bullet.h"
 using namespace sf;
 
-Bullet::Bullet(Texture & texture, float X, float Y, int W, int H, String Name, Direcions dir) {
+Bullet::Bullet(Texture & texture, float X, float Y, int W, int H, String Name, Directions dir) {
 	x = X; y = Y; w = W; h = H; name = Name; damage = 25;
 	switch (dir)
 	{
-	case Direcions::u:
+	case Directions::u:
 		dy = -0.4f;
 		dx = 0.f;
 		sprite.rotate(-90.f);
 		break;
-	case Direcions::d:
+	case Directions::d:
 		dy = 0.4f;
 		dx = 0.f;
 		sprite.rotate(90.f);
 		break;
-	case Direcions::l:
+	case Directions::l:
 		dy = 0.f;
 		dx = -0.4f;
 		sprite.setScale(-1.f, 1.f);
 		break;
-	case Direcions::r:
+	case Directions::r:
 		dy = 0.f;
 		dx = 0.4f;
 		break;
-	case Direcions::ur:
+	case Directions::ur:
 		dy = -0.4f;
 		dx = 0.4f;
 		sprite.rotate(-45.f);
 		break;
-	case Direcions::ul:
+	case Directions::ul:
 		dy = -0.4f;
 		dx = -0.4f;
 		sprite.setScale(-1.f, 1.f);
 		sprite.rotate(45.f);
 		break;
-	case Direcions::dr:
+	case Directions::dr:
 		dy = 0.4f;
 		dx = 0.4f;
 		sprite.rotate(-45.f);
 		break;
-	case Direcions::dl:
+	case Directions::dl:
 		dy = 0.4f;
 		dx = -0.4f;
 		sprite.setScale(-1.f, 1.f);

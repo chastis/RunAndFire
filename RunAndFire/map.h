@@ -6,7 +6,7 @@ using namespace sf;
 class Map : public Drawable
 {
 public:
-	Map(Image&, int = 15, int = 20);
+	Map(Image&, int, int, std::string);
 	virtual ~Map() = default;
 	virtual void draw(RenderTarget& window, RenderStates state) const;
 	int get_w();

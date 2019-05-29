@@ -81,7 +81,9 @@ int main()
 			hero.draw_bullet(time, *map, window, golems);
 			for (size_t i = 0; i < golems.size(); i++) {
 				if (!golems[i]->get_life()) {
-					loot.ammo_add(golems[i]->get_x(), golems[i]->get_y());
+					if (bossSpawned)
+						loot.portal_add(golems[i]->get_x(), golems[i]->get_y());
+					else loot.ammo_add(golems[i]->get_x(), golems[i]->get_y());
 					golems.erase(golems.begin() + i); i--;
 					if (golems.empty() && !bossSpawned) {
 						golems.push_back(std::make_unique<BossGolem>(monster_Image, 500, -100, 28, 34, "Boss"));
@@ -129,10 +131,6 @@ int main()
 				text.setPosition(440, 00);
 				text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 				window.draw(text);
-
-				text.setString("congrats");
-				text.setPosition(440, 20);
-				if (hero.ammo() == 0) window.draw(text);
 			}
 			int red = 255 * (1 - hero.hp() / static_cast<float>(PLAYER_HP));
 			int green = 255 * (hero.hp() / static_cast<float>(PLAYER_HP));

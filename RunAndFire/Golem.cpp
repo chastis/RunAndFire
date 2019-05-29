@@ -25,7 +25,19 @@ void Golem::set(Image &image, float X, float Y, int W, int H, String Name){
 void Golem::update(float time, Map & map)
 {
 
-	x += dx*time;
+	switch (health)
+	{
+	case 50:
+		x += dx*time;
+		break;
+	case 25:
+		x += 2 * dx*time;
+		break;
+	default:
+		x += dx*time;
+		break;
+
+	}
 	check_collision(dx, 0, map);
 	y += dy*time;
 	check_collision(0, dy, map);

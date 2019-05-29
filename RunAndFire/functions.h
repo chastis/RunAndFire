@@ -22,7 +22,7 @@ static void init() {
 	sf::Image mapImage ;
 	mapImage.loadFromFile(MAP_FILE);
 	mapImage.createMaskFromColor(Color(255, 255, 255));
-	map = std::make_unique<Map>(mapImage, MAP_H, MAP_W);
+	map = std::make_unique<Map>(mapImage, MAP_H, MAP_W, "map1");
 	font = std::make_unique<sf::Font>();
 	font->loadFromFile(FONT_FILE);
 }

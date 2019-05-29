@@ -14,6 +14,9 @@ void Loot::ammo_add(float x, float y) {
 	ammos.emplace_back(x, y);
 }
 
+void Loot::portal_add(float x, float y) {
+	portals.emplace_back(x, y);
+}
 
 Rect<float> Loot::get_rect()
 {
@@ -38,10 +41,17 @@ void Loot::draw(sf::RenderTarget & target, sf::RenderStates states) const
 		temp.setPosition(ammos[i].x, ammos[i].y);
 		target.draw(temp, states);
 	}
+	temp.setTextureRect(IntRect(16, 0, ammo_w, ammo_h));
+	for (size_t i = 0; i < portals.size(); i++) {
+		temp.setPosition(portals[i].x, portals[i].y);
+		target.draw(temp, states);
+	}
+	temp.setTextureRect(IntRect(0, 0, ammo_w, ammo_h));
 }
 
 void Loot::clear() {
 	ammos.clear();
+	portals.clear();
 }
 
 void Loot::update(Map & map) {
@@ -51,6 +61,15 @@ void Loot::update(Map & map) {
 			map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE]  == 'v' && !map.isInter())
 		{
 			ammos[i].y += 0.1;
+		}
+		
+	}
+	for (size_t i = 0; i < portals.size(); i++)
+	{
+		if (map[static_cast<int>(portals[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(portals[i].x + ammo_w / 2) / TITLE_SIZE] != 'w' ||
+			map[static_cast<int>(portals[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(portals[i].x + ammo_w / 2) / TITLE_SIZE] == 'v' && !map.isInter())
+		{
+			portals[i].y += 0.1;
 		}
 	}
 }

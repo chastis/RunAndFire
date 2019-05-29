@@ -9,10 +9,12 @@ class Loot : public sf::Drawable{
 public:
 	Loot(Image & image);
 	void ammo_add(float x, float y);
+	void portal_add(float x, float y);
 	Rect<float> get_rect();
 	void ammo_aword(int & );
 	int ammo_aword();
 	std::vector<Point> ammos;
+	std::vector<Point> portals;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	void clear();
 	void update(Map &);

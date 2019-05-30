@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "Golem.h"
 #include "Ghost.h"
+#include "BossGhost.h"
 #include "map.h"
 #include "loot.h"
 #include "globals.h"
@@ -144,11 +145,11 @@ int main()
 			hero.draw_bullet(time, *map, window, golems, ghosts);
 			for (size_t i = 0; i < golems.size(); i++) {
 				if (!golems[i]->get_life()) {
-					if (bossSpawned)
+					if (bossSpawned && level_counter == 1)
 						loot.portal_add(golems[i]->get_x(), golems[i]->get_y());
 					else loot.ammo_add(golems[i]->get_x(), golems[i]->get_y());
 					golems.erase(golems.begin() + i); i--;
-					if (golems.empty() && !bossSpawned) {
+					if (golems.empty() && !bossSpawned && level_counter == 1) {
 						golems.push_back(std::make_unique<BossGolem>(monster_Image, 500, -100, 28, 34, "Boss"));
 						bossSpawned = true;
 					}
@@ -156,9 +157,16 @@ int main()
 			}
 			for (size_t i = 0; i < ghosts.size(); i++) {
 				if (!ghosts[i]->get_life()) {
-					loot.ammo_add(ghosts[i]->get_x(), ghosts[i]->get_y());
+					if (bossSpawned && level_counter == 2)
+						loot.portal_add(ghosts[i]->get_x(), ghosts[i]->get_y());
+					else loot.ammo_add(ghosts[i]->get_x(), ghosts[i]->get_y());
 					ghosts.erase(ghosts.begin() + i); i--;
-				}
+					if (ghosts.empty() && !bossSpawned & level_counter == 2) {
+						ghosts.push_back(std::make_unique<BossGhost>(monster_Image, 320, 240, 23, 28, "Boss"));
+						bossSpawned = true;
+						map->move();
+					}
+				}	
 			}
 			Text text("Level "s + std::to_string(level_counter), *font, FONT_SIZE);
 			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
@@ -172,7 +180,7 @@ int main()
 			}
 			else if (!hero.alive()) {
 				text.setString("YOU DIED!");//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
-				text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
+				text.setFillColor(Color::Red);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 				text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 				window.draw(text);
 				text.setString("congrats");
@@ -182,8 +190,11 @@ int main()
 			else
 			{
 				window.draw(text);
-				if (bossSpawned) text.setString("Boss can be defeated only from the top");
-				else text.setString("Golems can be defeated in behind");
+				if (level_counter == 1)
+					if (bossSpawned) text.setString("Boss can be defeated only from the top");
+					else text.setString("Golems can be defeated in behind");
+				else if (bossSpawned) text.setString("You even can jump on boss ghost's head!");
+					else text.setString("You can jump on ghost's head");
 				text.setPosition(0, 20);
 				window.draw(text);
 			}

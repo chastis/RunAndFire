@@ -15,7 +15,7 @@ Ghost::Ghost(Image &image, float X, float Y, int W, int H, String Name) : Monste
 	dy = -speed;
 	is_right = 0;
 	damage = GHOST_DMG;
-	health = 51;
+	health = 50;
 	stepChange = 0.0005f;
 
 	Image bullet_Image; bullet_Image.loadFromFile("images/bullets.png");
@@ -46,7 +46,8 @@ void Ghost::update(float time, Map & map, float heroX, float heroY)
 		timer.restart();
 		sprite.setColor(sf::Color::White);
 		bullets.emplace_back(bullet_texture, x, y);
-		if (bullets.size() >= 4) change_direction();
+		if (bullets.size() >= 3) change_direction();
+		if (bullets.size() >= 4) bullets.erase(bullets.begin());
 		//for (auto & bul : bullets)
 		//std::cout << health << std::endl;
 	}
@@ -60,6 +61,18 @@ void Ghost::update(float time, Map & map, float heroX, float heroY)
 	//check_collision(dx, 0, map);
 	y += dy*time;
 	//check_collision(0, dy, map);
+
+	switch (health)
+	{
+	case 50:
+		break;
+	case 25:
+		sprite.setTextureRect(IntRect(0, 222, w, h));
+		break;
+	default:
+		break;
+
+	}
 
 	sprite.setPosition(x + w / 2, y + h / 2); //задаем позицию спрайта в место его центра
 	if (health <= 0) { life = false; }
@@ -208,4 +221,8 @@ void BadBullet::update(float time, Map & map, float heroX, float heroY)
 Sprite BadBullet::getSprite()
 {
 	return sprite;
+}
+void Ghost::reduse()
+{
+
 }

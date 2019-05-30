@@ -117,6 +117,8 @@ int Bullet::check_collision(std::vector<std::unique_ptr<Golem>> & golems, std::v
 			x >= ghosts[i]->get_x() && x <= ghosts[i]->get_x() + ghosts[i]->get_w() &&
 			y >= ghosts[i]->get_y() && y <= ghosts[i]->get_y() + ghosts[i]->get_h()) {
 			ghosts[i]->health -= damage;
+			if (ghosts[i]->get_type() == Monsters::bossGhost)
+				ghosts[i]->reduse();
 			return -1;
 		}
 	}

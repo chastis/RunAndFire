@@ -64,12 +64,16 @@ bool Buttons::is_shine()
 Menu::Menu()
 {
 	_is_menu = true;
-	Buttons * b_exit = new Buttons("exit.png", 320, 300, true);
-	Buttons * b_new_game = new Buttons("newgame.png", 320, 200, true);
-	Buttons * b_win = new Buttons("win.png", 320, 250, true);
+	Buttons * b_exit = new Buttons("exit.png", 320, 250, true);			//0
+	Buttons * b_new_game = new Buttons("newgame.png", 320, 150, true);	//1
+	Buttons * b_tutorial = new Buttons("tutorial.png", 320, 350, true);	//2
+	Buttons * b_win = new Buttons("win.png", 320, 250, true);			//3
+	Buttons * b_controls = new Buttons("controls.png", 320, 240, true); //4
 	_buttons.push_back(b_exit);
 	_buttons.push_back(b_new_game);
+	_buttons.push_back(b_tutorial);
 	_buttons.push_back(b_win);
+	_buttons.push_back(b_controls);
 	reset();
 }
 
@@ -131,7 +135,7 @@ void Menu::reset()
 {
 	for (int i = 0; i < _buttons.size(); i++)
 	{
-		if (i <= 1)
+		if (i <= 2)
 			//new game //0
 			//ext //1
 			_buttons[i]->_visible = true;
@@ -145,7 +149,7 @@ void Menu::winReset()
 {
 	for (int i = 0; i < _buttons.size(); i++)
 	{
-		if (i == 2)
+		if (i == 3)
 			_buttons[i]->_visible = true;
 		else
 			//another are not visible
@@ -180,10 +184,29 @@ void Menu::work(sf::Vector2f pos, sf::RenderWindow &window, Entity & player, Map
 		}
 		case 2:
 		{
+			
+			_buttons[0]->_visible = false;
+			_buttons[1]->_visible = false;
+			_buttons[2]->_visible = false;
+			_buttons[4]->_visible = true;
+			_buttons[3]->_visible = false;
+			break;
+		}
+		case 3:
+		{
 			_buttons[0]->_visible = true;
 			_buttons[1]->_visible = true;
-			_buttons[2]->_visible = false;
-			break;
+			_buttons[2]->_visible = true;
+			_buttons[3]->_visible = false;
+			_buttons[4]->_visible = false;
+		}
+		case 4:
+		{
+			_buttons[0]->_visible = true;
+			_buttons[1]->_visible = true;
+			_buttons[2]->_visible = true;
+			_buttons[3]->_visible = false;
+			_buttons[4]->_visible = false;
 		}
 		}
 

@@ -7,14 +7,14 @@ using namespace std::string_literals;
 constexpr auto TITLE_SIZE			= 16;
 constexpr auto PLAYER_GUN_SPEED		= 3; // per second
 constexpr auto GOLEM_DMG			= 45;
-constexpr auto GHOST_DMG			= 1;
+constexpr auto GHOST_DMG			= 10;
 constexpr auto PLAYER_HP			= 100;
 constexpr auto MAX_DJBOXES_COUNT	= 15;
 constexpr auto CRATES_RESPAWN		= 3000ll; // in milliseconds
 constexpr auto MED_KIT_HP_BOOST		= 50;
 constexpr auto MAP_H				= 30;
 constexpr auto MAP_W				= 40;
-constexpr auto PLAYET_BULLETS		= 100;
+constexpr auto PLAYET_BULLETS		= 11;
 constexpr auto MAP_FILE				= "images/map.png";
 constexpr auto FONT_FILE			= "terminal.TTF";
 constexpr auto FONT_SIZE			= 20;

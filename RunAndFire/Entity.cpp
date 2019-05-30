@@ -155,7 +155,7 @@ void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> &
 	//std::cout << isFly << std::endl;
 	if (Keyboard::isKeyPressed(Keyboard::R))
 		Restart(map, golems, ghosts, loot);
-	loot.update(map);
+		loot.update(map);
 	if (life) {
 		control();
 		switch (state)//различные действия в зависимости от состояния
@@ -253,8 +253,9 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 					//hp_text.setString(HP_TEXT + std::to_string(health));
 				}
 				if (map[i][j] == 's') {
-					life = false;
-					health = 0;
+					//life = false;
+					health -= 100;
+					if (health < 0) health = 0;
 					dy = -static_jump / 4.f;
 				}
 			}

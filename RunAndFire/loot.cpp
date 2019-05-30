@@ -26,12 +26,12 @@ Rect<float> Loot::get_rect()
 
 void Loot::ammo_aword(int & a) {
 	std::default_random_engine dre(std::random_device{}());
-	std::uniform_int_distribution<int> uid(1, 3);
+	std::uniform_int_distribution<int> uid(level_counter, 2 + level_counter);
 	a += uid(dre);
 }
 
 int Loot::ammo_aword() {
-	return rand() % 3;
+	return (rand() % 3)* level_counter;
 }
 
 void Loot::draw(sf::RenderTarget & target, sf::RenderStates states) const
@@ -58,18 +58,15 @@ void Loot::update(Map & map) {
 	for (size_t i = 0; i < ammos.size(); i++)
 	{
 		if (map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] != 'w')
-		{
-			if (map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] != 'v' ||
-				map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] == 'v' && map.isInter())
+			if (map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] != 's')
 			{
-				ammos[i].y += 0.1;
-			}
+				if (map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] != 'v' ||
+					map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] == 'v' && map.isInter())
+				{
+					ammos[i].y += 0.1;
+				}
 			
-		}
-		else
-		{
-			continue;
-		}
+			}
 		
 		
 		
@@ -77,18 +74,15 @@ void Loot::update(Map & map) {
 	for (size_t i = 0; i < portals.size(); i++)
 	{
 		if (map[static_cast<int>(portals[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(portals[i].x + ammo_w / 2) / TITLE_SIZE] != 'w')
-		{
-			if (map[static_cast<int>(portals[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(portals[i].x + ammo_w / 2) / TITLE_SIZE] != 'v' ||
-				map[static_cast<int>(ammos[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(ammos[i].x + ammo_w / 2) / TITLE_SIZE] == 'v' && map.isInter())
+			if (map[static_cast<int>(portals[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(portals[i].x + ammo_w / 2) / TITLE_SIZE] != 's')
 			{
-				portals[i].y += 0.1;
-			}
+				if (map[static_cast<int>(portals[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(portals[i].x + ammo_w / 2) / TITLE_SIZE] != 'v' ||
+					map[static_cast<int>(portals[i].y + ammo_h) / TITLE_SIZE][static_cast<int>(portals[i].x + ammo_w / 2) / TITLE_SIZE] == 'v' && map.isInter())
+				{
+					portals[i].y += 0.1;
+				}
 			
-		}
-		else
-		{
-			continue;
-		}
+			}
 		
 	}
 }

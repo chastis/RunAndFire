@@ -35,7 +35,8 @@ public:
 	void damaged();
 	bool checkBullets(float heroX, float heroY, int heroW, int heroH);
 	bool isDamaged();
-private:
+	virtual void reduse();
+protected:
 	bool weak;
 	int sign;
 	bool is_right;

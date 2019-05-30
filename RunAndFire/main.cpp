@@ -1,6 +1,7 @@
 #include "helpers.h"
 #include "Entity.h"
 #include "Golem.h"
+#include "Ghost.h"
 #include "map.h"
 #include "loot.h"
 #include "globals.h"
@@ -31,6 +32,8 @@ int main()
 	monster_Image.createMaskFromColor(Color(255, 255, 255));
 
 	std::vector<std::unique_ptr<Golem>> golems;
+	std::vector<std::unique_ptr<Ghost>> ghosts;
+	ghosts_spawn(monster_Image, 23, 28, ghosts, *map);
 	golems_spawn(monster_Image, 28, 34, golems, *map);
 	map->reset();
 	Image lootImage; lootImage.loadFromFile("images/loot.png");
@@ -98,7 +101,7 @@ int main()
 				
 				//std::this_thread::sleep_for(std::chrono::seconds(3));
 				map->change("map2");
-				hero.Restart( * map, golems, loot);
+				hero.Restart( * map, golems, ghosts, loot);
 				isLevelPassed = false;
 				clock.restart();
 			}
@@ -126,7 +129,10 @@ int main()
 			for (size_t i = 0; i < golems.size(); i++) {
 				golems[i]->update(time, *map);
 			}
-			hero.update(time, *map, golems, loot);
+			for (size_t i = 0; i < ghosts.size(); i++) {
+				ghosts[i]->update(time, *map, hero.getX(), hero.getY());
+			}
+			hero.update(time, *map, golems, ghosts, loot);
 			//std::cout << hero.health << std::endl;
 			window.setView(view);
 			window.clear(Color(77, 83, 140));
@@ -135,7 +141,7 @@ int main()
 			//loot.ammo_draw(window);
 			window.draw(loot);
 			window.draw(hero);
-			hero.draw_bullet(time, *map, window, golems);
+			hero.draw_bullet(time, *map, window, golems, ghosts);
 			for (size_t i = 0; i < golems.size(); i++) {
 				if (!golems[i]->get_life()) {
 					if (bossSpawned)
@@ -148,10 +154,16 @@ int main()
 					}
 				}
 			}
+			for (size_t i = 0; i < ghosts.size(); i++) {
+				if (!ghosts[i]->get_life()) {
+					loot.ammo_add(ghosts[i]->get_x(), ghosts[i]->get_y());
+					ghosts.erase(ghosts.begin() + i); i--;
+				}
+			}
 			Text text("Level "s + std::to_string(level_counter), *font, FONT_SIZE);
 			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
-			if (golems.size() == 0) {
+			if (golems.size() == 0 && ghosts.size() == 0) {
 				text.setString("YOU WIN!");//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)	
 				window.draw(text);
 				text.setString("congrats");
@@ -201,6 +213,9 @@ int main()
 			for (size_t i = 0; i < golems.size(); i++) {
 				window.draw(golems[i]->get_sprite());
 			}
+			for (size_t i = 0; i < ghosts.size(); i++) {
+				ghosts[i]->draw(window);
+			}
 		}
 		else
 		{
@@ -218,7 +233,7 @@ int main()
 				{
 					if (event.key.code == sf::Mouse::Left)
 					{
-						menu.work(pos, window, hero, *map, golems, loot);
+						menu.work(pos, window, hero, *map, golems, ghosts, loot);
 					}
 				}
 				

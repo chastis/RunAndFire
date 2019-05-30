@@ -54,7 +54,7 @@ public:
 	void draw(sf::RenderWindow &window);
 	//check buttons for pressed
 	//do all button's work
-	void work(sf::Vector2f pos, sf::RenderWindow &window, Entity & player, Map & map, std::vector<std::unique_ptr<Golem>> & golems, Loot & loot);
+	void work(sf::Vector2f pos, sf::RenderWindow &window, Entity & player, Map & map, std::vector<std::unique_ptr<Golem>> & golems, std::vector<std::unique_ptr<Ghost>> & ghosts, Loot & loot);
 	//reset to fisrt menu page
 	void reset();
 	void winReset();

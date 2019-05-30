@@ -59,14 +59,14 @@ Sprite Bullet::get_sprite() {
 	return sprite;
 }
 
-int Bullet::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> & golems) {
+int Bullet::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> & golems, std::vector<std::unique_ptr<Ghost>> & ghosts) {
 	x += dx * time;
 	if (check_collision(map) == -1) return -1;
-	if (check_collision(golems) == -1) return -1;
+	if (check_collision(golems, ghosts) == -1) return -1;
 
 	y += dy * time;
 	if (check_collision(map) == -1) return -1;
-	if (check_collision(golems) == -1) return -1;
+	if (check_collision(golems, ghosts) == -1) return -1;
 
 	sprite.setPosition(x + w / 2, y + h / 2);
 	return 0;
@@ -94,7 +94,7 @@ int Bullet::check_collision(Map & map) {
 	return 0;
 }
 
-int Bullet::check_collision(std::vector<std::unique_ptr<Golem>> & golems) {
+int Bullet::check_collision(std::vector<std::unique_ptr<Golem>> & golems, std::vector<std::unique_ptr<Ghost>> & ghosts) {
 	for (size_t i = 0; i < golems.size(); i++) {
 		if (x >= golems[i]->get_x() && x <= golems[i]->get_x() + golems[i]->get_w() &&
 			y >= golems[i]->get_y() && y <= golems[i]->get_y() + golems[i]->get_h()) {
@@ -109,6 +109,14 @@ int Bullet::check_collision(std::vector<std::unique_ptr<Golem>> & golems) {
 			case Monsters::none:
 				break;
 			}
+			return -1;
+		}
+	}
+	for (size_t i = 0; i < ghosts.size(); i++) {
+		if (ghosts[i]->isDamaged() &&
+			x >= ghosts[i]->get_x() && x <= ghosts[i]->get_x() + ghosts[i]->get_w() &&
+			y >= ghosts[i]->get_y() && y <= ghosts[i]->get_y() + ghosts[i]->get_h()) {
+			ghosts[i]->health -= damage;
 			return -1;
 		}
 	}

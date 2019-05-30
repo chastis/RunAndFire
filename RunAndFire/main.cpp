@@ -13,8 +13,53 @@ using namespace sf;
 
 bool gameOn;
 
+void changeScene(RenderWindow & window)
+{
+	long long red = 0, green = 0, blue = 0;
+	int plus = 1;
+	for (long long i = 0; i < 1000; i++)
+	{
+
+		window.clear(sf::Color(green, red, blue));
+		if (red == -1)
+		{
+			red++;
+			plus = 1;
+		}
+		else if (red == 128)
+		{
+			if (green == -1)
+			{
+				green++;
+				red--;
+			}
+			else if (green == 128)
+			{
+				if (blue == -1)
+				{
+					blue++;
+					green--;
+				}
+				else if (blue == 128)
+				{
+					plus = -1;
+					blue--;
+				}
+				else blue += plus;
+			}
+			else green += plus;
+		}
+		else red += plus;
+		window.display();
+		//std::cout << i << std::endl;
+	}
+}
+
 int main()
 {
+	//auto gameStart = std::chrono::high_resolution_clock::now();
+	sf::Clock gameTime;
+	float time = -1;
 	bossSpawned = false;
 	gameOn = true;
 	RenderWindow window(VideoMode(640, 480), "Run and Fire!");
@@ -26,7 +71,7 @@ int main()
 
 	Image hero_Image; hero_Image.loadFromFile("images/MilesTailsPrower.gif");
 	hero_Image.createMaskFromColor(Color(0, 0, 0));
-	Entity hero(hero_Image, -13, 190, 42, 33, "Hero");
+	Entity hero(hero_Image, -13, 190, 42, 31, "Hero");
 	hero.get_sprite().setScale(0.5, 0.5);
 	hero.spawn(*map);
 	Image monster_Image; monster_Image.loadFromFile("images/Monster.png");
@@ -35,7 +80,7 @@ int main()
 	std::vector<std::unique_ptr<Golem>> golems;
 	std::vector<std::unique_ptr<Ghost>> ghosts;
 	ghosts_spawn(monster_Image, 23, 28, ghosts, *map);
-	golems_spawn(monster_Image, 28, 34, golems, *map);
+	golems_spawn(monster_Image, 29, 34, golems, *map);
 	map->reset();
 	Image lootImage; lootImage.loadFromFile("images/loot.png");
 	lootImage.createMaskFromColor(Color(255, 255, 255));
@@ -51,53 +96,24 @@ int main()
 	Menu menu;
 	bool isWin = false;
 	while (window.isOpen())
-	{
+	{	
 		if (!menu.is_menu())
 		{
+			time = -1;
+			gameOn = true;
 			if (music.getStatus() == sf::Music::Status::Stopped) music.play();
-			if (level_counter > 2) menu.open(1);
+			if (level_counter > 2)
+			{
+				gameOn = false;
+				changeScene(window);
+				menu.open(1);
+			}
 			if (level_counter == 2 && isLevelPassed) 
 			{
 				std::cout << "Hello! ";
 				bool flag = false;
-				long long red = 0, green = 0, blue = 0;
-				int plus = 1;
-				for (long long i = 0; i < 1000; i++)
-				{
-					
-					window.clear(sf::Color(green, red, blue));
-					if (red == -1)
-					{
-						red++;
-						plus = 1;
-					}
-					else if (red == 128)
-					{
-						if (green == -1)
-						{
-							green++;
-							red--;
-						}
-						else if (green == 128)
-						{
-							if (blue == -1)
-							{
-								blue++;
-								green--;
-							}
-							else if (blue == 128)
-							{
-								plus = -1;
-								blue--;
-							}
-							else blue += plus;
-						}
-						else green += plus;
-					}
-					else red += plus;
-					window.display();
-					//std::cout << i << std::endl;
-				}
+				music.stop();
+				changeScene(window);
 				std::cout << "lvl2" << std::endl;
 				
 				//std::this_thread::sleep_for(std::chrono::seconds(3));
@@ -105,6 +121,7 @@ int main()
 				hero.Restart( * map, golems, ghosts, loot);
 				isLevelPassed = false;
 				clock.restart();
+				music.openFromFile("chut_menshe_gamno.wav");
 			}
 			auto time = static_cast<float>(clock.getElapsedTime().asMicroseconds());
 
@@ -169,13 +186,14 @@ int main()
 				}	
 			}
 			Text text("Level "s + std::to_string(level_counter), *font, FONT_SIZE);
+			text.setPosition(20, 0);
 			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 			if (golems.size() == 0 && ghosts.size() == 0) {
 				text.setString("YOU WIN!");//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)	
 				window.draw(text);
 				text.setString("congrats");
-				text.setPosition(0, 20);
+				text.setPosition(20, 20);
 				window.draw(text);
 			}
 			else if (!hero.alive()) {
@@ -184,7 +202,7 @@ int main()
 				text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
 				window.draw(text);
 				text.setString("congrats");
-				text.setPosition(0, 20);
+				text.setPosition(20, 20);
 				window.draw(text);
 			}
 			else
@@ -195,7 +213,7 @@ int main()
 					else text.setString("Golems can be defeated in behind");
 				else if (bossSpawned) text.setString("You even can jump on boss ghost's head!");
 					else text.setString("You can jump on ghost's head");
-				text.setPosition(0, 20);
+				text.setPosition(20, 20);
 				window.draw(text);
 			}
 			{
@@ -250,12 +268,28 @@ int main()
 				
 			}
 			window.clear();
+			//gameOn = false;
+			if (!gameOn)
+			{
+				
+				sf::String str = "Your time is ";
+				sf::Text text("", *font, FONT_SIZE);
+				if (time == -1) time = gameTime.getElapsedTime().asSeconds();
+				text.setString(str + std::to_string(time) + "s"s);
+				text.setFillColor(sf::Color::White);
+				text.setPosition(150, 300);
+				window.draw(text);
+			}
+			if (gameOn)
+			{
+				gameTime.restart();
+			}
 			menu.draw(window);
-			clock.restart();
+			clock.restart();			
 			isLevelPassed = false;
+			music.openFromFile("gamno.wav");
 		}
 		window.display();
 	}
-	gameOn = false;
 	return 0;
 }

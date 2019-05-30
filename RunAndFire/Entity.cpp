@@ -252,6 +252,23 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 					if (health > PLAYER_HP) health = PLAYER_HP;
 					//hp_text.setString(HP_TEXT + std::to_string(health));
 				}
+				/*
+				if (map[i][j] == 's') {
+					//life = false;
+					health -= 100;
+					if (health < 0) health = 0;
+					dy = -static_jump / 4.f;
+				}
+				*/
+			}
+		}
+	}
+	for (int i = static_cast<int>((y + 8) / TITLE_SIZE); i < (y + h - 8) / TITLE_SIZE; i++) {
+		if (i < 0 || i >= map.get_h()) continue;
+		for (int j = static_cast<int>((x + 8) / TITLE_SIZE); j < (x + w - 8) / TITLE_SIZE; j++) {
+			if (j < 0 || j >= map.get_w()) continue;
+			if (life)
+			{
 				if (map[i][j] == 's') {
 					//life = false;
 					health -= 100;
@@ -294,8 +311,8 @@ void Entity::check_collision(Loot & loot) {
 void Entity::check_collision(std::vector<std::unique_ptr<Golem>> & golems, std::vector<std::unique_ptr<Ghost>> & ghosts) {
 	for (size_t i = 0; i < golems.size(); i++) {
 		float gx = golems[i]->get_x(), gy = golems[i]->get_y(), gh = static_cast<float>(golems[i]->get_h()), gw = static_cast<float>(golems[i]->get_w());
-		if (square_in_square(x, y, static_cast<float>(w), static_cast<float>(h), gx, gy, gw, gh) ||
-			square_in_square(gx, gy, gw, gh, x, y, static_cast<float>(w), static_cast<float>(h))) {
+		if (square_in_square(x + 2, y + 2, static_cast<float>(w) - 4, static_cast<float>(h) - 4, gx, gy, gw, gh) ||
+			square_in_square(gx, gy, gw, gh, x + 2, y + 2, static_cast<float>(w) - 4, static_cast<float>(h) - 4)) {
 
 			if (!with_mob) health -= golems[i]->get_damage();
 			if (health < 0) health = 0;
@@ -316,8 +333,8 @@ void Entity::check_collision(std::vector<std::unique_ptr<Golem>> & golems, std::
 	for (size_t i = 0; i < ghosts.size(); i++) {
 		float gx = ghosts[i]->get_x(), gy = ghosts[i]->get_y(), gh = static_cast<float>(ghosts[i]->get_h()), gw = static_cast<float>(ghosts[i]->get_w());
 		if (isFly)
-			if (square_in_square(x + w / 2, y + h, static_cast<float>(w), 0, gx, gy, gw, 5) ||
-				square_in_square(gx, gy, gw, 5, x + w / 2, y + h, static_cast<float>(w), 0)) {
+			if (square_in_square(x + w/4, y + h, static_cast<float>(w) / 2, 1, gx, gy, gw, 8) ||
+				square_in_square(gx, gy, gw, 8, x + w / 4, y + h, static_cast<float>(w) / 2, 1)) {
 
 				ghosts[i]->damaged();
 				if (health < 0) health = 0;
@@ -325,7 +342,7 @@ void Entity::check_collision(std::vector<std::unique_ptr<Golem>> & golems, std::
 				dy = -static_jump;
 
 			}
-		if (ghosts[i]->checkBullets(x, y, w, h)) health -= GHOST_DMG;
+		if (ghosts[i]->checkBullets(x, y, w, h)) health -= ghosts[i]->get_damage();
 		if (health < 0) health = 0;
 	}
 	//hp_text.setString(HP_TEXT + std::to_string(health));

@@ -14,7 +14,7 @@ BossGhost::BossGhost(Image & image, float X, float Y, int W, int H, String Name)
 
 void BossGhost::update(float time, Map & map, float heroX, float heroY)
 {
-	if (timer.getElapsedTime().asSeconds() >= 4)
+	if (timer.getElapsedTime().asSeconds() >= 2)
 	{
 		weak = false;
 		timer.restart();

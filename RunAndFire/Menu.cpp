@@ -67,7 +67,7 @@ Menu::Menu()
 	Buttons * b_exit = new Buttons("exit.png", 320, 250, true);			//0
 	Buttons * b_new_game = new Buttons("newgame.png", 320, 150, true);	//1
 	Buttons * b_tutorial = new Buttons("tutorial.png", 320, 350, true);	//2
-	Buttons * b_win = new Buttons("win.png", 320, 250, true);			//3
+	Buttons * b_win = new Buttons("win.png", 320, 150, true);			//3
 	Buttons * b_controls = new Buttons("controls.png", 320, 240, true); //4
 	_buttons.push_back(b_exit);
 	_buttons.push_back(b_new_game);
@@ -113,6 +113,8 @@ void Menu::draw(sf::RenderWindow &window)
 			_buttons[i]->draw(window);
 		}
 	}
+	//if (_buttons[3]->_visible == true)
+		//Text text("Your time is "s + std::to_string(gameTime.getElapsedTime().asSeconds()) + "s"s, *font, FONT_SIZE);
 }
 
 void Menu::change_colors(sf::Vector2f pos)

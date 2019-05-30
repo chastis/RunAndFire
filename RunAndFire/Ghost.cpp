@@ -46,8 +46,8 @@ void Ghost::update(float time, Map & map, float heroX, float heroY)
 		timer.restart();
 		sprite.setColor(sf::Color::White);
 		bullets.emplace_back(bullet_texture, x, y);
-		if (bullets.size() >= 3) change_direction();
-		if (bullets.size() >= 4) bullets.erase(bullets.begin());
+		if (bullets.size() >= 4) change_direction();
+		if (bullets.size() >= 5) bullets.erase(bullets.begin());
 		//for (auto & bul : bullets)
 		//std::cout << health << std::endl;
 	}

@@ -17,7 +17,7 @@ constexpr auto MAP_W				= 40;
 constexpr auto PLAYET_BULLETS		= 11;
 constexpr auto MAP_FILE				= "images/map.png";
 constexpr auto FONT_FILE			= "terminal.TTF";
-constexpr auto FONT_SIZE			= 20;
+constexpr auto FONT_SIZE			= 23;
 constexpr auto STATIC_G				= 0.0015f;
 static const sf::String HP_TEXT			= "HP: ";
 

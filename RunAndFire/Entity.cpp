@@ -80,22 +80,19 @@ void Entity::control() {
 		if (Keyboard::isKeyPressed(Keyboard::D)) {//право
 			state = State::right; speed = static_speed; is_right = true;
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Space) && !up_pressed && !up_pressed_second_time && !onGround)
+		if ((Keyboard::isKeyPressed(Keyboard::Space) || Keyboard::isKeyPressed(Keyboard::W)) && !up_pressed && !up_pressed_second_time && !onGround)
 		{
 			up_pressed_second_time = true;
 			up_pressed = true;
 		}
-		if ((Keyboard::isKeyPressed(Keyboard::Space)) && (onGround || doubleJump)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
+		if ((Keyboard::isKeyPressed(Keyboard::Space) || Keyboard::isKeyPressed(Keyboard::W)) && (onGround || doubleJump)) {//если нажата клавиша вверх и мы на земле, то можем прыгать
 			state = State::jump; dy = -static_jump; onGround = false; doubleJump = false; up_pressed = true;
 			isFly = false;
 		}
-		if (Keyboard::isKeyPressed(Keyboard::S)) {
+		if (Keyboard::isKeyPressed(Keyboard::S) && (onGround || doubleJump)) {
 			state = State::down;
 		}
-		if (Keyboard::isKeyPressed(Keyboard::W)) {
-			state = State::up;
-		}
-		if (!Keyboard::isKeyPressed(Keyboard::Space) && up_pressed)
+		if ((!Keyboard::isKeyPressed(Keyboard::Space) && !Keyboard::isKeyPressed(Keyboard::W)) && up_pressed)
 		{
 			up_pressed = false;
 			//up_pressed_second_time = false;  
@@ -157,7 +154,10 @@ void Entity::update(float time, Map & map, std::vector<std::unique_ptr<Golem>> &
 		Restart(map, golems, ghosts, loot);
 		loot.update(map);
 	if (life) {
+		madeDoubleJumpOnThisTurn = up_pressed_second_time;
 		control();
+		if (madeDoubleJumpOnThisTurn != up_pressed_second_time) madeDoubleJumpOnThisTurn = true; else madeDoubleJumpOnThisTurn = false;
+		//madeDoubleJumpOnThisTurn = true;
 		switch (state)//различные действия в зависимости от состояния
 		{
 		case State::right: dx = speed; break;//состояние идти вправо
@@ -237,7 +237,8 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 			}
 			if (life)
 			{
-				if (map[i][j] == 'd' && up_pressed_second_time) {
+				/*
+				if (map[i][j] == 'd' && up_pressed_second_time && madeDoubleJumpOnThisTurn) {
 					map[i][j] = '0';
 					doubleJump = true;
 					up_pressed_second_time = false;
@@ -246,20 +247,14 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 					//!!!!
 					if (j == 2 && level_counter == 1) map.move();
 				}
+				*/
 				if (map[i][j] == 'h') {
 					map[i][j] = '0';
 					health += MED_KIT_HP_BOOST;
 					if (health > PLAYER_HP) health = PLAYER_HP;
 					//hp_text.setString(HP_TEXT + std::to_string(health));
 				}
-				/*
-				if (map[i][j] == 's') {
-					//life = false;
-					health -= 100;
-					if (health < 0) health = 0;
-					dy = -static_jump / 4.f;
-				}
-				*/
+
 			}
 		}
 	}
@@ -274,6 +269,24 @@ void Entity::check_collision(float dx, float dy, Map & map) {
 					health -= 100;
 					if (health < 0) health = 0;
 					dy = -static_jump / 4.f;
+				}
+			}
+		}
+	}
+	for (int i = static_cast<int>((y - 17) / TITLE_SIZE); i < (y + h + 17) / TITLE_SIZE; i++) {
+		if (i < 0 || i >= map.get_h()) continue;
+		for (int j = static_cast<int>((x - 17) / TITLE_SIZE); j < (x + w + 17) / TITLE_SIZE; j++) {
+			if (j < 0 || j >= map.get_w()) continue;
+			if (life)
+			{
+				if (map[i][j] == 'd' && up_pressed_second_time && madeDoubleJumpOnThisTurn) {
+					map[i][j] = '0';
+					doubleJump = true;
+					up_pressed_second_time = false;
+					isFly = false;
+					crates.push_back(std::make_pair(Point(i, j), std::chrono::high_resolution_clock::now()));
+					//!!!!
+					if (j == 2 && level_counter == 1) map.move();
 				}
 			}
 		}

@@ -46,9 +46,11 @@ void Map::draw(RenderTarget& window, RenderStates state) const {
 				else temp_strite.setTextureRect(IntRect(97, 0, TITLE_SIZE, TITLE_SIZE));
 				break;
 			case '0': temp_strite.setTextureRect(IntRect(97, 0, TITLE_SIZE, TITLE_SIZE)); break;
+			//case '0': continue;
 			case 'd': temp_strite.setTextureRect(IntRect(49, 0, TITLE_SIZE, TITLE_SIZE)); break;
 			case 'b': temp_strite.setTextureRect(IntRect(65, 0, TITLE_SIZE, TITLE_SIZE)); break;
 			case 'p': temp_strite.setTextureRect(IntRect(97, 0, TITLE_SIZE, TITLE_SIZE)); break;
+			//case 'p': continue;
 			case 's': temp_strite.setTextureRect(IntRect(33, 0, TITLE_SIZE, TITLE_SIZE)); break;
 			case 'h': temp_strite.setTextureRect(IntRect(81, 0, TITLE_SIZE, TITLE_SIZE)); break;
 			}

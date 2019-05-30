@@ -89,6 +89,11 @@ int main()
 	loot.ammo_add(576, 416);
 	loot.ammo_add(500, 416);
 
+	//Image bgImage; bgImage.loadFromFile("images/bg1");
+	Texture bgTexture; bgTexture.loadFromFile("images/bg1.png");
+	Sprite bgSprite; bgSprite.setTexture(bgTexture);
+	bgSprite.setPosition(0, 0);
+
 	sf::Music music;
 	music.openFromFile("gamno.wav");
 	music.play();
@@ -110,6 +115,8 @@ int main()
 			}
 			if (level_counter == 2 && isLevelPassed) 
 			{
+				bgTexture.loadFromFile("images/bg2.png");
+				bgSprite; bgSprite.setTexture(bgTexture);
 				std::cout << "Hello! ";
 				bool flag = false;
 				music.stop();
@@ -155,6 +162,10 @@ int main()
 			window.setView(view);
 			window.clear(Color(77, 83, 140));
 
+			//first of all bg;
+			window.draw(bgSprite);
+
+
 			window.draw(*map);
 			//loot.ammo_draw(window);
 			window.draw(loot);
@@ -189,6 +200,8 @@ int main()
 			text.setPosition(20, 0);
 			text.setFillColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
+			text.setOutlineColor(Color::White);
+			text.setOutlineThickness(0.6);
 			if (golems.size() == 0 && ghosts.size() == 0) {
 				text.setString("YOU WIN!");//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)	
 				window.draw(text);
@@ -217,7 +230,10 @@ int main()
 				window.draw(text);
 			}
 			{
+				
 				Text text("AMMO IS EMPTY!", *font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
+				text.setOutlineThickness(0.6);
+				text.setOutlineColor(Color::White);
 				String str;
 				str = "Bullets : ";
 				str.insert(str.getSize(), std::to_string(hero.ammo()));
@@ -234,6 +250,7 @@ int main()
 			int green = 255 * (hero.hp() / static_cast<float>(PLAYER_HP));
 			text.setFillColor(Color(red, green, 0));//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
 			text.setStyle(sf::Text::Bold /*| sf::Text::Underlined*/);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
+			text.setOutlineThickness(0);
 			String str = "HP: ";
 			str.insert(str.getSize(), std::to_string(hero.hp()));
 			text.setString(str);
@@ -288,6 +305,8 @@ int main()
 			clock.restart();			
 			isLevelPassed = false;
 			music.openFromFile("gamno.wav");
+			bgTexture.loadFromFile("images/bg1.png");
+			bgSprite; bgSprite.setTexture(bgTexture);
 		}
 		window.display();
 	}

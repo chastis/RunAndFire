@@ -39,6 +39,7 @@ private:
 	float dx, dy, speed, static_speed, static_jump;//скорость персонажа в текущий момент относительно осей, и стандартная скорость персонажа
 	int w, h;//размеры спрайта и кол-во здоровья персонажа
 	bool life, onGround, is_right, space_pressed, sprite_right, with_mob, up_pressed, up_pressed_second_time, isFly;
+	bool madeDoubleJumpOnThisTurn;
 	sf::Texture texture;
 	sf::Sprite sprite;
 	String name;

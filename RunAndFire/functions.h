@@ -18,7 +18,8 @@ static bool square_in_square(float x, float y, float w, float h, float gx, float
 		);
 }
 
-static void init() {
+static void init() 
+{
 	sf::Image mapImage ;
 	mapImage.loadFromFile(MAP_FILE);
 	mapImage.createMaskFromColor(Color(255, 255, 255));

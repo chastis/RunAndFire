@@ -14,21 +14,21 @@ workspace "RunAndFire"
 
     INCLUDE_PATHS = 
     {
-        SFML = "%{wks.location}/SFML/Sources/include",
+        SFML = "%{wks.location}/Game/SFML/Sources/include",
         ROOT = "%{wks.location}",
     }
 
     LIB_PATHS = 
     {
-        SFML = "%{wks.location}/SFML/Build/lib/%{cfg.buildcfg}",
-        SFML_DIST = "%{wks.location}/SFML/build/lib/Release"
+        SFML = "%{wks.location}/Game/SFML/Build/lib/%{cfg.buildcfg}",
+        SFML_DIST = "%{wks.location}/Game/SFML/build/lib/Release"
     }
 
     filter "action:vs*"
-        LIB_PATHS.SFML_EXTLIB = "%{wks.location}/SFML/Sources/extlibs/libs-msvc-universal/x64"
+        LIB_PATHS.SFML_EXTLIB = "%{wks.location}/Game/SFML/Sources/extlibs/libs-msvc-universal/x64"
         buildoptions {"/Zc:__cplusplus"}
 
     filter "system:windows"
         systemversion "latest"
 
-   include "RunAndFire"
+   include "Game/RunAndFire"

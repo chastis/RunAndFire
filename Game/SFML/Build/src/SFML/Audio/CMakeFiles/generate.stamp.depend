@@ -1,0 +1,7 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.16/Modules/FindOpenAL.cmake
+C:/Program Files/CMake/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.16/Modules/FindPackageMessage.cmake
+C:/root/GitHub/RunAndFire/Game/SFML/Sources/cmake/Modules/FindFLAC.cmake
+C:/root/GitHub/RunAndFire/Game/SFML/Sources/cmake/Modules/FindVorbis.cmake
+C:/root/GitHub/RunAndFire/Game/SFML/Sources/src/SFML/Audio/CMakeLists.txt

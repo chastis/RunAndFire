@@ -33,6 +33,8 @@ project "RunAndFire"
         "ws2_32",
     }
 
+    links { "Utility" } 
+
     defines { "SFML_STATIC" }
 
     filter "configurations:Debug"
@@ -51,7 +53,7 @@ project "RunAndFire"
 
     filter "configurations:Release"
         kind "WindowedApp"
-        defines { "NDEBUG", "RELEASE"}
+        defines { "NDEBUG", "RELEASE", "PUGIXML_NO_EXCEPTIONS"}
         optimize "On"
         runtime "Release"
 

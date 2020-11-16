@@ -11,7 +11,7 @@
 .vs
 
 # Project specific
-SFML/Build/
+Game/SFML/Build/
 
 # Build results
 [Dd]ebug/

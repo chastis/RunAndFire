@@ -22,3 +22,4 @@ project "Utility"
         defines { "NDEBUG", "RELEASE", "PUGIXML_NO_EXCEPTIONS"}
         optimize "On"
         runtime "Release"
+        

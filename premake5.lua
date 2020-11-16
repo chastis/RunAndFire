@@ -1,23 +1,34 @@
--- premake5.lua
 workspace "RunAndFire"
-   configurations { "Debug", "Release" }
-   architecture "x64"
-   platforms { "Win64" }
-   flags { "MultiProcessorCompile" }
-   
-   TARGET_DIR = "%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.platform}-%{cfg.architecture}"
-   OUTPUT_DIR = "%{wks.location}/bin/obj/%{cfg.buildcfg}-%{cfg.platform}-%{cfg.architecture}"
+    configurations { "Debug", "Release" }
+    architecture "x64"
+    startproject "Application"
+    platforms { "Win64" }
 
-   INCLUDE_PATHS = 
-   {
-      SFML = "%{wks.location}/SFML/include"
-   }
+    flags { "MultiProcessorCompile" , "FatalWarnings", "NoPCH"}
 
-   prebuildcommands 
-   {
-      "{COPY} %{wks.location}/SFML/build/lib/%{cfg.buildcfg} " .. TARGET_DIR,
-      --TODO(maybe): make this compiler independent
-      "{COPY} %{wks.location}/SFML/extlibs/libs-msvc/" .. "x" .. "%{cfg.architecture:sub(-2)} " .. TARGET_DIR,
-   }
+    CPPDIALECT = "C++17"
+    RTTI = "Off"
+
+    TARGET_DIR = "%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.platform}-%{cfg.architecture}"
+    OUTPUT_DIR = "%{wks.location}/bin/obj/%{cfg.buildcfg}-%{cfg.platform}-%{cfg.architecture}"
+
+    INCLUDE_PATHS = 
+    {
+        SFML = "%{wks.location}/SFML/Sources/include",
+        ROOT = "%{wks.location}",
+    }
+
+    LIB_PATHS = 
+    {
+        SFML = "%{wks.location}/SFML/Build/lib/%{cfg.buildcfg}",
+        SFML_DIST = "%{wks.location}/SFML/build/lib/Release"
+    }
+
+    filter "action:vs*"
+        LIB_PATHS.SFML_EXTLIB = "%{wks.location}/SFML/Sources/extlibs/libs-msvc-universal/x64"
+        buildoptions {"/Zc:__cplusplus"}
+
+    filter "system:windows"
+        systemversion "latest"
 
    include "RunAndFire"

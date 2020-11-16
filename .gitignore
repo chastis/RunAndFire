@@ -2,7 +2,6 @@
 
 *.exe
 *.bat
-**/imgui.ini
 
 # Visual studio specific
 *.sln

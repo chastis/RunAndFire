@@ -1,7 +1,7 @@
 workspace "RunAndFire"
     configurations { "Debug", "Release" }
     architecture "x64"
-    startproject "Application"
+    startproject "RunAndFire"
     platforms { "Win64" }
 
     flags { "MultiProcessorCompile" , "FatalWarnings", "NoPCH"}
@@ -15,7 +15,7 @@ workspace "RunAndFire"
     INCLUDE_PATHS = 
     {
         SFML = "%{wks.location}/Game/SFML/Sources/include",
-        ROOT = "%{wks.location}",
+        ROOT = "%{wks.location}/Game"
     }
 
     LIB_PATHS = 
@@ -32,3 +32,4 @@ workspace "RunAndFire"
         systemversion "latest"
 
    include "Game/RunAndFire"
+   include "Game/Utility"

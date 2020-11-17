@@ -24,10 +24,7 @@ void Application::Run()
         while (m_window.pollEvent(event))
         {
             std::unique_ptr<Event> applicatioEvent(ApplicationEvents::Create(event));
-            if (applicatioEvent)
-            {
-                EventSystem::Broadcast(*applicatioEvent, ApplicationEventChannel::GetInstance());
-            }
+            EventSystem::Broadcast(std::move(applicatioEvent), ApplicationEventChannel::GetInstance());
         }
 
         m_window.clear();

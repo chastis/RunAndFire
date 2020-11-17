@@ -2,7 +2,10 @@
 
 #include <Core/EventSystem/EventChannel.hpp>
 
-void EventSystem::Broadcast(Event& event, EventChannel* channel)
+void EventSystem::Broadcast(std::unique_ptr<Event> event, EventChannel* channel)
 {
-    channel->DispatchEvent(event);
+    if (event)
+    {
+        channel->DispatchEvent(*event);
+    }
 }

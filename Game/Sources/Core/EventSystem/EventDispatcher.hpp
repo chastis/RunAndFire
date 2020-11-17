@@ -1,9 +1,13 @@
 #pragma once
 
+#include <Core/EventSystem/Event.hpp>
+
+#include <memory>
+
 class Event;
 class EventChannel;
 
 namespace EventSystem
 {
-    void Broadcast(Event& event, EventChannel* channel);
+    void Broadcast(std::unique_ptr<Event> event, EventChannel* channel);
 }

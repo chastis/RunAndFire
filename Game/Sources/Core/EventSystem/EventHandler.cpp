@@ -1,6 +1,12 @@
 #include <Core/EventSystem/EventHandler.hpp>
 #include <Core/EventSystem/EventChannel.hpp>
 
+EventHandler::~EventHandler()
+{
+    DisconnectAll();
+    LeaveAll();
+}
+
 void EventHandler::DisconnectAll()
 {
     m_eventCallbacks.clear();

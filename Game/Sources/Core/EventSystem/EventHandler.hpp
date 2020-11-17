@@ -11,6 +11,9 @@ class EventChannel;
 class EventHandler
 {
 public:
+    EventHandler() = default;
+    ~EventHandler();
+
     template <class ChannelT>
     void JoinChannel();
 

@@ -25,7 +25,7 @@ private:                                                                        
     using super = ParentName;                                                               \
     inline static const TypeId ms_typeId = GetTypeId(#TypeName);                            \
 public:                                                                                     \
-    static TypeId GetStaticType()                                                           \
+    static const TypeId& GetStaticType()                                                    \
     {                                                                                       \
         return ms_typeId;                                                                   \
     }                                                                                       \

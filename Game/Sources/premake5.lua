@@ -32,5 +32,6 @@ workspace "RunAndFire"
         systemversion "latest"
 
    include "Core"
+   include "Engine"
    include "Utility"
    include "Game"

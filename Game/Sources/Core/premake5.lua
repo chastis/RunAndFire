@@ -14,8 +14,6 @@ project "Core"
         INCLUDE_PATHS.ROOT,
     }
 
-    links { "Utility" } 
-
     filter "configurations:Debug"
         defines { "DEBUG" }
         symbols "On"

@@ -17,15 +17,17 @@ private:
     inline static const TypeId ms_typeId = GetTypeId("DynamicType");
 public:
     virtual const TypeId& GetDynamicType() const;
-    virtual bool IsChildOf(const TypeId& type) const;
+    virtual bool IsKindOf(const TypeId& type) const;
+protected:
+    virtual ~DynamicType() = default;
 };
 
 #define DECLARE_DYNAMIC_TYPE(TypeName, ParentName)                                          \
 private:                                                                                    \
-    using super = ParentName;                                                               \
+    using Base = ParentName;                                                                \
     inline static const TypeId ms_typeId = GetTypeId(#TypeName);                            \
 public:                                                                                     \
-    static const TypeId& GetStaticType()                                                    \
+    static constexpr const TypeId& GetStaticType()                                          \
     {                                                                                       \
         return ms_typeId;                                                                   \
     }                                                                                       \
@@ -35,8 +37,8 @@ public:                                                                         
         return ms_typeId;                                                                   \
     }                                                                                       \
                                                                                             \
-    virtual bool IsChildOf(const TypeId& type) const override                               \
+    virtual bool IsKindOf(const TypeId& type) const override                                \
     {                                                                                       \
         if (type == ms_typeId) return true;                                                 \
-        return super::IsChildOf(type);                                                      \
+        return Base::IsKindOf(type);                                                        \
     }

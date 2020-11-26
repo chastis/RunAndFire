@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Utility/DynamicType.hpp>
+#include <Utility/Types/DynamicType.hpp>
 #include <Core/EventSystem/Event.hpp>
 
 class EventCallbackBase

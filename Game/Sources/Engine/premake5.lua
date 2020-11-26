@@ -1,9 +1,11 @@
-project "RunAndFire"
-  language "C++"
+project "Engine"
+    location ""
+    language "C++"
     cppdialect (CPPDIALECT)
     rtti (RTTI)
     targetdir (TARGET_DIR)
     objdir (OUTPUT_DIR .. "/%{prj.name}")
+    kind "StaticLib"
 
     files { "**.hpp", "**.cpp" }
 
@@ -19,37 +21,30 @@ project "RunAndFire"
         LIB_PATHS.SFML_EXTLIB
     }
 
-    links
-    {
-        "opengl32",
-        "freetype",
-        "winmm",
-        "gdi32",
-        "flac",
-        "vorbisenc",
-        "vorbisfile",
-        "vorbis",
-        "ogg",
-        "ws2_32"
-    }
-
-    links { "Utility", "Core", "Engine" }
-
     defines { "SFML_STATIC" }
 
     filter "configurations:Debug"
-        kind "ConsoleApp"
         defines { "DEBUG" }
         symbols "On"
         runtime "Debug"
 
+        links 
+        {
+            "sfml-graphics-s-d",
+            "sfml-window-s-d",
+            "sfml-system-s-d",
+            "sfml-audio-s-d"
+        }
+
     filter "configurations:Release"
-        kind "WindowedApp"
-        defines { "NDEBUG", "RELEASE", "PUGIXML_NO_EXCEPTIONS"}
+        defines { "NDEBUG", "RELEASE" }
         optimize "On"
         runtime "Release"
 
         links
         {
-            "sfml-main"
+            "sfml-graphics-s",
+            "sfml-window-s",
+            "sfml-system-s",
+            "sfml-audio-s",
         }

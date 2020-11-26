@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Utility/DynamicType.hpp>
+#include <Utility/Types/DynamicType.hpp>
 
 class Event : public DynamicType
 {

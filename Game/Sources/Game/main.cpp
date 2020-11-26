@@ -2,8 +2,14 @@
 
 int main()
 {
-    Application app;
-    app.Init();
-    app.Run();
+    Application::CreateInstance();
+
+    auto& application = Application::GetInstanceRef();
+
+    application.Initialize();
+    application.Run();
+    application.Shutdown();
+
+    Application::DestroyInstance();
     return 0;
 }

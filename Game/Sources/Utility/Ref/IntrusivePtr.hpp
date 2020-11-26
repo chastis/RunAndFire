@@ -200,3 +200,9 @@ inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(std::nullptr_t)
     if (data) data->Release();
     data = nullptr;
 }
+
+template <class T ,class U>
+IntrusivePtr<T> StaticIntrusiveCast(IntrusivePtr<U>& rhs)
+{
+    return { static_cast<T*>(rhs.Get()) };
+}

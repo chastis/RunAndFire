@@ -1,6 +1,6 @@
-#include <Core/EventSystem/EventDispatcher.hpp>
+#include <Engine/EventSystem/EventDispatcher.hpp>
 
-#include <Core/EventSystem/EventChannel.hpp>
+#include <Engine/EventSystem/EventChannel.hpp>
 
 void EventSystem::Broadcast(std::unique_ptr<Event> event, EventChannel* channel)
 {

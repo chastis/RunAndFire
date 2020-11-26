@@ -1,45 +1,60 @@
 #include <Game/Application/Application.hpp>
-#include <Core/EventSystem/EventDispatcher.hpp>
+#include <Engine/EventSystem/EventDispatcher.hpp>
+#include <SFML/Window/Mouse.hpp>
 
 #include <SFML/Graphics.hpp>
 
-void Application::Init()
+Application_Impl::Application_Impl()
 {
-    m_window.create(sf::VideoMode(200, 200), "SFML works!");
+}
+
+Application_Impl::~Application_Impl()
+{
+}
+
+void Application_Impl::Initialize()
+{
+    m_window = std::make_shared<sf::RenderWindow>();
+    m_window->create(sf::VideoMode(200, 200), "SFML works!");
+    m_engineInstance.Initialize(m_window);
 
     m_applicationEventHandler.JoinChannel<ApplicationEventChannel>();
 
-    m_applicationEventHandler.ConnectHandler(this, &Application::OnClosedEvent);
-    m_applicationEventHandler.ConnectHandler(this, &Application::OnResizedEvent);
+    m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnClosedEvent);
+    m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnResizedEvent);
 }
 
-void Application::Run()
+void Application_Impl::Run()
 {
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-
     sf::Event event;
-    while (m_window.isOpen())
+    sf::Clock frameClock;
+    while (m_window->isOpen())
     {
-        while (m_window.pollEvent(event))
+        while (m_window->pollEvent(event))
         {
             std::unique_ptr<Event> applicatioEvent(ApplicationEvents::Create(event));
             EventSystem::Broadcast(std::move(applicatioEvent), ApplicationEventChannel::GetInstance());
         }
-
-        m_window.clear();
-        m_window.draw(shape);
-        m_window.display();
+        
+        m_window->clear();
+        m_engineInstance.Update(frameClock.restart().asSeconds());
+        m_window->display();
     }
 }
 
-void Application::OnClosedEvent(ApplicationEvents::Closed& event)
+void Application_Impl::Shutdown()
 {
-    m_window.close();
+    m_engineInstance.Shutdown();
+    m_window.reset();
 }
 
-void Application::OnResizedEvent(ApplicationEvents::Resized& event)
+void Application_Impl::OnClosedEvent(ApplicationEvents::Closed& event)
+{
+    m_window->close();
+}
+
+void Application_Impl::OnResizedEvent(ApplicationEvents::Resized& event)
 {
     sf::FloatRect visibleArea(0.f, 0.f, float(event.event.size.width), float(event.event.size.height));
-    m_window.setView(sf::View(visibleArea));
+    m_window->setView(sf::View(visibleArea));
 }

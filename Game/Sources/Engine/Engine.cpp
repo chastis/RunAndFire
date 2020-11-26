@@ -21,7 +21,7 @@ void Engine::Shutdown()
 {
 }
 
-void Engine::Update()
+void Engine::Update(float deltaTime)
 {
     if (auto renderTarget = m_renderTargetWeak.lock())
     {

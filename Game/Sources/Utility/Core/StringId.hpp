@@ -10,6 +10,8 @@ public:
     StringId() = default;
     StringId(const std::string& str);
 
+
+
     bool operator==(const StringId& rhs) const;
     bool operator!=(const StringId& rhs) const;
 

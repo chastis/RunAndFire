@@ -17,6 +17,8 @@ public:
 private:
     void OnClosedEvent(ApplicationEvents::Closed& event);
     void OnResizedEvent(ApplicationEvents::Resized& event);
+    void InitializeSingltones();
+    void DestroySingletones();
 private:
     Application_Impl();
     ~Application_Impl();

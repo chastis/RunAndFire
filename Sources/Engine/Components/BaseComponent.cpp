@@ -1,5 +1,6 @@
 #include <Engine/Components/BaseComponent.hpp>
 #include <Engine/Entity.hpp>
+#include <Utility/Debugging/Assert.hpp>
 
 Entity* BaseComponent::GetOwner() const
 {
@@ -13,7 +14,7 @@ Entity& BaseComponent::GetOwnerRef() const
 
 void BaseComponent::Init(Entity* owner)
 {
-    // todo : assert
+    M42_ASSERT(owner, "You forget to add component to Factory");
     m_owner = owner;
 }
 

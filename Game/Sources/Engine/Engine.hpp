@@ -15,7 +15,7 @@ public:
     void Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget);
     void Shutdown();
 
-    void Update();
+    void Update(float deltaTime);
 
 private:
     std::weak_ptr<sf::RenderTarget> m_renderTargetWeak;

@@ -33,7 +33,7 @@ project "RunAndFire"
         "ws2_32"
     }
 
-    links { "Utility", "Core", "Engine" }
+    links { "Utility", "Engine" }
 
     defines { "SFML_STATIC" }
 

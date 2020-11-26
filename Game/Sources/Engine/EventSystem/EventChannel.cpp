@@ -1,5 +1,5 @@
-#include <Core/EventSystem/EventChannel.hpp>
-#include <Core/EventSystem/EventHandler.hpp>
+#include <Engine/EventSystem/EventChannel.hpp>
+#include <Engine/EventSystem/EventHandler.hpp>
 
 void EventChannel::DispatchEvent(Event& event)
 {

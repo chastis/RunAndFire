@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/EventSystem/EventHandler.hpp>
+#include <Engine/EventSystem/EventHandler.hpp>
 #include <Engine/Engine.hpp>
 #include <Game/Application/ApplicationEvents.hpp>
 #include <Utility/Core/Singleton.hpp>

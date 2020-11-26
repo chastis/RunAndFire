@@ -31,7 +31,6 @@ workspace "RunAndFire"
     filter "system:windows"
         systemversion "latest"
 
-   include "Core"
    include "Engine"
    include "Utility"
    include "Game"

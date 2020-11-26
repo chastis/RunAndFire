@@ -1,5 +1,5 @@
 #include <Game/Application/Application.hpp>
-#include <Core/EventSystem/EventDispatcher.hpp>
+#include <Engine/EventSystem/EventDispatcher.hpp>
 #include <SFML/Window/Mouse.hpp>
 
 #include <SFML/Graphics.hpp>
@@ -27,6 +27,7 @@ void Application_Impl::Initialize()
 void Application_Impl::Run()
 {
     sf::Event event;
+    sf::Clock frameClock;
     while (m_window->isOpen())
     {
         while (m_window->pollEvent(event))
@@ -36,7 +37,7 @@ void Application_Impl::Run()
         }
         
         m_window->clear();
-        m_engineInstance.Update();
+        m_engineInstance.Update(frameClock.restart().asSeconds());
         m_window->display();
     }
 }

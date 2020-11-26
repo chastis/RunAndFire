@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Core/EventSystem/EventChannel.hpp>
-#include <Core/EventSystem/Event.hpp>
+#include <Engine/EventSystem/EventChannel.hpp>
+#include <Engine/EventSystem/Event.hpp>
 #include <SFML/Window/Event.hpp>
 
 class ApplicationEventChannel : public EventChannelSingleton<ApplicationEventChannel> {};

@@ -1,5 +1,5 @@
-#include <Core/EventSystem/EventHandler.hpp>
-#include <Core/EventSystem/EventChannel.hpp>
+#include <Engine/EventSystem/EventHandler.hpp>
+#include <Engine/EventSystem/EventChannel.hpp>
 
 EventHandler::~EventHandler()
 {

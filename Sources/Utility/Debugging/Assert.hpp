@@ -15,7 +15,7 @@
                 ss << "Press Try Again to break in debugger.";                                                      \
                 int res = MessageBox(NULL,                                                                          \
                                      ss.str().c_str(),                                                              \
-                                     L"Assertionfailed!",                                                           \
+                                     L"Assertion failed!",                                                           \
                                      MB_ICONWARNING | MB_CANCELTRYCONTINUE | MB_DEFBUTTON2);                        \
                 if (res == IDTRYAGAIN)                                                                              \
                 {                                                                                                   \

@@ -1,4 +1,4 @@
-# Install script for directory: C:/root/GitHub/RunAndFire/Sources/SFML/Sources/src/SFML/Window
+# Install script for directory: W:/Projects/RunAndFire/Sources/SFML/Sources/src/SFML/Window
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,13 +34,13 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xdevelx" OR NOT CMAKE_INSTALL_COMPONENT)
   if("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/root/GitHub/RunAndFire/Sources/SFML/Build/lib/Debug/sfml-window-s-d.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "W:/Projects/RunAndFire/Sources/SFML/Build/lib/Debug/sfml-window-s-d.lib")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/root/GitHub/RunAndFire/Sources/SFML/Build/lib/Release/sfml-window-s.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "W:/Projects/RunAndFire/Sources/SFML/Build/lib/Release/sfml-window-s.lib")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Mm][Ii][Nn][Ss][Ii][Zz][Ee][Rr][Ee][Ll])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/root/GitHub/RunAndFire/Sources/SFML/Build/lib/MinSizeRel/sfml-window-s.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "W:/Projects/RunAndFire/Sources/SFML/Build/lib/MinSizeRel/sfml-window-s.lib")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/root/GitHub/RunAndFire/Sources/SFML/Build/lib/RelWithDebInfo/sfml-window-s.lib")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "W:/Projects/RunAndFire/Sources/SFML/Build/lib/RelWithDebInfo/sfml-window-s.lib")
   endif()
 endif()
 

@@ -1,6 +1,6 @@
 #include <Engine/InputSystem/InputManager.hpp>
 #include <Engine/InputSystem/InputClient.hpp>
-#include <Engine/InputSystem/Event.hpp>
+#include <Engine/InputSystem/InputEvent.hpp>
 #include <Utility/Debugging/Assert.hpp>
 
 std::map<std::string, ActionMap> InputManager::ms_actionMaps;
@@ -76,7 +76,6 @@ void InputManager::LoadActionMaps(const pugi::xml_document& file)
 
 void InputManager::DispatchInput(const ActionSignalEvent& input)
 {
-    const auto native_input_prefix = GetActionInputEventPrefix(input.type);
     for (auto head = m_actionMapStack.rbegin(); head != m_actionMapStack.rend(); ++head)
     {
         for (auto signal : head->GetSignals(GetNativeInput(input)))

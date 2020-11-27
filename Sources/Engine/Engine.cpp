@@ -33,7 +33,7 @@ void Engine::Update(float deltaTime)
     }
 }
 
-InputManager& Engine::GetPrimaryInputManagerRef()
+InputManager& Engine::GetInputManagerRef()
 {
     return m_inputManager;
 }

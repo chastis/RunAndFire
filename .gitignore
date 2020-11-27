@@ -8,7 +8,7 @@
 .vs
 
 # Project specific
-# Sources/SFML/Build/
+Sources/SFML/Build/
 
 # Build results
 [Dd]ebug/

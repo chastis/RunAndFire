@@ -1,4 +1,4 @@
-# Install script for directory: C:/root/GitHub/RunAndFire/Sources/SFML/Sources/src/SFML
+# Install script for directory: W:/Projects/RunAndFire/Sources/SFML/Sources/src/SFML
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,12 +34,12 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/root/GitHub/RunAndFire/Sources/SFML/Build/src/SFML/System/cmake_install.cmake")
-  include("C:/root/GitHub/RunAndFire/Sources/SFML/Build/src/SFML/Main/cmake_install.cmake")
-  include("C:/root/GitHub/RunAndFire/Sources/SFML/Build/src/SFML/Window/cmake_install.cmake")
-  include("C:/root/GitHub/RunAndFire/Sources/SFML/Build/src/SFML/Network/cmake_install.cmake")
-  include("C:/root/GitHub/RunAndFire/Sources/SFML/Build/src/SFML/Graphics/cmake_install.cmake")
-  include("C:/root/GitHub/RunAndFire/Sources/SFML/Build/src/SFML/Audio/cmake_install.cmake")
+  include("W:/Projects/RunAndFire/Sources/SFML/Build/src/SFML/System/cmake_install.cmake")
+  include("W:/Projects/RunAndFire/Sources/SFML/Build/src/SFML/Main/cmake_install.cmake")
+  include("W:/Projects/RunAndFire/Sources/SFML/Build/src/SFML/Window/cmake_install.cmake")
+  include("W:/Projects/RunAndFire/Sources/SFML/Build/src/SFML/Network/cmake_install.cmake")
+  include("W:/Projects/RunAndFire/Sources/SFML/Build/src/SFML/Graphics/cmake_install.cmake")
+  include("W:/Projects/RunAndFire/Sources/SFML/Build/src/SFML/Audio/cmake_install.cmake")
 
 endif()
 

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <SFML/Graphics/RenderTarget.hpp>
+#include <Engine/InputSystem/InputManager.hpp>
 
+#include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 
 #include <memory>
@@ -17,7 +18,12 @@ public:
 
     void Update(float deltaTime);
 
+    InputManager& GetPrimaryInputManagerRef();
+
 private:
+    void InitializeInputManager();
+private:
+    InputManager m_inputManager;
     std::weak_ptr<sf::RenderTarget> m_renderTargetWeak;
 
     sf::CircleShape m_shape;

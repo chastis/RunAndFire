@@ -10,11 +10,16 @@ using ActionSignal = StringId;
 class ActionMap
 {
 public:
+    static const ActionSignal InvalidSignal;
+public:
     void LoadFromXml(const pugi::xml_node& actionMapNode);
 
     const std::string& GetName() const;
-    const ActionSignal& GetSignalFromInput(const std::string& inputValue) const;
+    bool IsPassthrough() const;
+
+    std::vector<ActionSignal> GetSignals(const std::string& nativeInput);
 private:
-    std::map<StringId, StringId> m_signals;
+    std::map<std::string, ActionSignal> m_signals;
     std::string m_name;
+    bool m_passthrough;
 };

@@ -11,8 +11,11 @@ class BaseComponent : public DynamicType, Noncopyable
 public:
     [[nodiscard]] Entity* GetOwner() const;
     [[nodiscard]] Entity& GetOwnerRef() const;
-    virtual void Init(Entity* owner);
+    void Init(Entity* owner);
+    virtual void PostInit();
     virtual void Update(float deltaTime);
 protected:
+    virtual void InitSpecific();
+
     Entity* m_owner = nullptr;
 };

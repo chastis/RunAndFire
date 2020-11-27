@@ -1,6 +1,7 @@
 #pragma once
 
 #include <sstream>
+#define NOMINMAX
 #include <windows.h> //TODO: move to platform folder
 
 //#TODO : make crossplatform

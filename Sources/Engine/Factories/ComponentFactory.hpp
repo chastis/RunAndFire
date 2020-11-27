@@ -10,8 +10,8 @@ class ComponentFactory : public TypeFactoryBase
 public:
 
     template <class T>
-    BaseComponent* CreateComponent() const;
-    BaseComponent* CreateComponent(const TypeId& typeId) const;
+    [[nodiscard]] BaseComponent* CreateComponent() const;
+    [[nodiscard]] BaseComponent* CreateComponent(const TypeId& typeId) const;
 
     void RegisterTypes() override;
 private:

@@ -5,12 +5,12 @@
 
 InputClient::InputClient()
 {
-    auto& inputManager = GameManager::GetInstanceRef().GetEngineInstance()->GetPrimaryInputManagerRef();
+    auto& inputManager = GameManager::GetInstanceRef().GetEngineInstance()->GetInputManagerRef();
     inputManager.AddListener(this);
 }
 
 InputClient::~InputClient()
 {
-    auto& inputManager = GameManager::GetInstanceRef().GetEngineInstance()->GetPrimaryInputManagerRef();
+    auto& inputManager = GameManager::GetInstanceRef().GetEngineInstance()->GetInputManagerRef();
     inputManager.RemoveListener(this);
 }

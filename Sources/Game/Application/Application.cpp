@@ -1,6 +1,6 @@
 #include <Game/Application/Application.hpp>
 #include <Engine/EventSystem/EventDispatcher.hpp>
-#include <Engine/InputSystem/Event.hpp>
+#include <Engine/InputSystem/InputEvent.hpp>
 #include <Engine/GameManager.hpp>
 
 #include <SFML/Window/Mouse.hpp>

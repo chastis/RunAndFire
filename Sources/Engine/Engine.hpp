@@ -18,7 +18,7 @@ public:
 
     void Update(float deltaTime);
 
-    InputManager& GetPrimaryInputManagerRef();
+    InputManager& GetInputManagerRef();
 
 private:
     void InitializeInputManager();

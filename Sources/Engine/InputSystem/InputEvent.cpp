@@ -1,4 +1,4 @@
-#include <Engine/InputSystem/Event.hpp>
+#include <Engine/InputSystem/InputEvent.hpp>
 
 InputSystemEvent::InputSystemEvent(const sf::Event& event)
 {

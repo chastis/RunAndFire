@@ -2,7 +2,8 @@
 
 #include <Engine/Consts/Const.hpp>
 #include <Utility/Core/Noncopyable.hpp>
-#include <Utility/Json/Json.hpp>
+#include <Utility/XML/pugixml.hpp>
+#include <Utility/Debugging/Assert.hpp>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -26,13 +27,14 @@ public:
     {
         return id == prototype.id;
     }
-    virtual bool Init(const nlohmann::json::iterator& nodeIt)
+    void Init(const pugi::xml_node& node)
     {
-        nlohmann::json node = nodeIt.value();
-        sid = nodeIt.key();
-        return true;
+        sid = node.name();
+        InitSpecific(node);
     }
 protected:
+    virtual void InitSpecific(const pugi::xml_node& node) = 0;
+
     size_t id = 0;
     std::string sid;
 
@@ -60,25 +62,26 @@ std::vector<std::unique_ptr<T>> BasePrototypes<T>::prototypes;
 template <class T>
 void BasePrototypes<T>::Init(const std::string& filePath)
 {
+    using namespace std::string_literals;
     std::ifstream file(filePath);
-    
-    nlohmann::json j = nlohmann::json::parse(file);
-    prototypes.resize(j.size());
+
+    pugi::xml_document xml_doc;
+    xml_doc.load(file);
+
     uint32_t currentId = 0;
-    for (auto node = j.begin(); node != j.end(); ++node)
+    for (pugi::xml_node child : xml_doc.children())
     {
         std::unique_ptr<T> newPrototype = std::make_unique<T>();
-        if (node.value().contains("parent"))
+        if (const pugi::xml_attribute& parent = child.attribute("parent"))
         {
-            std::string parentSid = node.value().at("parent").get<std::string>();
-            if (j.contains(parentSid))
+            std::string query = "prototypes/prototype/[@sid = '"s + parent.as_string()+ "']";
+            pugi::xpath_node parentNode = xml_doc.select_node(query.data());
+            if (parentNode)
             {
-                nlohmann::json::iterator parentNode = j.at(parentSid).get<nlohmann::json::iterator>();
                 newPrototype->Init(parentNode);
             }
-            
         }
-        newPrototype->Init(node);
+        newPrototype->Init(child);
         newPrototype->id = currentId;
         prototypes[currentId] = std::move(newPrototype);
         
@@ -108,7 +111,7 @@ const T& BasePrototypes<T>::Get(size_t inID)
             return *prototypes[inID];
         }
     }
-    assert(false && "Don't exist prototype with this ID");
+    M42_ASSERT(false, "Don't exist prototype with this ID");
     return GetDefault();
 }
 
@@ -122,7 +125,7 @@ const T& BasePrototypes<T>::Get(const std::string& inSID)
             return *el;
         }
     }
-    assert(false && "Don't exist prototype with this SID");
+    M42_ASSERT(false, "Don't exist prototype with this SID");
     return GetDefault();
 }
 

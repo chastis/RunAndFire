@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ActionMaps>
+	<ActionMap name="debug_action_map" passthrough="false">
+		<ActionSignal native_input="kp:22" signal="W_pressed" />
+		<ActionSignal native_input="mbr:0" signal="lbm_pressed" />
+	</ActionMap>	
+</ActionMaps>

@@ -16,6 +16,7 @@ void BaseComponent::Init(Entity* owner)
 {
     M42_ASSERT(owner, "You forget to give owner");
     m_owner = owner;
+    InitSpecific();
 }
 
 void BaseComponent::PostInit()

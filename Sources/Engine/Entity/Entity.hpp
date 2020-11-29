@@ -38,7 +38,7 @@ T* Entity::AddComponent()
     static_assert(std::is_base_of_v<BaseComponent, T>, "Component type should derrive ComponentBase!");
     const TypeId& componentId = T::GetStaticType();
     BaseComponent* newComponent = AddComponent(componentId);
-    return static_cast<T>(newComponent);
+    return static_cast<T*>(newComponent);
 }
 
 template <class T>
@@ -47,5 +47,5 @@ T* Entity::GetComponent() const
     static_assert(std::is_base_of_v<BaseComponent, T>, "Component type should derrive ComponentBase!");
     const TypeId& componentId = T::GetStaticType();
     BaseComponent* findComponent = GetComponent(componentId);
-    return static_cast<T>(findComponent);
+    return static_cast<T*>(findComponent);
 }

@@ -1,14 +1,19 @@
 #include <Engine/Engine.hpp>
 #include <Engine/InputSystem/InputClient.hpp>
+#include <Engine/Managers/FileManager.hpp>
+#include <Utility/Debugging/Assert.hpp>
 
-#include <SFML/Graphics.hpp>
+#include <Engine/Factories/DynamicTypeFactory.hpp>
 
-#include <iostream>
+#if defined(DEBUG)
+#include <Engine/Debugging/Engine_Debug.hpp>
+#endif
 
 Engine::Engine()
-    : m_shape(100.f)
+#if defined(DEBUG)
+    : m_debug(*this)
+#endif
 {
-    m_shape.setFillColor(sf::Color::Green);
 }
 
 Engine::~Engine()
@@ -17,20 +22,31 @@ Engine::~Engine()
 
 void Engine::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
 {
+    DynamicTypeFactory::CreateInstance();
+
     m_renderTargetWeak = renderTarget;
     InitializeInputManager();
+
+#if defined(DEBUG)
+    m_debug->Initialize();
+#endif //DEBUG
 }
 
 void Engine::Shutdown()
 {
+#if defined(DEBUG)
+    m_debug->Shutdown();
+#endif //DEBUG
+
+    DynamicTypeFactory::DestroyInstance();
 }
 
 void Engine::Update(float deltaTime)
 {
-    if (auto renderTarget = m_renderTargetWeak.lock())
-    {
-        renderTarget->draw(m_shape);
-    }
+
+#if defined(DEBUG)
+    m_debug->Update(deltaTime);
+#endif //DEBUG
 }
 
 InputManager& Engine::GetInputManagerRef()
@@ -40,10 +56,11 @@ InputManager& Engine::GetInputManagerRef()
 
 void Engine::InitializeInputManager()
 {
-    //TODO MB: query file from file managers
+    auto& file_manager = FileManager::GetInstanceRef();
+    auto action_maps_config = file_manager.OpenFile("action_maps.xml");
+    M42_ASSERT(action_maps_config.is_open(), "Failed to open action maps config file");
 
     pugi::xml_document actionMapsDoc;
-    actionMapsDoc.load_file("action_maps.xml");
-
+    actionMapsDoc.load(action_maps_config);
     InputManager::LoadActionMaps(actionMapsDoc);
 }

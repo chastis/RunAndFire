@@ -1,7 +1,9 @@
 #include <Game/Application/Application.hpp>
 #include <Engine/EventSystem/EventDispatcher.hpp>
 #include <Engine/InputSystem/InputEvent.hpp>
-#include <Engine/GameManager.hpp>
+#include <Engine/Managers/GameManager.hpp>
+#include <Engine/Managers/FileManager.hpp>
+#include <Engine/Managers/EntityManager.hpp>
 
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Graphics.hpp>
@@ -99,10 +101,16 @@ void Application_Impl::OnMouseButtonReleasedEvent(ApplicationEvents::MouseButton
 
 void Application_Impl::InitializeSingltones()
 {
+    FileManager::CreateInstance();
     GameManager::CreateInstance();
+    EntityManager::CreateInstance();
+
+    FileManager::GetInstanceRef().SetWorkingDirectory(WORKING_DIRECTORY);
 }
 
 void Application_Impl::DestroySingletones()
 {
+    EntityManager::DestroyInstance();
     GameManager::DestroyInstance();
+    FileManager::DestroyInstance();
 }

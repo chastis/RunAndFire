@@ -1,6 +1,10 @@
 #include <Engine/Factories/ComponentFactory.hpp>
 #include <Utility/Debugging/Assert.hpp>
 
+#if defined(DEBUG)
+#include <Engine/Debugging/EntityComponents_Debug.hpp>
+#endif //DEBUG
+
 BaseComponent* ComponentFactory::CreateComponent(const TypeId& typeId) const
 {
     auto creator = m_creators.find(typeId);
@@ -14,5 +18,8 @@ BaseComponent* ComponentFactory::CreateComponent(const TypeId& typeId) const
 
 void ComponentFactory::RegisterTypes()
 {
-
+#if defined(DEBUG)
+    m_creators[CircleShapeComponent::GetStaticType()] = []() { return new CircleShapeComponent; };
+    m_creators[EntityControllerComponent::GetStaticType()] = []() { return new EntityControllerComponent; };
+#endif //DEBUG
 }

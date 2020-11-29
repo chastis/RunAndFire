@@ -7,6 +7,10 @@
 
 #include <memory>
 
+#if defined(DEBUG)
+#include <Utility/Core/FastPimpl.hpp>
+#endif
+
 class Engine final
 {
 public:
@@ -26,5 +30,8 @@ private:
     InputManager m_inputManager;
     std::weak_ptr<sf::RenderTarget> m_renderTargetWeak;
 
-    sf::CircleShape m_shape;
+#if defined(DEBUG)
+    class Debug;
+    FastPimpl<Debug, 16, 8> m_debug;
+#endif
 };

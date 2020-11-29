@@ -1,5 +1,5 @@
 project "RunAndFire"
-  language "C++"
+    language "C++"
     cppdialect (CPPDIALECT)
     rtti (RTTI)
     targetdir (TARGET_DIR)
@@ -37,15 +37,18 @@ project "RunAndFire"
 
     defines { "SFML_STATIC" }
 
+    filter "configurations:Release"
+        DATA_PATH = "\"Data\""
+
     filter "configurations:Debug"
         kind "ConsoleApp"
-        defines { "DEBUG" }
+        defines { "DEBUG", "WORKING_DIRECTORY=".."\"%{wks.location}/../Data\"" }
         symbols "On"
         runtime "Debug"
 
     filter "configurations:Release"
         kind "WindowedApp"
-        defines { "NDEBUG", "RELEASE", "PUGIXML_NO_EXCEPTIONS"}
+        defines { "NDEBUG", "RELEASE", "PUGIXML_NO_EXCEPTIONS", "WORKING_DIRECTORY=".."\"Data\"" }
         optimize "On"
         runtime "Release"
 

@@ -1,6 +1,6 @@
 #include <Engine/InputSystem/InputClient.hpp>
 #include <Engine/InputSystem/InputManager.hpp>
-#include <Engine/GameManager.hpp>
+#include <Engine/Managers/GameManager.hpp>
 #include <Engine/Engine.hpp>
 
 InputClient::InputClient()

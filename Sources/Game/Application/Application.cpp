@@ -7,12 +7,10 @@
 #include <SFML/Graphics.hpp>
 
 Application_Impl::Application_Impl()
-{
-}
+{}
 
 Application_Impl::~Application_Impl()
-{
-}
+{}
 
 void Application_Impl::Initialize()
 {
@@ -21,7 +19,7 @@ void Application_Impl::Initialize()
     GameManager::GetInstanceRef().SetEngineInstance(&m_engineInstance);
 
     m_window = std::make_shared<sf::RenderWindow>();
-    m_window->create(sf::VideoMode(200, 200), "SFML works!");
+    m_window->create(sf::VideoMode(200, 200), "RUN & FIRE");
 
     m_engineInstance.Initialize(m_window);
 
@@ -30,10 +28,7 @@ void Application_Impl::Initialize()
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnClosedEvent);
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnResizedEvent);
 
-    m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnKeyPressedEvent);
-    m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnKeyReleasedEvent);
-    m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnMouseButtonPressedEvent);
-    m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnMouseButtonReleasedEvent);
+    m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnInputEvent);
 }
 
 void Application_Impl::Run()
@@ -44,8 +39,8 @@ void Application_Impl::Run()
     {
         while (m_window->pollEvent(event))
         {
-            std::unique_ptr<Event> applicatioEvent(ApplicationEvents::Create(event));
-            EventSystem::Broadcast(std::move(applicatioEvent), ApplicationEventChannel::GetInstance());
+            std::shared_ptr<Event> applicationEvent(ApplicationEvents::Create(event));
+            EventSystem::Broadcast(applicationEvent, ApplicationEventChannel::GetInstance());
         }
         
         m_window->clear();
@@ -73,25 +68,7 @@ void Application_Impl::OnResizedEvent(ApplicationEvents::Resized& event)
     m_window->setView(sf::View(visibleArea));
 }
 
-void Application_Impl::OnKeyPressedEvent(ApplicationEvents::KeyPressed& event)
-{
-    auto inputEvent = std::make_unique<InputSystemEvent>(event.event);
-    EventSystem::Broadcast(std::move(inputEvent), InputSystemEventChannel::GetInstance());
-}
-
-void Application_Impl::OnKeyReleasedEvent(ApplicationEvents::KeyReleased& event)
-{
-    auto inputEvent = std::make_unique<InputSystemEvent>(event.event);
-    EventSystem::Broadcast(std::move(inputEvent), InputSystemEventChannel::GetInstance());
-}
-
-void Application_Impl::OnMouseButtonPressedEvent(ApplicationEvents::MouseButtonPressed& event)
-{
-    auto inputEvent = std::make_unique<InputSystemEvent>(event.event);
-    EventSystem::Broadcast(std::move(inputEvent), InputSystemEventChannel::GetInstance());
-}
-
-void Application_Impl::OnMouseButtonReleasedEvent(ApplicationEvents::MouseButtonReleased& event)
+void Application_Impl::OnInputEvent(ApplicationEvents::InputApplicationEvent& event)
 {
     auto inputEvent = std::make_unique<InputSystemEvent>(event.event);
     EventSystem::Broadcast(std::move(inputEvent), InputSystemEventChannel::GetInstance());

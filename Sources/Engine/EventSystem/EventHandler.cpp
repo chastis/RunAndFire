@@ -23,10 +23,12 @@ void EventHandler::LeaveAll()
 
 void EventHandler::DispatchEvent(Event& event)
 {
-    auto handlerIt = m_eventCallbacks.find(event.GetDynamicType());
-    if (handlerIt != m_eventCallbacks.end())
+    for (auto& handlerIt : m_eventCallbacks)
     {
-        handlerIt->second->Call(event);
+        if (event.IsKindOf(handlerIt.first))
+        {
+            handlerIt.second->Call(event);
+        }
     }
 }
 

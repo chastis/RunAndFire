@@ -16,6 +16,8 @@ public:
 
     template <class ChannelT>
     void JoinChannel();
+    template <class ChannelT>
+    void LeaveChannel();
 
     template <class Obj, class EventType>
     void ConnectHandler(Obj* obj, void(Obj::* callback)(EventType&));
@@ -38,6 +40,18 @@ inline void EventHandler::JoinChannel()
     auto channel = ChannelT::GetInstance();
     channel->AddHandler(this);
     m_channels.push_back(channel);
+}
+
+template<class ChannelT>
+inline void EventHandler::LeaveChannel()
+{
+    auto channel = ChannelT::GetInstance();
+    channel->RemoveHandler(this);
+    auto channelIt = std::find(m_channels.begin(), m_channels.end(), channel);
+    if (channelIt != m_channels.end())
+    {
+        m_channels.erase(channelIt);
+    }
 }
 
 template<class Obj, class EventType>

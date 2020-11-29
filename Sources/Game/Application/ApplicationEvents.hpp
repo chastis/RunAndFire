@@ -47,16 +47,34 @@ namespace ApplicationEvents
         DECLARE_DYNAMIC_TYPE(TextEntered, ApplicationEvent)
     };
 
-    class KeyPressed : public ApplicationEvent
+    class InputApplicationEvent : public ApplicationEvent
     {
     public:
-        DECLARE_DYNAMIC_TYPE(KeyPressed, ApplicationEvent)
+        DECLARE_DYNAMIC_TYPE(InputEvent, ApplicationEvent)
     };
 
-    class KeyReleased : public ApplicationEvent
+    class KeyPressed : public InputApplicationEvent
     {
     public:
-        DECLARE_DYNAMIC_TYPE(KeyReleased, ApplicationEvent)
+        DECLARE_DYNAMIC_TYPE(KeyPressed, InputApplicationEvent)
+    };
+
+    class KeyReleased : public InputApplicationEvent
+    {
+    public:
+        DECLARE_DYNAMIC_TYPE(KeyReleased, InputApplicationEvent)
+    };
+
+    class MouseButtonPressed : public InputApplicationEvent
+    {
+    public:
+        DECLARE_DYNAMIC_TYPE(MouseButtonPressed, InputApplicationEvent)
+    };
+
+    class MouseButtonReleased : public InputApplicationEvent
+    {
+    public:
+        DECLARE_DYNAMIC_TYPE(MouseButtonReleased, InputApplicationEvent)
     };
 
     class MouseWheelMoved : public ApplicationEvent
@@ -69,18 +87,6 @@ namespace ApplicationEvents
     {
     public:
         DECLARE_DYNAMIC_TYPE(MouseWheelScrolled, ApplicationEvent)
-    };
-
-    class MouseButtonPressed : public ApplicationEvent
-    {
-    public:
-        DECLARE_DYNAMIC_TYPE(MouseButtonPressed, ApplicationEvent)
-    };
-
-    class MouseButtonReleased : public ApplicationEvent
-    {
-    public:
-        DECLARE_DYNAMIC_TYPE(MouseButtonReleased, ApplicationEvent)
     };
 
     class MouseMoved : public ApplicationEvent

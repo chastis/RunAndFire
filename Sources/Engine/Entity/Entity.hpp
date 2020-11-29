@@ -9,7 +9,7 @@ class BaseComponent;
 
 using UID = size_t;
 
-class  Entity final : public sf::Transformable, public Noncopyable, public ReferenceCountable<>
+class Entity final : public sf::Transformable, public Noncopyable, public ReferenceCountable<>
 {
 public:
     Entity();

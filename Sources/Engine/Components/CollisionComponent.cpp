@@ -1,4 +1,7 @@
 #include <Engine/Components/CollisionComponent.hpp>
+#include <Engine/EventSystem/EventDispatcher.hpp>
+#include <Engine/Managers/EntityManager.hpp>
+#include <Engine/Entity/EntityEvents.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <SFML/System/Vector2.hpp>
 
@@ -8,8 +11,19 @@ void CollisionComponent::InitFromPrototype()
 }
 
 void CollisionComponent::Update(float deltaTime)
-{
-    
+{   
+    std::vector<Entity*> entities = EntityManager::GetInstanceRef().GetEntities();
+    for (auto en : entities)
+    {
+        const auto enCollisionComp = en->GetComponent<CollisionComponent>();
+        if (enCollisionComp && CheckCollision(*enCollisionComp))
+        {
+            auto collisionEvent = std::make_shared<EntityEvents::CollisionEntityEvent>();
+            collisionEvent->CollidedEntity = enCollisionComp->GetOwner();
+            EventSystem::Broadcast(collisionEvent, EntityEventChannel::GetInstance());
+            EventSystem::Broadcast(collisionEvent, EntityEventChannel::GetInstance());
+        }
+    }
 }
 
 bool CollisionComponent::CheckCollision(float x, float y) const

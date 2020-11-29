@@ -18,10 +18,7 @@ private:
     void OnClosedEvent(ApplicationEvents::Closed& event);
     void OnResizedEvent(ApplicationEvents::Resized& event);
 
-    void OnKeyPressedEvent(ApplicationEvents::KeyPressed& event);
-    void OnKeyReleasedEvent(ApplicationEvents::KeyReleased& event);
-    void OnMouseButtonPressedEvent(ApplicationEvents::MouseButtonPressed& event);
-    void OnMouseButtonReleasedEvent(ApplicationEvents::MouseButtonReleased& event);
+    void OnInputEvent(ApplicationEvents::InputApplicationEvent& event);
 
     void InitializeSingltones();
     void DestroySingletones();

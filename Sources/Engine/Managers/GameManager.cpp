@@ -1,4 +1,4 @@
-#include <Engine/GameManager.hpp>
+#include <Engine/Managers/GameManager.hpp>
 
 void GameManager_Impl::SetEngineInstance(Engine* instance)
 {

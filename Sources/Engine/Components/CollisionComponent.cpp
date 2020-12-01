@@ -7,7 +7,7 @@
 
 void CollisionComponent::InitFromPrototype()
 {
-    
+    // todo
 }
 
 void CollisionComponent::Update(float deltaTime)

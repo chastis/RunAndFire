@@ -18,12 +18,3 @@ void BaseComponent::Init(Entity* owner)
     m_owner = owner;
     InitSpecific();
 }
-
-void BaseComponent::PostInit()
-{}
-
-void BaseComponent::Update(float deltaTime)
-{}
-
-void BaseComponent::InitSpecific()
-{}

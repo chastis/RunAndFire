@@ -15,6 +15,6 @@ public:
 public:
     InputSystemEvent(const sf::Event& event);
 
-    ActionSignalEvent event;
+    ActionSignalInput m_input;
 };
 

@@ -1,7 +1,5 @@
 #include <Engine/Engine.hpp>
-#include <Engine/InputSystem/InputClient.hpp>
-#include <Engine/Managers/FileManager.hpp>
-#include <Utility/Debugging/Assert.hpp>
+#include <Engine/InputSystem/InputManager.hpp>
 
 #include <Engine/Factories/DynamicTypeFactory.hpp>
 
@@ -22,10 +20,9 @@ Engine::~Engine()
 
 void Engine::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
 {
-    DynamicTypeFactory::CreateInstance();
-
     m_renderTargetWeak = renderTarget;
-    InitializeInputManager();
+
+    ChangeGameMode(EGameMode::Game);
 
 #if defined(DEBUG)
     m_debug->Initialize();
@@ -37,8 +34,19 @@ void Engine::Shutdown()
 #if defined(DEBUG)
     m_debug->Shutdown();
 #endif //DEBUG
+}
 
-    DynamicTypeFactory::DestroyInstance();
+void Engine::ChangeGameMode(EGameMode newMode)
+{
+    switch (newMode)
+    {
+    case EGameMode::Game:
+        {
+            InputManager::GetInstanceRef().PushActionMap("game_input");
+        }
+    case EGameMode::Menu: break;
+    default: ;
+    }
 }
 
 void Engine::Update(float deltaTime)
@@ -47,20 +55,4 @@ void Engine::Update(float deltaTime)
 #if defined(DEBUG)
     m_debug->Update(deltaTime);
 #endif //DEBUG
-}
-
-InputManager& Engine::GetInputManagerRef()
-{
-    return m_inputManager;
-}
-
-void Engine::InitializeInputManager()
-{
-    auto& file_manager = FileManager::GetInstanceRef();
-    auto action_maps_config = file_manager.OpenFile("action_maps.xml");
-    M42_ASSERT(action_maps_config.is_open(), "Failed to open action maps config file");
-
-    pugi::xml_document actionMapsDoc;
-    actionMapsDoc.load(action_maps_config);
-    InputManager::LoadActionMaps(actionMapsDoc);
 }

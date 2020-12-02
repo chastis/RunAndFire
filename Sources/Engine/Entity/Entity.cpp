@@ -6,6 +6,20 @@
 Entity::Entity() = default;
 Entity::~Entity() = default;
 
+void Entity::InitFromPrototype()
+{
+    const auto& componentsData = GetPrototype().GetComponents();
+    for (const auto& componentInfo : componentsData)
+    {
+        BaseComponent* newComponent = AddComponent(componentInfo.first);
+        if (componentInfo.second.has_value())
+        {
+            newComponent->InitPrototype(componentInfo.second.value());
+        }
+    }
+    PostInitComponents();
+}
+
 BaseComponent* Entity::AddComponent(const TypeId& typeId)
 {
     const auto& factory = DynamicTypeFactory::GetInstanceRef().GetFactoryRef<ComponentFactory>();
@@ -20,6 +34,18 @@ BaseComponent* Entity::GetComponent(const TypeId& typeId) const
     for (const auto& componentIt : m_components)
     {
         if (componentIt->GetDynamicType() == typeId)
+        {
+            return  componentIt.get();
+        }
+    }
+    return nullptr;
+}
+
+BaseComponent* Entity::GetKindOfComponent(const TypeId& typeId) const
+{
+    for (const auto& componentIt : m_components)
+    {
+        if (componentIt->IsKindOf(typeId))
         {
             return  componentIt.get();
         }

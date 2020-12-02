@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Engine/Consts/Const.hpp>
 #include <Utility/Core/Noncopyable.hpp>
 #include <Utility/XML/pugixml.hpp>
 #include <Utility/Debugging/Assert.hpp>
@@ -33,7 +32,7 @@ public:
         InitSpecific(node);
     }
 protected:
-    virtual void InitSpecific(const pugi::xml_node& node) = 0;
+    virtual void InitSpecific(const pugi::xml_node& node){}// = 0;
 
     size_t id = 0;
     std::string sid;
@@ -46,7 +45,7 @@ template <class T>
 class BasePrototypes : public Noncopyable
 {
 public:
-    static void Init(const std::string& filePath);
+    static void Init(std::ifstream& file);
     static const T& GetDefault();
     static const T& Get(size_t inID);
     static const T& Get(const std::string& inSID);
@@ -60,30 +59,29 @@ template <class T>
 std::vector<std::unique_ptr<T>> BasePrototypes<T>::prototypes;
 
 template <class T>
-void BasePrototypes<T>::Init(const std::string& filePath)
+void BasePrototypes<T>::Init(std::ifstream& file)
 {
     using namespace std::string_literals;
-    std::ifstream file(filePath);
 
     pugi::xml_document xml_doc;
     xml_doc.load(file);
 
     uint32_t currentId = 0;
-    for (pugi::xml_node child : xml_doc.children())
+    for (pugi::xml_node child : xml_doc.first_child().children())
     {
         std::unique_ptr<T> newPrototype = std::make_unique<T>();
         if (const pugi::xml_attribute& parent = child.attribute("parent"))
         {
-            std::string query = "prototypes/prototype/[@sid = '"s + parent.as_string()+ "']";
+            std::string query = xml_doc.first_child().name() + "/"s + parent.as_string()+ "";
             pugi::xpath_node parentNode = xml_doc.select_node(query.data());
             if (parentNode)
             {
-                newPrototype->Init(parentNode);
+                newPrototype->Init(parentNode.node());
             }
         }
         newPrototype->Init(child);
-        newPrototype->id = currentId;
-        prototypes[currentId] = std::move(newPrototype);
+        newPrototype->id = currentId++;
+        prototypes.push_back(std::move(newPrototype));
         
     }
 

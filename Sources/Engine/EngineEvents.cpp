@@ -1,8 +1,8 @@
-#include <Game/Application/ApplicationEvents.hpp>
+#include <Engine/EngineEvents.hpp>
 
-ApplicationEvents::ApplicationEvent* ApplicationEvents::Create(const sf::Event& event)
+EngineEvents::EngineEvent* EngineEvents::Create(const sf::Event& event)
 {
-    ApplicationEvent* result = nullptr;
+    EngineEvent* result = nullptr;
     switch (event.type)
     {
     case sf::Event::Closed: result = new Closed; break;

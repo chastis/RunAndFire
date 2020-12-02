@@ -1,5 +1,0 @@
-<PhysicPrototype>
-    <PlayerPrototype>
-        <mass value = "42"/>
-    </PlayerPrototype>
-</PhysicPrototype>

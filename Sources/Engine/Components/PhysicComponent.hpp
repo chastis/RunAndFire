@@ -4,9 +4,9 @@
 #include <Engine/Prototypes/PrototypeableInterface.hpp>
 #include <Engine/Prototypes/PhysicPrototype.hpp>
 
-class PhysicComponent : public BaseComponent, public IPrototypeable<PhysicPrototype>
+class PhysicComponent : public PrototypeableBaseComponent<PhysicPrototype>
 {
-    DECLARE_DYNAMIC_TYPE(PhysicComponent, BaseComponent)
+    DECLARE_DYNAMIC_TYPE(PhysicComponent, PrototypeableBaseComponent<PhysicPrototype>)
 public:
     void InitFromPrototype() override;
     void Update(float deltaTime) override;

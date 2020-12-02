@@ -13,6 +13,7 @@ Engine::Debug::Debug(Engine& owner)
 
 void Engine::Debug::Initialize()
 {
+    return;
     m_debugEntity = EntityManager::GetInstanceRef().CreateEntity();
 
     m_debugEntity->AddComponent<CircleShapeComponent>()->SetRenderTarget(m_owner.m_renderTargetWeak.lock().get());
@@ -28,6 +29,7 @@ void Engine::Debug::Shutdown()
 
 void Engine::Debug::Update(float deltaTime)
 {
+    return;
     m_debugEntity->Update(deltaTime);
 }
 

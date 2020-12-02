@@ -42,8 +42,6 @@ void EntityControllerComponent::InitSpecific()
     m_ownerTransform = m_owner;
 }
 
-#endif //DEBUG
-
 void CircleShapeComponent::SetRenderTarget(sf::RenderTarget* target)
 {
     m_renderTarget = target;
@@ -60,3 +58,5 @@ void CircleShapeComponent::InitSpecific()
     m_shape.setRadius(25);
     m_shape.setFillColor(sf::Color::Green);
 }
+
+#endif //DEBUG

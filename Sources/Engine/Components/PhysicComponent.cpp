@@ -1,6 +1,7 @@
+#include <Engine/Components/ControllerComponent.hpp>
 #include <Engine/Components/PhysicComponent.hpp>
 #include <Engine/Entity/Entity.hpp>
-#include <Engine/Consts/Const.hpp>
+#include <Engine/Static/Const.hpp>
 #include <SFML/System/Vector2.hpp>
 
 void PhysicComponent::InitFromPrototype()
@@ -13,8 +14,13 @@ void PhysicComponent::Update(float deltaTime)
 {
     if (!m_isStatic)
     {
-        sf::Vector2f delta(0.f, 1.f);
-        delta *= Const::G * deltaTime * deltaTime / 2;
-        GetOwnerRef().move(delta);
+        if (auto controllerComp = GetOwnerRef().GetKindOfComponent<ControllerComponent>())
+        {
+            controllerComp->m_velocity.y += Const::FallingForce * deltaTime;
+        }
+        else
+        {
+            M42_ASSERT(false, "you are trying apply physic to non-controllable component");
+        }
     }
 }

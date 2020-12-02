@@ -1,4 +1,5 @@
 #include <Engine/Components/BaseComponent.hpp>
+#include <Engine/Components/EventHandlerComponent.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <Utility/Debugging/Assert.hpp>
 
@@ -20,10 +21,25 @@ void BaseComponent::Init(Entity* owner)
 }
 
 void BaseComponent::PostInit()
-{}
+{
+    PostInitSpecific();
+    if (auto eventComponent = GetOwnerRef().GetComponent<EventHandlerComponent>())
+    {
+        eventComponent->ConnectHandler(m_eventHandler);
+    }
+}
 
-void BaseComponent::Update(float deltaTime)
-{}
+void BaseComponent::InitPrototype(const std::string& prototypeName)
+{
+    M42_ASSERT(false, "you call this in not-inherited prototype class");
+}
 
-void BaseComponent::InitSpecific()
-{}
+void BaseComponent::InitPrototype(size_t prototypeID)
+{
+    M42_ASSERT(false, "you call this in not-inherited prototype class");
+}
+
+void BaseComponent::ConnectEvent(TypeId eventType)
+{
+     M42_ASSERT(false, "you need to override this, if you want to subscribe to events");
+}

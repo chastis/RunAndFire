@@ -11,6 +11,12 @@
 #include <Utility/Core/FastPimpl.hpp>
 #endif
 
+enum class EGameMode
+{
+    Game,
+    Menu
+};
+
 class Engine final
 {
 public:
@@ -19,15 +25,10 @@ public:
 
     void Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget);
     void Shutdown();
-
+    void ChangeGameMode(EGameMode newMode);
     void Update(float deltaTime);
 
-    InputManager& GetInputManagerRef();
-
 private:
-    void InitializeInputManager();
-private:
-    InputManager m_inputManager;
     std::weak_ptr<sf::RenderTarget> m_renderTargetWeak;
 
 #if defined(DEBUG)

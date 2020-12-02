@@ -1,4 +1,6 @@
 #pragma once
+#include <Engine/Prototypes/PrototypeableInterface.hpp>
+#include <Engine/Prototypes/EntityPrototype.hpp>
 #include <Utility/Core/Noncopyable.hpp>
 #include <Utility/Ref/ReferenceCountable.hpp>
 #include <Utility/Types/DynamicType.hpp>
@@ -9,15 +11,20 @@ class BaseComponent;
 
 using UID = size_t;
 
-class  Entity final : public sf::Transformable, public Noncopyable, public ReferenceCountable<>
+class Entity final : public sf::Transformable, public Noncopyable, public ReferenceCountable<>, public IPrototypeable<EntityPrototype>
 {
 public:
     Entity();
     ~Entity();
 
+    void InitFromPrototype() override;
+
     template <class T>
     [[nodiscard]] T* GetComponent() const;
     [[nodiscard]] BaseComponent* GetComponent(const TypeId& typeId) const;
+    template <class T>
+    [[nodiscard]] T* GetKindOfComponent() const;
+    [[nodiscard]] BaseComponent* GetKindOfComponent(const TypeId& typeId) const;
     UID GetUID() const;
 
     template <class T>
@@ -47,5 +54,14 @@ T* Entity::GetComponent() const
     static_assert(std::is_base_of_v<BaseComponent, T>, "Component type should derrive ComponentBase!");
     const TypeId& componentId = T::GetStaticType();
     BaseComponent* findComponent = GetComponent(componentId);
+    return static_cast<T*>(findComponent);
+}
+
+template <class T>
+T* Entity::GetKindOfComponent() const
+{
+    static_assert(std::is_base_of_v<BaseComponent, T>, "Component type should derrive ComponentBase!");
+    const TypeId& componentId = T::GetStaticType();
+    BaseComponent* findComponent = GetKindOfComponent(componentId);
     return static_cast<T*>(findComponent);
 }

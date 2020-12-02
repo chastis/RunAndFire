@@ -1,5 +1,0 @@
-<CollisionPrototype>
-    <PlayerPrototype>
-        <mass value = "42"/>
-    </PlayerPrototype>
-</CollisionPrototype>

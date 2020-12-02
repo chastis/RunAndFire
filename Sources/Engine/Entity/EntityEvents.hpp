@@ -18,7 +18,7 @@ namespace EntityEvents
     class CollisionEntityEvent : public EntityEvent
     {
     public:
-        DECLARE_DYNAMIC_TYPE(ApplicationEvent, Event)
+        DECLARE_DYNAMIC_TYPE(CollisionEntityEvent, EntityEvent)
         Entity* CollidedEntity;
     };
 }

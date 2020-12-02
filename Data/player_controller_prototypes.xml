@@ -1,0 +1,7 @@
+<PlayerControllerPrototype>
+    <Default>
+    </Default>
+    <PlayerPrototype>
+        <speed x = "42" y = "42"/>
+    </PlayerPrototype>
+</PlayerControllerPrototype>

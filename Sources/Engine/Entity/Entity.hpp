@@ -1,4 +1,6 @@
 #pragma once
+#include <Engine/Prototypes/PrototypeableInterface.hpp>
+#include <Engine/Prototypes/EntityPrototype.hpp>
 #include <Utility/Core/Noncopyable.hpp>
 #include <Utility/Ref/ReferenceCountable.hpp>
 #include <Utility/Types/DynamicType.hpp>
@@ -9,11 +11,13 @@ class BaseComponent;
 
 using UID = size_t;
 
-class Entity final : public sf::Transformable, public Noncopyable, public ReferenceCountable<>
+class Entity final : public sf::Transformable, public Noncopyable, public ReferenceCountable<>, public IPrototypeable<EntityPrototype>
 {
 public:
     Entity();
     ~Entity();
+
+    void InitFromPrototype() override;
 
     template <class T>
     [[nodiscard]] T* GetComponent() const;

@@ -1,0 +1,7 @@
+<MeshPrototype>
+    <Default>
+    </Default>
+    <PlayerPrototype>
+        <mesh_path value = "Content/frog.png"/>
+    </PlayerPrototype>
+</MeshPrototype>

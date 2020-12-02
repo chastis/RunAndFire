@@ -1,8 +1,8 @@
 #include <Engine/Managers/FileManager.hpp>
 
-std::ifstream FileManager_Impl::OpenFile(const std::string& filepath)
+std::ifstream FileManager_Impl::OpenFile(const std::string& filepath, std::ios_base::openmode mode)
 {
-    std::ifstream file(ConstructFilePath(filepath));
+    std::ifstream file(ConstructFilePath(filepath), mode);
     return std::move(file);
 }
 

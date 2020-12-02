@@ -3,14 +3,31 @@
 #include <Engine/Prototypes/BasePrototype.hpp>
 #include <string>
 
+class IPrototypeableBase
+{
+public:
+    virtual void InitFromPrototype()
+    {
+        M42_ASSERT(false, "you call this in not-inherited prototype class");
+    }
+    virtual void SetPrototype(size_t prototypeID)
+    {
+        M42_ASSERT(false, "you call this in not-inherited prototype class");
+    }
+    virtual void SetPrototype(const std::string& prototypeSID)
+    {
+        M42_ASSERT(false, "you call this in not-inherited prototype class");
+    }
+};
+
 template <class T>
-class IPrototypeable
+class IPrototypeable : public IPrototypeableBase
 {
 public:
     virtual ~IPrototypeable() = default;
-    virtual void InitFromPrototype() = 0;
-    void SetPrototype(size_t prototypeID);
-    void SetPrototype(const std::string& prototypeSID);
+    //virtual void InitFromPrototype() = 0;
+    void SetPrototype(size_t prototypeID) override;
+    void SetPrototype(const std::string& prototypeSID) override;
     [[nodiscard]] const T& GetPrototype() const;
 protected:
     const T* prototype = nullptr;

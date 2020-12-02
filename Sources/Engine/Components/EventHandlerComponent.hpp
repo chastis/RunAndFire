@@ -6,11 +6,10 @@
 
 class Event;
 
-class EventHandlerComponent : public BaseComponent, public IPrototypeable<PhysicPrototype>
+class EventHandlerComponent : public BaseComponent
 {
     DECLARE_DYNAMIC_TYPE(EventHandlerComponent, BaseComponent)
 public:
-    void InitFromPrototype() override;
     void Update(float deltaTime) override;
 
     void DispatchEvent(Event& entityEvent);

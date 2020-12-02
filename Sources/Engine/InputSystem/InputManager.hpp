@@ -39,6 +39,7 @@ private:
     std::string GetNativeInput(const ActionSignalInput& input);
 
     void OnInputSystemEvent(const InputSystemEvent& event);
+
     std::map<std::string, ActionMap> m_actionMaps;
     std::deque<ActionMap> m_actionMapStack;
     std::vector<InputClient*> m_clients;

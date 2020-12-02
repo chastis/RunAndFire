@@ -1,47 +1,39 @@
 #pragma once
 
 #include <Engine/Prototypes/BasePrototype.hpp>
-#include "PhysicPrototype.hpp"
+#include <SFML/Graphics/Rect.hpp>
 
 class CollisionPrototype : public BasePrototype
 {
 public:
     void InitSpecific(const pugi::xml_node& node) override
     {
-        if (const auto childNode = node.child("mass"))
+        if (const auto childNode = node.child("collision_box"))
         {
-            if (const auto value = childNode.attribute("value"))
+            if (const auto value = childNode.attribute("left"))
             {
-                m_mass = value.as_float();
+                m_collisionBox.left = value.as_float();
             }
-            else
+            if (const auto value = childNode.attribute("top"))
             {
-                M42_ASSERT(false, "There is no value for Mass");
+                m_collisionBox.top = value.as_float();
             }
-        }
-        if (const auto childNode = node.child("is_static"))
-        {
-            if (const auto value = childNode.attribute("value"))
+            if (const auto value = childNode.attribute("width"))
             {
-                m_isStatic = value.as_bool();
+                m_collisionBox.width = value.as_float();
             }
-            else
+            if (const auto value = childNode.attribute("height"))
             {
-                M42_ASSERT(false, "There is no value for Static");
+                m_collisionBox.height = value.as_float();
             }
         }
     }
-    [[nodiscard]] float GetMass() const
+    [[nodiscard]] sf::FloatRect GetCollisionBox() const
     {
-        return m_mass;
-    }
-    [[nodiscard]] bool IsStatic() const
-    {
-        return m_isStatic;
+        return m_collisionBox;
     }
 protected:
-    float m_mass = 0.f;
-    bool m_isStatic = true;
+    sf::FloatRect m_collisionBox;
 };
 
 using CollisionPrototypes = BasePrototypes<CollisionPrototype>;

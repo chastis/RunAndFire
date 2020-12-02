@@ -98,6 +98,13 @@ inline Vector2<T> operator -(const Vector2<T>& left, const Vector2<T>& right)
     return Vector2<T>(left.x - right.x, left.y - right.y);
 }
 
+// M42 {
+template <typename T>
+Vector2<T> operator *(const Vector2<T>& left, const Vector2<T>& right)
+{
+    return Vector2<T>(left.x * right.x, left.y * right.y);
+}
+// M42 }
 
 ////////////////////////////////////////////////////////////
 template <typename T>
@@ -159,3 +166,33 @@ inline bool operator !=(const Vector2<T>& left, const Vector2<T>& right)
 {
     return (left.x != right.x) || (left.y != right.y);
 }
+
+// M42 {
+
+//#include <cmath>
+
+template <typename T>
+inline T Vector2<T>::lenghtsqr()
+{
+    return x * x + y * y;
+}
+
+template <typename T>
+inline T Vector2<T>::lenght()
+{
+    return static_cast<T>(std::sqrt(lenghtsqr()));
+}
+
+template <typename T>
+inline Vector2<T> Vector2<T>::getNormilized()
+{
+    Vector2<T> normilized(x, y);
+    const T len = normilized.lenght();
+    if (len <= 0.01f)
+    {
+        return normilized;
+    }
+    return normilized / len;
+}
+
+// M42 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Engine/Prototypes/PrototypeableInterface.hpp>
 #include <Utility/Types/DynamicType.hpp>
 #include <Utility/Core/Noncopyable.hpp>
 
@@ -14,8 +15,34 @@ public:
     void Init(Entity* owner);
     virtual void PostInit() {};
     virtual void Update(float deltaTime) {};
+
+    virtual void InitPrototype(const std::string& prototypeName)
+    {
+        M42_ASSERT(false, "you call this in not-inherited prototype class");
+    }
+    virtual void InitPrototype(size_t prototypeID)
+    {
+        M42_ASSERT(false, "you call this in not-inherited prototype class");
+    }
 protected:
     virtual void InitSpecific() {};
 
     Entity* m_owner = nullptr;
+};
+
+template <class T>
+class BasePrototypeableComponent : public BaseComponent, public IPrototypeable<T>
+{
+    DECLARE_DYNAMIC_TYPE(BasePrototypeableComponent, BaseComponent)
+public:
+    void InitPrototype(const std::string& prototypeName) override
+    {
+        SetPrototype(prototypeName);
+        InitFromPrototype();
+    }
+    void InitPrototype(size_t prototypeID) override
+    {
+        SetPrototype(prototypeID);
+        InitFromPrototype();
+    }
 };

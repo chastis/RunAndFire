@@ -1,8 +1,10 @@
 #include <Game/Application/Application.hpp>
+#include <Engine/Managers/EntityManager.hpp>
 #include <Engine/EventSystem/EventDispatcher.hpp>
 #include <Engine/InputSystem/InputEvent.hpp>
 #include <Game/Managers/GameManager.hpp>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 Application_Impl::Application_Impl()
 {}
@@ -18,12 +20,19 @@ void Application_Impl::Initialize()
 
     m_window = std::make_shared<sf::RenderWindow>();
     m_window->create(sf::VideoMode(200, 200), "RUN & FIRE");
-
+    m_window->setKeyRepeatEnabled(false); // https://www.sfml-dev.org/tutorials/2.5/window-events.php
     m_engineInstance.Initialize(m_window);
 
     m_applicationEventHandler.JoinChannel<EngineEventChannel>();
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnClosedEvent);
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnResizedEvent);
+
+    Entity* a = EntityManager::GetInstanceRef().CreateEntity();
+    a->SetPrototype("PlayerPrototype");
+    a->InitFromPrototype();
+
+    std::cout << a->GetPrototype().GetSID();
+
 }
 
 void Application_Impl::Run()
@@ -37,7 +46,6 @@ void Application_Impl::Run()
             std::shared_ptr<Event> applicationEvent(EngineEvents::Create(event));
             EventSystem::Broadcast(applicationEvent, EngineEventChannel::GetInstance());
         }
-        
         m_window->clear();
         m_engineInstance.Update(frameClock.restart().asSeconds());
         m_window->display();

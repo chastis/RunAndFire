@@ -66,7 +66,7 @@ std::string InputManager_Impl::GetNativeInput(const ActionSignalInput& input)
 {
     using namespace std::string_literals;
     std::string keyValue = "Unknown";
-    if (input.value > 0 && input.value < sf::Keyboard::Key::KeyCount)
+    if (input.value >= 0 && input.value < sf::Keyboard::Key::KeyCount)
     {
         keyValue = KeyValues[input.value];
     }

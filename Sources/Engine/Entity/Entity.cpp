@@ -6,6 +6,20 @@
 Entity::Entity() = default;
 Entity::~Entity() = default;
 
+void Entity::InitFromPrototype()
+{
+    const auto& componentsData = GetPrototype().GetComponents();
+    for (const auto& componentInfo : componentsData)
+    {
+        BaseComponent* newComponent = AddComponent(componentInfo.first);
+        if (componentInfo.second.has_value())
+        {
+            newComponent->InitPrototype(componentInfo.second.value());
+        }
+    }
+    PostInitComponents();
+}
+
 BaseComponent* Entity::AddComponent(const TypeId& typeId)
 {
     const auto& factory = DynamicTypeFactory::GetInstanceRef().GetFactoryRef<ComponentFactory>();

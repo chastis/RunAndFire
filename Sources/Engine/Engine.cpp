@@ -2,6 +2,8 @@
 #include <Engine/InputSystem/InputManager.hpp>
 
 #include <Engine/Factories/DynamicTypeFactory.hpp>
+#include "Managers/EntityManager.hpp"
+#include "Components/MeshComponent.hpp"
 
 #if defined(DEBUG)
 #include <Engine/Debugging/Engine_Debug.hpp>
@@ -31,6 +33,7 @@ void Engine::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
 
 void Engine::Shutdown()
 {
+    EntityManager::GetInstanceRef().DeleteAllEntities();
 #if defined(DEBUG)
     m_debug->Shutdown();
 #endif //DEBUG
@@ -51,7 +54,15 @@ void Engine::ChangeGameMode(EGameMode newMode)
 
 void Engine::Update(float deltaTime)
 {
-
+    std::vector<Entity*> entities = EntityManager::GetInstanceRef().GetEntities();
+    for (auto en : entities)
+    {
+        en->Update(deltaTime);
+        if (const auto enMeshComp = en->GetComponent<MeshComponent>())
+        {
+            m_renderTargetWeak.lock()->draw(*enMeshComp, en->getTransform());
+        }
+    }
 #if defined(DEBUG)
     m_debug->Update(deltaTime);
 #endif //DEBUG

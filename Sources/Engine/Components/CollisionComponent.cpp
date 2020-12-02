@@ -7,7 +7,7 @@
 
 void CollisionComponent::InitFromPrototype()
 {
-    // todo
+    collisionBox = GetPrototype().GetCollisionBox();
 }
 
 void CollisionComponent::Update(float deltaTime)

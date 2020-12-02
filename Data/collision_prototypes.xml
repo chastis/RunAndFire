@@ -1,0 +1,7 @@
+<CollisionPrototype>
+    <Default>
+    </Default>
+    <PlayerPrototype>
+        <collision_box left = "10" top = "10" width = "10" height = "10"/>
+    </PlayerPrototype>
+</CollisionPrototype>

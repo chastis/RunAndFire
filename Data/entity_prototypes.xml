@@ -1,0 +1,12 @@
+<EntityPrototype>
+    <Default>
+    </Default>
+    <PlayerPrototype>
+        <components>
+            <CollisionComponent prototype = "PlayerPrototype"/>
+            <PhysicComponent prototype = "PlayerPrototype"/>
+            <MeshComponent prototype = "PlayerPrototype"/>
+            <PlayerControllerComponent prototype = "PlayerPrototype"/>
+        </components>
+    </PlayerPrototype>
+</EntityPrototype>

@@ -10,6 +10,10 @@ public:
     {
         if (const auto childNode = node.child("collision_box"))
         {
+            if (const auto value = childNode.attribute("init_from_mesh"))
+            {
+                m_initFromMesh = value.as_bool();
+            }
             if (const auto value = childNode.attribute("left"))
             {
                 m_collisionBox.left = value.as_float();
@@ -32,8 +36,13 @@ public:
     {
         return m_collisionBox;
     }
+    [[nodiscard]] bool IsInitFromMesh() const
+    {
+        return m_initFromMesh;
+    }
 protected:
     sf::FloatRect m_collisionBox;
+    bool m_initFromMesh = false;
 };
 
 using CollisionPrototypes = BasePrototypes<CollisionPrototype>;

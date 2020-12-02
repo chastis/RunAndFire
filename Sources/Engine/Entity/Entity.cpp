@@ -41,6 +41,18 @@ BaseComponent* Entity::GetComponent(const TypeId& typeId) const
     return nullptr;
 }
 
+BaseComponent* Entity::GetKindOfComponent(const TypeId& typeId) const
+{
+    for (const auto& componentIt : m_components)
+    {
+        if (componentIt->IsKindOf(typeId))
+        {
+            return  componentIt.get();
+        }
+    }
+    return nullptr;
+}
+
 void Entity::Update(float deltaTime)
 {
     for (const auto& componentIt : m_components)

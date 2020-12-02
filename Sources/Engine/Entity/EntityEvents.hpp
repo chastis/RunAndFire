@@ -2,6 +2,7 @@
 
 #include <Engine/EventSystem/EventChannel.hpp>
 #include <Engine/EventSystem/Event.hpp>
+#include <SFML/Graphics/Rect.hpp>
 
 class Entity;
 
@@ -19,6 +20,7 @@ namespace EntityEvents
     {
     public:
         DECLARE_DYNAMIC_TYPE(CollisionEntityEvent, EntityEvent)
-        Entity* CollidedEntity;
+        std::pair<Entity*, Entity*> collidedEntity;
+        sf::FloatRect intersection;
     };
 }

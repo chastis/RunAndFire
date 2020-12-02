@@ -2,6 +2,10 @@
     <Default>
     </Default>
     <PlayerPrototype>
-        <mass value = "42"/>
+        <mass value = "150"/>
+        <is_static value = "false"/>
     </PlayerPrototype>
+    <StaticObjectPrototype>
+        <is_static value = "true"/>
+    </StaticObjectPrototype>
 </PhysicPrototype>

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Engine/Consts/Const.hpp>
 #include <Utility/Core/Noncopyable.hpp>
 #include <Utility/XML/pugixml.hpp>
 #include <Utility/Debugging/Assert.hpp>
@@ -73,7 +72,7 @@ void BasePrototypes<T>::Init(std::ifstream& file)
         std::unique_ptr<T> newPrototype = std::make_unique<T>();
         if (const pugi::xml_attribute& parent = child.attribute("parent"))
         {
-            std::string query = "prototypes/prototype/[@sid = '"s + parent.as_string()+ "']";
+            std::string query = xml_doc.first_child().name() + "/"s + parent.as_string()+ "";
             pugi::xpath_node parentNode = xml_doc.select_node(query.data());
             if (parentNode)
             {

@@ -10,6 +10,7 @@
 #include <Engine/Prototypes/EntityPrototype.hpp>
 #include <Engine/Prototypes/PhysicPrototype.hpp>
 #include <Engine/Prototypes/MeshPrototype.hpp>
+#include <Engine/Prototypes/EventHandlerPrototype.hpp>
 #include <Game/Prototypes/PlayerControllerPrototype.hpp>
 #include <Game/Components/PlayerControllerComponent.hpp>
 
@@ -30,6 +31,7 @@ void GameManager_Impl::Initialize()
     InitPrototypes<PhysicPrototypes>("physic_prototypes.xml");
     InitPrototypes<PlayerControllerPrototypes>("player_controller_prototypes.xml");
     InitPrototypes<MeshPrototypes>("mesh_prototypes.xml");
+    InitPrototypes<EventHandlerPrototypes>("event_handler_prototypes.xml");
 
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<PlayerControllerComponent>();
 

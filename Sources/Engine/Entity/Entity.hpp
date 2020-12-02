@@ -22,6 +22,9 @@ public:
     template <class T>
     [[nodiscard]] T* GetComponent() const;
     [[nodiscard]] BaseComponent* GetComponent(const TypeId& typeId) const;
+    template <class T>
+    [[nodiscard]] T* GetKindOfComponent() const;
+    [[nodiscard]] BaseComponent* GetKindOfComponent(const TypeId& typeId) const;
     UID GetUID() const;
 
     template <class T>
@@ -51,5 +54,14 @@ T* Entity::GetComponent() const
     static_assert(std::is_base_of_v<BaseComponent, T>, "Component type should derrive ComponentBase!");
     const TypeId& componentId = T::GetStaticType();
     BaseComponent* findComponent = GetComponent(componentId);
+    return static_cast<T*>(findComponent);
+}
+
+template <class T>
+T* Entity::GetKindOfComponent() const
+{
+    static_assert(std::is_base_of_v<BaseComponent, T>, "Component type should derrive ComponentBase!");
+    const TypeId& componentId = T::GetStaticType();
+    BaseComponent* findComponent = GetKindOfComponent(componentId);
     return static_cast<T*>(findComponent);
 }

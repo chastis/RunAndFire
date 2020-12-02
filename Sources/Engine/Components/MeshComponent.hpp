@@ -4,9 +4,9 @@
 #include <Engine/Prototypes/MeshPrototype.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
-class MeshComponent : public BasePrototypeableComponent<MeshPrototype>, public sf::Sprite
+class MeshComponent : public PrototypeableBaseComponent<MeshPrototype>, public sf::Sprite
 {
-    DECLARE_DYNAMIC_TYPE(MeshComponent, BasePrototypeableComponent<MeshPrototype>)
+    DECLARE_DYNAMIC_TYPE(MeshComponent, PrototypeableBaseComponent<MeshPrototype>)
 public:
     void InitFromPrototype() override;
     void Update(float deltaTime) override;

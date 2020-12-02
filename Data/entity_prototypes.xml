@@ -3,10 +3,22 @@
     </Default>
     <PlayerPrototype>
         <components>
-            <CollisionComponent prototype = "PlayerPrototype"/>
+            <CollisionComponent prototype = "MeshCollisionPrototype"/>
             <PhysicComponent prototype = "PlayerPrototype"/>
             <MeshComponent prototype = "PlayerPrototype"/>
             <PlayerControllerComponent prototype = "PlayerPrototype"/>
+            <EventHandlerComponent prototype = "PlayerPrototype"/>
         </components>
     </PlayerPrototype>
+    <StaticObjectPrototype>
+        <components>
+            <CollisionComponent prototype = "MeshCollisionPrototype"/>
+            <PhysicComponent prototype = "StaticObjectPrototype"/>
+        </components>
+    </StaticObjectPrototype>
+    <GroundPrototype parent = "StaticObjectPrototype">
+        <components>
+            <MeshComponent prototype = "GroundPrototype"/>
+        </components>
+    </GroundPrototype>
 </EntityPrototype>

@@ -42,8 +42,6 @@ void EntityControllerComponent::InitSpecific()
     m_ownerTransform = m_owner;
 }
 
-
-
 void CircleShapeComponent::SetRenderTarget(sf::RenderTarget* target)
 {
     m_renderTarget = target;

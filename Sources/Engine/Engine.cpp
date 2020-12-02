@@ -1,9 +1,8 @@
 #include <Engine/Engine.hpp>
 #include <Engine/InputSystem/InputManager.hpp>
-
 #include <Engine/Factories/DynamicTypeFactory.hpp>
-#include "Managers/EntityManager.hpp"
-#include "Components/MeshComponent.hpp"
+#include <Engine/Managers/EntityManager.hpp>
+#include <Engine/Components/MeshComponent.hpp>
 
 #if defined(DEBUG)
 #include <Engine/Debugging/Engine_Debug.hpp>

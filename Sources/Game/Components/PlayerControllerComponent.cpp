@@ -10,6 +10,7 @@ void PlayerControllerComponent::Update(float deltaTime)
 {
     const auto delta = m_speed * m_direction.getNormilized() * deltaTime;
     GetOwnerRef().move(delta);
+    UpdateMovement(deltaTime);
 }
 
 bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)

@@ -4,4 +4,7 @@
     <PlayerPrototype>
         <mesh_path value = "Content/frog.png"/>
     </PlayerPrototype>
+    <GroundPrototype>
+        <mesh_path value = "Content/ground.png"/>
+    </GroundPrototype>
 </MeshPrototype>

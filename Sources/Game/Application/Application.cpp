@@ -4,7 +4,6 @@
 #include <Engine/InputSystem/InputEvent.hpp>
 #include <Game/Managers/GameManager.hpp>
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
 Application_Impl::Application_Impl()
 {}
@@ -19,7 +18,7 @@ void Application_Impl::Initialize()
     GameManager::GetInstanceRef().SetEngineInstance(&m_engineInstance);
 
     m_window = std::make_shared<sf::RenderWindow>();
-    m_window->create(sf::VideoMode(200, 200), "RUN & FIRE");
+    m_window->create(sf::VideoMode(800, 600), "RUN & FIRE");
     m_window->setKeyRepeatEnabled(false); // https://www.sfml-dev.org/tutorials/2.5/window-events.php
     m_engineInstance.Initialize(m_window);
 
@@ -31,8 +30,17 @@ void Application_Impl::Initialize()
     a->SetPrototype("PlayerPrototype");
     a->InitFromPrototype();
 
-    std::cout << a->GetPrototype().GetSID();
+    Entity* b = EntityManager::GetInstanceRef().CreateEntity();
+    b->SetPrototype("GroundPrototype");
+    b->InitFromPrototype();
 
+    b->setPosition(0.f, 500.f);
+
+    Entity* c = EntityManager::GetInstanceRef().CreateEntity();
+    c->SetPrototype("GroundPrototype");
+    c->InitFromPrototype();
+
+    c->setPosition(300.f, 300.f);
 }
 
 void Application_Impl::Run()

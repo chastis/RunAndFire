@@ -11,7 +11,7 @@ class BaseComponent;
 
 using UID = size_t;
 
-class Entity final : public sf::Transformable, public Noncopyable, public ReferenceCountable<>, public IPrototypeable<EntityPrototype>
+class  Entity final : public sf::Transformable, public Noncopyable, public ReferenceCountable<DefaultThreadPolicy>, public IPrototypeable<EntityPrototype>
 {
 public:
     Entity();

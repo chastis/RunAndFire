@@ -17,6 +17,11 @@ Entity* EntityManager_Impl::CreateEntity()
     return newEntityIt.first->second.Get();
 }
 
+void EntityManager_Impl::DeleteAllEntities()
+{
+    m_entities.clear();
+}
+
 EntityManager_Impl::EntityManager_Impl() = default;
 
 EntityManager_Impl::~EntityManager_Impl() = default;

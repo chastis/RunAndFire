@@ -2,11 +2,10 @@
 
 #include <Engine/EventSystem/EventHandler.hpp>
 #include <Engine/Engine.hpp>
-#include <Game/Application/ApplicationEvents.hpp>
+#include <Engine/EngineEvents.hpp>
 #include <Utility/Core/Singleton.hpp>
 
 #include <SFML/Graphics/RenderWindow.hpp>
-
 
 class Application_Impl
 {
@@ -15,16 +14,9 @@ public:
     void Run();
     void Shutdown();
 private:
-    void OnClosedEvent(ApplicationEvents::Closed& event);
-    void OnResizedEvent(ApplicationEvents::Resized& event);
-
-    void OnKeyPressedEvent(ApplicationEvents::KeyPressed& event);
-    void OnKeyReleasedEvent(ApplicationEvents::KeyReleased& event);
-    void OnMouseButtonPressedEvent(ApplicationEvents::MouseButtonPressed& event);
-    void OnMouseButtonReleasedEvent(ApplicationEvents::MouseButtonReleased& event);
-
-    void InitializeSingltones();
-    void DestroySingletones();
+    void OnClosedEvent(EngineEvents::Closed& event);
+    void OnResizedEvent(EngineEvents::Resized& event);
+    
 private:
     Application_Impl();
     ~Application_Impl();

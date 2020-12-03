@@ -6,8 +6,10 @@
 
 class Event;
 class EventChannel;
+class Entity;
 
 namespace EventSystem
 {
-    void Broadcast(std::unique_ptr<Event> event, EventChannel* channel);
+    void Broadcast(std::shared_ptr<Event> event, EventChannel* channel);
+    void Broadcast(std::shared_ptr<Event> event, Entity* entity);
 }

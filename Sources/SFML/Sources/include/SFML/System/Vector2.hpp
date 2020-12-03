@@ -25,6 +25,7 @@
 #ifndef SFML_VECTOR2_HPP
 #define SFML_VECTOR2_HPP
 
+#include <cmath>
 
 namespace sf
 {
@@ -68,6 +69,12 @@ public:
     ////////////////////////////////////////////////////////////
     template <typename U>
     explicit Vector2(const Vector2<U>& vector);
+
+    // M42 {
+    T lenghtsqr();
+    T lenght();
+    Vector2<T> getNormilized();
+    // M42 }
 
     ////////////////////////////////////////////////////////////
     // Member data
@@ -145,6 +152,11 @@ Vector2<T> operator +(const Vector2<T>& left, const Vector2<T>& right);
 ////////////////////////////////////////////////////////////
 template <typename T>
 Vector2<T> operator -(const Vector2<T>& left, const Vector2<T>& right);
+
+// M42 {
+template <typename T>
+Vector2<T> operator *(const Vector2<T>& left, const Vector2<T>& right);
+// M42 }
 
 ////////////////////////////////////////////////////////////
 /// \relates Vector2

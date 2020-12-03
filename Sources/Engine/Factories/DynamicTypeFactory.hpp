@@ -23,7 +23,7 @@ public:
     void RegisterConcreteTypeFactory();
 
     template <class T>
-    const T* GetFactory() const;
+    T* GetFactory() const;
 
     template <class T>
     const T& GetFactoryRef() const;
@@ -55,14 +55,14 @@ inline void DynamicTypeFactory_Impl::RegisterConcreteTypeFactory()
 }
 
 template<class T>
-inline const T* DynamicTypeFactory_Impl::GetFactory() const
+inline T* DynamicTypeFactory_Impl::GetFactory() const
 {
     static_assert(std::is_base_of_v<TypeFactoryBase, T>, "Factory type should derrive ConcreteTypeFactoryBase!");
     auto factoryTypeId = GetFactoryTypeId<T>();
     auto factoryIt = m_factories.find(factoryTypeId);
     if (factoryIt != m_factories.end())
     {
-        return static_cast<const T*>(factoryIt->second.get());
+        return static_cast<T*>(factoryIt->second.get());
     }
     M42_ASSERT(false, "There is no Factory, that you are looking for");
     return nullptr;

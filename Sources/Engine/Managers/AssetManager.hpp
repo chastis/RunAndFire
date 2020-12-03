@@ -41,7 +41,7 @@ const T* AssetManager_Impl::GetAsset(const std::string& assetPath)
 }
 
 template <>
-bool AssetManager_Impl::LoadAsset<sf::Texture>(const std::string& assetPath)
+inline bool AssetManager_Impl::LoadAsset<sf::Texture>(const std::string& assetPath)
 {
     auto newTexture = std::make_unique<sf::Texture>();
     auto fileStream = FileManager::GetInstanceRef().OpenFile(assetPath, std::ios::binary | std::ios::ate);
@@ -69,7 +69,7 @@ bool AssetManager_Impl::LoadAsset<sf::Texture>(const std::string& assetPath)
 }
 
 template <>
-const sf::Texture* AssetManager_Impl::GetAsset<sf::Texture>(const std::string& assetPath)
+inline const sf::Texture* AssetManager_Impl::GetAsset<sf::Texture>(const std::string& assetPath)
 {
     auto it = m_textures.find(assetPath);
     if (it != m_textures.end())

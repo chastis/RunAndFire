@@ -38,12 +38,12 @@ class PrototypeableBaseComponent : public BaseComponent, public IPrototypeable<T
 public:
     void InitPrototype(const std::string& prototypeName) override
     {
-        SetPrototype(prototypeName);
-        InitFromPrototype();
+        IPrototypeable<T>::SetPrototype(prototypeName);
+        IPrototypeable<T>::InitFromPrototype();
     }
     void InitPrototype(size_t prototypeID) override
     {
-        SetPrototype(prototypeID);
-        InitFromPrototype();
+        IPrototypeable<T>::SetPrototype(prototypeID);
+        IPrototypeable<T>::InitFromPrototype();
     }
 };

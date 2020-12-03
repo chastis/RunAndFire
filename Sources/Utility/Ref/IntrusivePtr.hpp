@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Utility/Ref/ReferenceCountable.hpp>
+#include <Utility/Ref/RefCounterPolicy.hpp>
 #include <type_traits>
 
-template <class T>
+template <RefCountedConcept T>
 class IntrusivePtr
 {
 private:
@@ -18,20 +18,20 @@ public:
 
     IntrusivePtr(IntrusivePtr&& other) noexcept;
 
-    template <class U>
+    template <RefCountedConcept U>
     IntrusivePtr(const IntrusivePtr<U>& other) noexcept;
 
-    template <class U>
+    template <RefCountedConcept U>
     IntrusivePtr(IntrusivePtr<U>&& other) noexcept;
 
     IntrusivePtr& operator=(const IntrusivePtr& other);
 
     IntrusivePtr& operator=(IntrusivePtr&& other);
 
-    template <class U>
+    template <RefCountedConcept U>
     IntrusivePtr& operator=(const IntrusivePtr<U>& other);
 
-    template <class U>
+    template <RefCountedConcept U>
     IntrusivePtr& operator=(IntrusivePtr<U>&& other);
 
     IntrusivePtr& operator=(std::nullptr_t);
@@ -50,23 +50,23 @@ public:
     operator bool() const noexcept { return data != nullptr; }
 
 private:
-    template <class U>
+    template <RefCountedConcept U>
     friend class IntrusivePtr;
 };
 
-template <class T, class... Args>
+template <RefCountedConcept T, class... Args>
 IntrusivePtr<T> MakeIntrusive(Args&&... args)
 {
     return IntrusivePtr<T>(new T(std::forward<Args>(args)...), false);
 }
 
-template<class T>
+template<RefCountedConcept T>
 inline IntrusivePtr<T>::IntrusivePtr() noexcept
     : data(nullptr)
 {
 }
 
-template<class T>
+template<RefCountedConcept T>
 inline IntrusivePtr<T>::~IntrusivePtr()
 {
     if (data)
@@ -75,28 +75,28 @@ inline IntrusivePtr<T>::~IntrusivePtr()
     }
 }
 
-template<class T>
+template<RefCountedConcept T>
 inline IntrusivePtr<T>::IntrusivePtr(T* data, bool addRef) noexcept
     : data(data)
 {
     if (addRef && data) data->AddRef();
 }
 
-template<class T>
+template<RefCountedConcept T>
 inline IntrusivePtr<T>::IntrusivePtr(const IntrusivePtr& other) noexcept
     : data(other.data)
 {
     if (data) data->AddRef();
 }
 
-template<class T>
+template<RefCountedConcept T>
 inline IntrusivePtr<T>::IntrusivePtr(IntrusivePtr&& other) noexcept
     : data(other.data)
 {
     other.data = nullptr;
 }
 
-template<class T>
+template<RefCountedConcept T>
 inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(const IntrusivePtr& other)
 {
     if (data) data->Release();
@@ -105,7 +105,7 @@ inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(const IntrusivePtr& other)
     return *this;
 }
 
-template<class T>
+template<RefCountedConcept T>
 inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(IntrusivePtr&& other)
 {
     if (data)
@@ -117,8 +117,8 @@ inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(IntrusivePtr&& other)
     return *this;
 }
 
-template<class T>
-template<class U>
+template<RefCountedConcept T>
+template<RefCountedConcept U>
 inline IntrusivePtr<T>::IntrusivePtr(const IntrusivePtr<U>& other) noexcept
     : data(other.data)
 {
@@ -126,8 +126,8 @@ inline IntrusivePtr<T>::IntrusivePtr(const IntrusivePtr<U>& other) noexcept
     if (data) data->AddRef();
 }
 
-template<class T>
-template<class U>
+template<RefCountedConcept T>
+template<RefCountedConcept U>
 inline IntrusivePtr<T>::IntrusivePtr(IntrusivePtr<U>&& other) noexcept
     : data(other.data)
 {
@@ -135,8 +135,8 @@ inline IntrusivePtr<T>::IntrusivePtr(IntrusivePtr<U>&& other) noexcept
     other.data = nullptr;
 }
 
-template<class T>
-template<class U>
+template<RefCountedConcept T>
+template<RefCountedConcept U>
 inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(const IntrusivePtr<U>& other)
 {
     if constexpr (std::is_base_of_v<T, U>)
@@ -157,8 +157,8 @@ inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(const IntrusivePtr<U>& other)
     }
 }
 
-template<class T>
-template<class U>
+template<RefCountedConcept T>
+template<RefCountedConcept U>
 inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(IntrusivePtr<U>&& other)
 {
     if constexpr (std::is_base_of_v<T, U>)
@@ -177,7 +177,7 @@ inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(IntrusivePtr<U>&& other)
     }
 }
 
-template<class T>
+template<RefCountedConcept T>
 template<class U>
 inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(U* ptr)
 {
@@ -194,14 +194,14 @@ inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(U* ptr)
     }
 }
 
-template<class T>
+template<RefCountedConcept T>
 inline IntrusivePtr<T>& IntrusivePtr<T>::operator=(std::nullptr_t)
 {
     if (data) data->Release();
     data = nullptr;
 }
 
-template <class T ,class U>
+template <RefCountedConcept T , RefCountedConcept U>
 IntrusivePtr<T> StaticIntrusiveCast(IntrusivePtr<U>& rhs)
 {
     return { static_cast<T*>(rhs.Get()) };

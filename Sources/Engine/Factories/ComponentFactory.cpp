@@ -1,6 +1,5 @@
 #include <Engine/Factories/ComponentFactory.hpp>
 #include <Utility/Debugging/Assert.hpp>
-#include <Engine/Components/CollisionComponent.hpp>
 #include <Engine/Components/EventHandlerComponent.hpp>
 #include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Components/MeshComponent.hpp>
@@ -22,7 +21,6 @@ BaseComponent* ComponentFactory::CreateComponent(const TypeId& typeId) const
 
 void ComponentFactory::RegisterTypes()
 {
-    m_creators[CollisionComponent::GetStaticType()] = []() { return new CollisionComponent; };
     m_creators[EventHandlerComponent::GetStaticType()] = []() { return new EventHandlerComponent; };
     m_creators[PhysicBodyComponent::GetStaticType()] = []() { return new PhysicBodyComponent; };
     m_creators[MeshComponent::GetStaticType()] = []() { return new MeshComponent; };

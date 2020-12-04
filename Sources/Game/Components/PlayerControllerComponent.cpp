@@ -35,18 +35,10 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
     if (signal == ActionSignal("move_left"))
     {
         m_direction.x += -1.f;
-        if (m_direction.x < 0.f)
-        {
-            GetOwnerRef().setScale(-1.f, 1.f);
-        }
     }
     if (signal == ActionSignal("move_right"))
     {
         m_direction.x += 1.f;
-        if (m_direction.x > 0.f)
-        {
-            GetOwnerRef().setScale(1.f, 1.f);
-        }
     }
     if (signal == ActionSignal("stop_move_up"))
     {

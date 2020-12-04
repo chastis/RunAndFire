@@ -19,6 +19,7 @@ void PhysicBodyComponent::InitFromPrototype()
    
     auto entityPosition = GetOwnerRef().getPosition();
     bodyDef.position.Set(entityPosition.x / Const::PixelPerUnit, entityPosition.y / Const::PixelPerUnit);
+    bodyDef.userData.pointer = (uintptr_t)GetOwner();
 
     m_body = m_engine->CreateBody(bodyDef);
     M42_ASSERT(m_body, "Failed to create b2Body!");

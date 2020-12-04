@@ -2,9 +2,7 @@
     <Default>
     </Default>
     <PlayerPrototype>
-        <mesh_path value = "Content/frog.png"/>
+        <mesh_tile_name value = "anim_idle"/>
+        <tile_id value = "0"/>
     </PlayerPrototype>
-    <GroundPrototype>
-        <mesh_path value = "Content/ground.png"/>
-    </GroundPrototype>
 </MeshPrototype>

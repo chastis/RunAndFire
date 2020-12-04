@@ -26148,6 +26148,7 @@ namespace tson
 
 			[[nodiscard]] inline const std::string &getType() const;
 			[[nodiscard]] inline std::vector<tson::Tile> &getTiles();
+			[[nodiscard]] inline const std::vector<tson::Tile> &getTilesConst() const;
 			[[nodiscard]] inline const std::vector<tson::WangSet> &getWangsets() const;
 			[[nodiscard]] inline PropertyCollection &getProperties();
 			[[nodiscard]] inline const std::vector<tson::Terrain> &getTerrains() const;
@@ -26380,6 +26381,11 @@ const std::string &tson::Tileset::getImage() const { return m_image; }
  * @return
  */
 std::vector<tson::Tile> &tson::Tileset::getTiles()
+{
+	return m_tiles;
+}
+
+const std::vector<tson::Tile> &tson::Tileset::getTilesConst() const
 {
 	return m_tiles;
 }
@@ -27455,6 +27461,7 @@ namespace tson
 			inline std::unique_ptr<tson::Map> parse(const std::string &path);
 			#endif
 			inline std::unique_ptr<tson::Map> parse(const void * data, size_t size);
+		    inline std::unique_ptr<tson::Tileset> parseTileset(const void * data, size_t size);
 			inline tson::DecompressorContainer *decompressors();
 		private:
 			inline std::unique_ptr<tson::Map> parseJson(const nlohmann::json &json);
@@ -27554,6 +27561,26 @@ std::unique_ptr<tson::Map> tson::Tileson::parse(const void *data, size_t size)
 	return std::move(parseJson(json));
 }
 
+std::unique_ptr<tson::Tileset> tson::Tileson::parseTileset(const void * data, size_t size)
+{
+    tson::MemoryStream mem {(uint8_t *)data, size};
+
+	nlohmann::json json;
+	try
+	{
+		mem >> json;
+	}
+	catch (const nlohmann::json::parse_error& error)
+	{
+		std::string message = "Parse error: ";
+		message += std::string(error.what());
+		message += std::string("\n");
+		return std::make_unique<tson::Tileset>();
+	}
+	std::unique_ptr<tson::Tileset> tilset = std::make_unique<tson::Tileset>(json, nullptr);
+	return std::move(tilset);
+}
+
 /*!
  * Common parsing functionality for doing the json parsing
  * @param json Tiled json to parse
@@ -27637,16 +27664,18 @@ void tson::Tile::performDataCalculations()
 	int rows = m_tileset->getTileCount() / columns;
 	int lastId = (m_tileset->getFirstgid() + m_tileset->getTileCount()) - 1;
 
+
+	// ms : later all m_map was replaced to m_tileset
 	if (getGid() >= static_cast<uint32_t>(firstId) && getGid() <= static_cast<uint32_t>(lastId))
 	{
 		int baseTilePosition = ((int)getGid() - firstId);
 
 		int tileModX = (baseTilePosition % columns);
 		int currentRow = (baseTilePosition / columns);
-		int offsetX = (tileModX != 0) ? ((tileModX) * m_map->getTileSize().x) : (0 * m_map->getTileSize().x);
-		int offsetY =  (currentRow < rows-1) ? (currentRow * m_map->getTileSize().y) : ((rows-1) * m_map->getTileSize().y);
+		int offsetX = (tileModX != 0) ? ((tileModX) * m_tileset->getTileSize().x) : (0 * m_tileset->getTileSize().x);
+		int offsetY =  (currentRow < rows-1) ? (currentRow * m_tileset->getTileSize().y) : ((rows-1) * m_tileset->getTileSize().y);
 
-		m_drawingRect = { offsetX, offsetY, m_map->getTileSize().x, m_map->getTileSize().y };
+		m_drawingRect = { offsetX, offsetY, m_tileset->getTileSize().x, m_tileset->getTileSize().y };
 	}
 	else
 		m_drawingRect = {0, 0, 0, 0};

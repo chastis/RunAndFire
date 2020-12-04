@@ -19,6 +19,8 @@ public:
     bool LoadAsset<sf::Texture>(const std::string& assetPath);
     template <>
     bool LoadAsset<tson::Map>(const std::string& assetPath);
+    template <>
+    bool LoadAsset<tson::Tileset>(const std::string& assetPath);
 private:
     template <class T>
     [[nodiscard]] std::map<std::string, std::unique_ptr<T>>* GetContainer();
@@ -26,12 +28,15 @@ private:
     [[nodiscard]] std::map<std::string, std::unique_ptr<sf::Texture>>* GetContainer();
     template <>
     [[nodiscard]] std::map<std::string, std::unique_ptr<tson::Map>>* GetContainer();
+    template <>
+    [[nodiscard]] std::map<std::string, std::unique_ptr<tson::Tileset>>* GetContainer();
 
     AssetManager_Impl();
     ~AssetManager_Impl();
 
     std::map<std::string, std::unique_ptr<sf::Texture>> m_textures;
     std::map<std::string, std::unique_ptr<tson::Map>> m_maps;
+    std::map<std::string, std::unique_ptr<tson::Tileset>> m_tileset;
     friend class Singleton<AssetManager_Impl>;
 };
 
@@ -82,6 +87,12 @@ inline std::map<std::string, std::unique_ptr<tson::Map>>* AssetManager_Impl::Get
 }
 
 template <>
+inline std::map<std::string, std::unique_ptr<tson::Tileset>>* AssetManager_Impl::GetContainer()
+{
+    return &m_tileset;
+}
+
+template <>
 inline bool AssetManager_Impl::LoadAsset<sf::Texture>(const std::string& assetPath)
 {
     auto newTexture = std::make_unique<sf::Texture>();
@@ -106,13 +117,35 @@ inline bool AssetManager_Impl::LoadAsset<tson::Map>(const std::string& assetPath
     {
         for(auto& tileSet : map->getTilesets())
         {
-            fs::path tilePath = fs::path(assetPath).parent_path() / tileSet.getImage();
+            fs::path tilePath = tileSet.getImage();
             LoadAsset<sf::Texture>(tilePath.generic_string());
         }
         m_maps[assetPath] = std::move(map);
         return true;
     }
     M42_ASSERT(false, "can't open a map");
+    return false;
+}
+
+template <>
+inline bool AssetManager_Impl::LoadAsset<tson::Tileset>(const std::string& assetPath)
+{
+    for (const auto& mapIt : m_maps)
+    {
+        if (tson::Map* map = mapIt.second.get())
+        {
+            for (auto & tileset : map->getTilesets())
+            {
+                if (tileset.getName() == assetPath)
+                {
+                    tson::Tileset* tilesetPtr = &tileset;
+                    m_tileset[assetPath] = std::move(std::unique_ptr<tson::Tileset>(tilesetPtr));
+                    return true;
+                }
+            }
+        }
+    }
+    M42_ASSERT(false, "can't find a tileset");
     return false;
 }
 

@@ -88,7 +88,7 @@ void Scene::InitTiledLayer(const tson::Layer& layer)
             M42_ASSERT(false, "can't find tilset");
             continue;
         }
-        const std::string texturePath = (m_mapPath.parent_path() / tileSet->getImage()).generic_string();
+        const std::string texturePath = tileSet->getImage().generic_string();
         const sf::Texture* texture = AssetManager::GetInstanceRef().GetAsset<sf::Texture>(texturePath);
         if (!texture)
         {

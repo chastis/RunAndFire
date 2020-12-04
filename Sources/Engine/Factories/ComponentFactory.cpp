@@ -2,7 +2,7 @@
 #include <Utility/Debugging/Assert.hpp>
 #include <Engine/Components/CollisionComponent.hpp>
 #include <Engine/Components/EventHandlerComponent.hpp>
-#include <Engine/Components/PhysicComponent.hpp>
+#include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Components/MeshComponent.hpp>
 
 #if defined(DEBUG)
@@ -24,7 +24,7 @@ void ComponentFactory::RegisterTypes()
 {
     m_creators[CollisionComponent::GetStaticType()] = []() { return new CollisionComponent; };
     m_creators[EventHandlerComponent::GetStaticType()] = []() { return new EventHandlerComponent; };
-    m_creators[PhysicComponent::GetStaticType()] = []() { return new PhysicComponent; };
+    m_creators[PhysicBodyComponent::GetStaticType()] = []() { return new PhysicBodyComponent; };
     m_creators[MeshComponent::GetStaticType()] = []() { return new MeshComponent; };
 #if defined(DEBUG)
     m_creators[CircleShapeComponent::GetStaticType()] = []() { return new CircleShapeComponent; };

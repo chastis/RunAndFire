@@ -2,7 +2,7 @@
     <Default>
     </Default>
     <PlayerPrototype>
-        <mesh_path value = "Content/frog.png"/>
+        <mesh_path value = "Content/player.png"/>
     </PlayerPrototype>
     <GroundPrototype>
         <mesh_path value = "Content/ground.png"/>

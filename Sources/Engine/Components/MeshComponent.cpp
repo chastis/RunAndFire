@@ -13,6 +13,10 @@ void MeshComponent::InitFromPrototype()
     {
         M42_ASSERT(false, "can't load texture");
     }
+
+    auto& entity = GetOwnerRef();
+    auto size = getLocalBounds();
+    entity.setOrigin(size.width / 2, size.height / 2);
 }
 
 void MeshComponent::Update(float deltaTime)

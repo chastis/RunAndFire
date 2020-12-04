@@ -12,11 +12,10 @@ class ControllerComponent : public BaseComponent
 public:
     void ConnectEvent(TypeId eventType) override;
     sf::Vector2f m_velocity;
-    //sf::Vector2f m_accel;
 protected:
     void UpdateMovement(float deltaTime);
 
-    void OnCollision(EntityEvents::CollisionEntityEvent& entityEvent);
+    //void OnCollision(EntityEvents::CollisionEntityEvent& entityEvent);
 };
 
 template <class T>
@@ -26,12 +25,12 @@ class PrototypeableControllerComponent : public ControllerComponent, public IPro
 public:
     void InitPrototype(const std::string& prototypeName) override
     {
-        IPrototypeable<T>::SetPrototype(prototypeName);
-        IPrototypeable<T>::InitFromPrototype();
+        this->SetPrototype(prototypeName);
+        this->InitFromPrototype();
     }
     void InitPrototype(size_t prototypeID) override
     {
-        IPrototypeable<T>::SetPrototype(prototypeID);
-        IPrototypeable<T>::InitFromPrototype();
+        this->SetPrototype(prototypeID);
+        this->InitFromPrototype();
     }
 };

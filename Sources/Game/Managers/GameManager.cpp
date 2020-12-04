@@ -8,7 +8,7 @@
 #include <Engine/InputSystem/InputManager.hpp>
 #include <Engine/Prototypes/CollisionPrototype.hpp>
 #include <Engine/Prototypes/EntityPrototype.hpp>
-#include <Engine/Prototypes/PhysicPrototype.hpp>
+#include <Engine/Prototypes/PhysicBodyPrototype.hpp>
 #include <Engine/Prototypes/MeshPrototype.hpp>
 #include <Engine/Prototypes/EventHandlerPrototype.hpp>
 #include <Game/Prototypes/PlayerControllerPrototype.hpp>
@@ -26,12 +26,12 @@ void GameManager_Impl::Initialize()
     FileManager::GetInstanceRef().SetWorkingDirectory(WORKING_DIRECTORY);
     InputManager::GetInstanceRef().Initialize("action_maps.xml");
 
-    InitPrototypes<CollisionPrototypes>("collision_prototypes.xml");
-    InitPrototypes<EntityPrototypes>("entity_prototypes.xml");
-    InitPrototypes<PhysicPrototypes>("physic_prototypes.xml");
-    InitPrototypes<PlayerControllerPrototypes>("player_controller_prototypes.xml");
-    InitPrototypes<MeshPrototypes>("mesh_prototypes.xml");
-    InitPrototypes<EventHandlerPrototypes>("event_handler_prototypes.xml");
+    InitPrototypes<CollisionPrototypes>("Prototypes/collision_prototypes.xml");
+    InitPrototypes<EntityPrototypes>("Prototypes/entity_prototypes.xml");
+    InitPrototypes<PhysicBodyPrototypes>("Prototypes/physic_body_prototypes.xml");
+    InitPrototypes<PlayerControllerPrototypes>("Prototypes/player_controller_prototypes.xml");
+    InitPrototypes<MeshPrototypes>("Prototypes/mesh_prototypes.xml");
+    InitPrototypes<EventHandlerPrototypes>("Prototypes/event_handler_prototypes.xml");
 
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<PlayerControllerComponent>();
 

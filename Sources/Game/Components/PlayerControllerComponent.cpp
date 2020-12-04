@@ -1,4 +1,5 @@
 #include <Game/Components/PlayerControllerComponent.hpp>
+#include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Entity/Entity.hpp>
 
 void PlayerControllerComponent::InitFromPrototype()
@@ -9,8 +10,7 @@ void PlayerControllerComponent::InitFromPrototype()
 void PlayerControllerComponent::Update(float deltaTime)
 {
     const auto delta = m_speed * m_direction.getNormilized() * deltaTime;
-    GetOwnerRef().move(delta);
-    UpdateMovement(deltaTime);
+    m_physicComponent->SetLinearVelocity(delta.x, delta.y);
 }
 
 bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
@@ -48,4 +48,9 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
         m_direction.x -= 1.f;
     }
     return false;
+}
+
+void PlayerControllerComponent::PostInitSpecific()
+{
+    m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
 }

@@ -7,7 +7,7 @@ void MeshComponentBase::PostInitSpecific()
     auto& entity = GetOwnerRef();
     auto size = getLocalBounds();
     entity.setOrigin(size.width / 2, size.height / 2);
-    setOrigin(size.width / 2, size.height / 2);
+    //setOrigin(size.width / 2, size.height / 2);
 }
 
 void MeshComponent::InitFromPrototype()

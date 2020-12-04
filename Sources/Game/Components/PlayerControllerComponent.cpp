@@ -12,14 +12,14 @@ void PlayerControllerComponent::Update(float deltaTime)
     const auto delta = m_speed * m_direction.getNormilized() * deltaTime;
     m_physicComponent->SetLinearVelocity(delta.x, delta.y);
 
-    if (m_direction.x < 0.f)
-    {
-        SetMeshScale(-1.f, 1.f);
-    }
-    else if (m_direction.x > 0.f)
-    {
-        SetMeshScale(1.f, 1.f);
-    }
+    //if (m_direction.x < 0.f)
+    //{
+    //    SetMeshScale(-1.f, 1.f);
+    //}
+    //else if (m_direction.x > 0.f)
+    //{
+    //    SetMeshScale(1.f, 1.f);
+    //}
 }
 
 bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
@@ -37,7 +37,7 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
         m_direction.x += -1.f;
         if (m_direction.x < 0.f)
         {
-           SetMeshScale(-1.f, 1.f);
+           //SetMeshScale(-1.f, 1.f);
         }
     }
     if (signal == ActionSignal("move_right"))
@@ -45,7 +45,7 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
         m_direction.x += 1.f;
         if (m_direction.x > 0.f)
         {
-            SetMeshScale(1.f, 1.f);
+            //SetMeshScale(1.f, 1.f);
         }
     }
     if (signal == ActionSignal("stop_move_up"))

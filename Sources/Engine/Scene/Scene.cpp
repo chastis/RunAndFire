@@ -105,7 +105,7 @@ void Scene::InitTiledLayer(const tson::Layer& layer)
         meshComp->setTextureRect({drawingRect.x, drawingRect.y, drawingRect.width, drawingRect.height});
         
         const tson::Vector2f position = tileObject.getPosition(); 
-        entity->setPosition({position.x, position.y});
+        entity->setPosition({position.x + drawingRect.width / 2, position.y + drawingRect.height / 2});
 
         entity->PostInitComponents();
 
@@ -126,7 +126,7 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
         }
 
         Entity* entity = EntityManager::GetInstanceRef().CreateEntity();
-        const sf::Vector2f position = {static_cast<float>(obj.getPosition().x), static_cast<float>(obj.getPosition().y)};
+        const sf::Vector2f position = {static_cast<float>(obj.getPosition().x + obj.getSize().x / 2), static_cast<float>(obj.getPosition().y + obj.getSize().y / 2)};
         entity->setPosition({position.x, position.y});
         
         entity->SetPrototype(obj.getName());
@@ -145,7 +145,7 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
 
         entity->PostInitComponents();
 
-        auto physComp = entity->GetComponent<PhysicBodyComponentBase>();
+        auto physComp = entity->GetComponent<PhysicBodyComponent>();
         if (physComp && isRect)
         {
             sf::Vector2f origin(0.f, 0.f);

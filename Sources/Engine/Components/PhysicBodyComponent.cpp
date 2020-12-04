@@ -22,7 +22,6 @@ void PhysicBodyComponent::InitFromPrototype()
 
     m_body = m_engine->CreateBody(bodyDef);
     M42_ASSERT(m_body, "Failed to create b2Body!");
-
     for (const auto& fixture : prototype.GetFixtures())
     {
         auto fixtureTemp = *fixture;

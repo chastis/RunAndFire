@@ -8,8 +8,9 @@
 class MeshComponentBase : public BaseComponent, public sf::Sprite
 {
     DECLARE_DYNAMIC_TYPE(MeshComponentBase, BaseComponent)
+protected:
+    void PostInitSpecific() override;
 };
-
 
 struct AnimationData
 {

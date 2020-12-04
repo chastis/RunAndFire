@@ -3,6 +3,7 @@
 #include <Engine/Managers/AssetManager.hpp>
 #include <Engine/Managers/EntityManager.hpp>
 #include <Engine/Components/MeshComponent.hpp>
+#include <Engine/Components/PhysicBodyComponent.hpp>
 
 void Scene::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
 {
@@ -47,9 +48,9 @@ void Scene::Draw()
             if (const auto enMeshComp = en->GetKindOfComponent<MeshComponentBase>())
             {
                 sf::Transform enTransform = en->getTransform();
-                sf::Vector2f shift = en->getPosition() * m_mapScale - en->getPosition();
-                enTransform = enTransform.translate(shift);
-                enTransform = enTransform.scale(m_mapScale);
+                //sf::Vector2f shift = en->getPosition() * m_mapScale - en->getPosition();
+                //enTransform = enTransform.translate(shift);
+                //enTransform = enTransform.scale(m_mapScale);
                 m_renderTarget.lock()->draw(*enMeshComp, enTransform);
             }
         }
@@ -106,6 +107,8 @@ void Scene::InitTiledLayer(const tson::Layer& layer)
         const tson::Vector2f position = tileObject.getPosition(); 
         entity->setPosition({position.x, position.y});
 
+        entity->PostInitComponents();
+
         m_layers.back().objects.push_back(entity);
 
     }
@@ -121,13 +124,39 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
         {
             continue;
         }
-        
 
         Entity* entity = EntityManager::GetInstanceRef().CreateEntity();
-        entity->SetPrototype(obj.getName());
-        entity->InitFromPrototype();
         const sf::Vector2f position = {static_cast<float>(obj.getPosition().x), static_cast<float>(obj.getPosition().y)};
         entity->setPosition({position.x, position.y});
+        
+        entity->SetPrototype(obj.getName());
+        entity->InitFromPrototype();
+
+        const bool isRect = obj.getType() == "Rect";
+
+        if (isRect)
+        {
+            auto meshComp = entity->AddComponent<MeshComponentBase>();
+            const sf::Texture* texture = AssetManager::GetInstanceRef().GetAsset<sf::Texture>("Content/red.png");
+            meshComp->setTexture(*texture);
+            const sf::IntRect drawingRect = {0, 0, obj.getSize().x, obj.getSize().y};
+            meshComp->setTextureRect(drawingRect);
+        }
+
+        entity->PostInitComponents();
+
+        auto physComp = entity->GetComponent<PhysicBodyComponentBase>();
+        if (physComp && isRect)
+        {
+            sf::Vector2f origin(0.f, 0.f);
+            std::vector<sf::Vector2f> vertices;
+            tson::Vector2f objSize(static_cast<float>(obj.getSize().x), static_cast<float>(obj.getSize().y));
+            vertices.emplace_back(0.f, 0.f);
+            vertices.emplace_back(0.f, objSize.y);
+            vertices.emplace_back(objSize.x, 0.f);
+            vertices.emplace_back(objSize.x, objSize.y);
+            physComp->SetFixtures(origin, vertices);
+        }
 
         m_layers.back().objects.push_back(entity);
     }

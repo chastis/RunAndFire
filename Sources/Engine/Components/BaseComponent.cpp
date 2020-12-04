@@ -41,5 +41,5 @@ void BaseComponent::InitPrototype(size_t prototypeID)
 
 void BaseComponent::ConnectEvent(TypeId eventType)
 {
-     M42_ASSERT(false, "you need to override this, if you want to subscribe to events");
+    M42_ASSERT(false, "you need to override this, if you want to subscribe to events");
 }

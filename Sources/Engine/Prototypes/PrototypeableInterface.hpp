@@ -25,7 +25,7 @@ class IPrototypeable : public IPrototypeableBase
 {
 public:
     virtual ~IPrototypeable() = default;
-    //virtual void InitFromPrototype() = 0;
+
     void SetPrototype(size_t prototypeID) override;
     void SetPrototype(const std::string& prototypeSID) override;
     [[nodiscard]] const T& GetPrototype() const;

@@ -12,11 +12,11 @@ class ControllerComponent : public BaseComponent
 public:
     void ConnectEvent(TypeId eventType) override;
     sf::Vector2f m_velocity;
-    //sf::Vector2f m_accel;
 protected:
     void UpdateMovement(float deltaTime);
-
-    void OnCollision(EntityEvents::CollisionEntityEvent& entityEvent);
+    void SetMeshScale(sf::Vector2f scale);
+    void SetMeshScale(float x, float y);
+    //void OnCollision(EntityEvents::CollisionEntityEvent& entityEvent);
 };
 
 template <class T>

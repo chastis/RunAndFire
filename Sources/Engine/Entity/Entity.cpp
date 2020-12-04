@@ -1,4 +1,6 @@
 #include <Engine/Entity/Entity.hpp>
+#include <Engine/Entity/EntityEvents.hpp>
+#include <Engine/EventSystem/EventDispatcher.hpp>
 #include <Engine/Factories/DynamicTypeFactory.hpp>
 #include <Engine/Factories/ComponentFactory.hpp>
 #include <Engine/Components/BaseComponent.hpp>
@@ -17,13 +19,18 @@ void Entity::InitFromPrototype()
             newComponent->InitPrototype(componentInfo.second.value());
         }
     }
-    PostInitComponents();
+    //PostInitComponents();
 }
 
 BaseComponent* Entity::AddComponent(const TypeId& typeId)
 {
     const auto& factory = DynamicTypeFactory::GetInstanceRef().GetFactoryRef<ComponentFactory>();
     BaseComponent* newComponent = factory.CreateComponent(typeId);
+
+    auto componentCreatedEvent = std::make_shared<EntityEvents::ComponentCreatedEvent>();
+    componentCreatedEvent->component = newComponent;
+    EventSystem::Broadcast(std::move(componentCreatedEvent), EntityEventChannel::GetInstance());
+
     m_components.emplace_back(newComponent);
     newComponent->Init(this);
     return newComponent;

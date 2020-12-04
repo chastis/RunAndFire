@@ -14,23 +14,30 @@ Engine::Debug::Debug(Engine& owner)
 void Engine::Debug::Initialize()
 {
     return;
-    m_debugEntity = EntityManager::GetInstanceRef().CreateEntity();
+    Entity* a = EntityManager::GetInstanceRef().CreateEntity();
+    a->setPosition(150.f, 0.f);
+    a->SetPrototype("PlayerPrototype");
+    a->InitFromPrototype();
 
-    m_debugEntity->AddComponent<CircleShapeComponent>()->SetRenderTarget(m_owner.m_renderTargetWeak.lock().get());
-    m_debugEntity->AddComponent<EntityControllerComponent>()->SetSpeed(50, 50);
+    Entity* b = EntityManager::GetInstanceRef().CreateEntity();
+    b->setPosition(150.f, 500.f);
+    b->SetPrototype("GroundPrototype");
+    b->InitFromPrototype();
 
-    m_debugEntity->PostInitComponents();
+
+    Entity* c = EntityManager::GetInstanceRef().CreateEntity();
+    c->setPosition(300.f, 300.f);
+    c->SetPrototype("GroundPrototype");
+    c->InitFromPrototype();
+
 }
 
 void Engine::Debug::Shutdown()
 {
-    m_debugEntity = nullptr;
 }
 
 void Engine::Debug::Update(float deltaTime)
 {
-    return;
-    m_debugEntity->Update(deltaTime);
 }
 
 #endif //DEBUG

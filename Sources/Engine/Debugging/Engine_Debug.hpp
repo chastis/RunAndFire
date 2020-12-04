@@ -18,7 +18,6 @@ public:
 
 private:
     Engine& m_owner;
-    Entity* m_debugEntity = nullptr;
 };
 
 #endif //DEBUG

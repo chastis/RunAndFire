@@ -1,0 +1,21 @@
+<CollisionPrototype>
+    <Default>
+    </Default>
+    <PlayerPhysicBody>
+        <body_definition is_static="false" lock_rotation="true" />
+        <fixtures init_from_mesh="true">
+            <!-- <fixture density="1.0" friction="0.3">
+                <vertices>
+                    <vertice x="-10" y="-16" />
+                    <vertice x="10" y="-16" />
+                    <vertice x="10" y="16" />
+                    <vertice x="-10" y="16" />
+                </vertices>
+            </fixture> -->
+        </fixtures>
+    </PlayerPhysicBody>
+    <CollisionSimpleBody>
+        <body_definition is_static="true" lock_rotation="true" />
+        <fixtures init_from_mesh="false" />
+    </CollisionSimpleBody>
+</CollisionPrototype>

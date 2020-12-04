@@ -48,9 +48,13 @@ void Scene::Draw()
             if (const auto enMeshComp = en->GetKindOfComponent<MeshComponentBase>())
             {
                 sf::Transform enTransform = en->getTransform();
-                //sf::Vector2f shift = en->getPosition() * m_mapScale - en->getPosition();
-                //enTransform = enTransform.translate(shift);
-                //enTransform = enTransform.scale(m_mapScale);
+                constexpr bool enableScaling = true;
+                if (enableScaling)
+                {
+                    sf::Vector2f shift = (en->getPosition() - en->getOrigin()) * m_mapScale - en->getPosition() + en->getOrigin();
+                    enTransform = enTransform.translate(shift);
+                    enTransform = enTransform.scale(m_mapScale);
+                }
                 m_renderTarget.lock()->draw(*enMeshComp, enTransform);
             }
         }

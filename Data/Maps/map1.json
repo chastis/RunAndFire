@@ -96,7 +96,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -116,7 +116,7 @@
                          "value":true
                         }],
                  "rotation":0,
-                 "type":"",
+                 "type":"Player",
                  "visible":true,
                  "width":54.5,
                  "x":27.1667,
@@ -129,7 +129,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":9,
+ "nextobjectid":10,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"2020.11.25",
@@ -260,6 +260,86 @@
                          "tileid":3
                         }],
                  "id":0
+                }, 
+                {
+                 "animation":[
+                        {
+                         "duration":100,
+                         "tileid":0
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":1
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":2
+                        }],
+                 "id":3
+                }],
+         "tilewidth":64,
+         "transparentcolor":"#ffffff"
+        }, 
+        {
+         "columns":1,
+         "firstgid":1641,
+         "image":"Content\/panstarrs\/anim_lond_standing.png",
+         "imageheight":64,
+         "imagewidth":64,
+         "margin":0,
+         "name":"anim_collision",
+         "properties":[
+                {
+                 "name":"originX",
+                 "type":"int",
+                 "value":20
+                }, 
+                {
+                 "name":"originY",
+                 "type":"int",
+                 "value":36
+                }],
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":64,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "height":24,
+                             "id":1,
+                             "name":"",
+                             "rotation":0,
+                             "type":"",
+                             "visible":true,
+                             "width":20,
+                             "x":10,
+                             "y":24
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    },
+                 "properties":[
+                        {
+                         "name":"originX",
+                         "type":"int",
+                         "value":20
+                        }, 
+                        {
+                         "name":"originY",
+                         "type":"int",
+                         "value":36
+                        }],
+                 "type":"Collision"
                 }],
          "tilewidth":64,
          "transparentcolor":"#ffffff"

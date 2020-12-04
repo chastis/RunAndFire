@@ -2,45 +2,74 @@
 
 #include <Engine/Prototypes/BasePrototype.hpp>
 
+struct TileInfo
+{
+    std::string name;
+    int32_t id = 0;
+    void Parse(const pugi::xml_node& node)
+    {
+        if (const auto value = node.attribute("name"))
+        {
+            name = value.as_string();
+        }
+        else
+        {
+            M42_ASSERT(false, "There is no value for mesh_path");
+        }
+        if (const auto value = node.attribute("id"))
+        {
+            id = value.as_int();
+        }
+        else
+        {
+            M42_ASSERT(false, "There is no value for mesh_path");
+        }
+    }
+};
+
 class MeshPrototype : public BasePrototype
 {
 public:
     void InitSpecific(const pugi::xml_node& node) override
     {
-        if (const auto childNode = node.child("mesh_tile_name"))
+        if (const auto childNode = node.child("animation_tiles"))
         {
-            if (const auto value = childNode.attribute("value"))
+            for (pugi::xml_node child : childNode.children())
             {
-                m_meshTileName = value.as_string();
+                TileInfo animationTile;
+                animationTile.Parse(child);
+                m_animationTiles.push_back(animationTile);
             }
-            else
-            {
-                M42_ASSERT(false, "There is no value for mesh_path");
-            }
+
         }
-        if (const auto childNode = node.child("tile_id"))
+        if (const auto childNode = node.child("collision_tile"))
         {
-            if (const auto value = childNode.attribute("value"))
-            {
-                m_tileId = static_cast<uint32_t>(value.as_uint());
-            }
-            else
-            {
-                M42_ASSERT(false, "There is no value for mesh_path");
-            }
+            m_collisionTile.Parse(childNode);
         }
     }
-    [[nodiscard]] const std::string& GetMeshTileName() const
+    [[nodiscard]] const std::vector<TileInfo>& GetAnimationTiles() const
     {
-        return m_meshTileName;
+        return m_animationTiles;
     }
-    [[nodiscard]] uint32_t GetTileId() const
+    [[nodiscard]] const TileInfo& GetAnimationTile(std::string name) const
     {
-        return m_tileId;
+        for (const auto& tile : m_animationTiles)
+        {
+            if (tile.name == name)
+            {
+                return tile;
+            }
+        }
+        M42_ASSERT(false, "there is no tile with this name");
+        return m_collisionTile;
+    }
+    [[nodiscard]] const TileInfo& GetCollisionTile() const
+    {
+        return m_collisionTile;
     }
 protected:
-    std::string m_meshTileName;
-    uint32_t m_tileId = 0;
+    std::vector<TileInfo> m_animationTiles;
+    TileInfo m_collisionTile;
 };
 
 using MeshPrototypes = BasePrototypes<MeshPrototype>;

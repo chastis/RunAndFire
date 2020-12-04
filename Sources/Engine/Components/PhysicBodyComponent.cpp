@@ -37,15 +37,16 @@ void PhysicBodyComponentBase::SetFixtures(sf::Vector2f origin, const std::vector
     fixtureDef.userData.pointer = (uintptr_t)GetOwner();
 
     std::vector<b2Vec2> b2vertices;
-    for (auto verticeNode : vertices)
+    const sf::Vector2f shift = GetOwnerRef().getOrigin() - origin;
+    for (const auto& verticeNode : vertices)
     {
         auto& vertice = b2vertices.emplace_back();
-        vertice.x = verticeNode.x / Const::PixelPerUnit;
-        vertice.y = verticeNode.y / Const::PixelPerUnit;
+        vertice.x = (verticeNode.x - shift.x) / Const::PixelPerUnit;
+        vertice.y = (verticeNode.y - shift.y) / Const::PixelPerUnit;
     }
     b2PolygonShape shape;
-    //shape.Set(b2vertices.data(), int32_t(b2vertices.size()));
-    shape.SetAsBox(vertices[3].x / 2 / Const::PixelPerUnit, vertices[3].y / 2 / Const::PixelPerUnit);
+    shape.Set(b2vertices.data(), int32_t(b2vertices.size()));
+    //shape.SetAsBox(vertices[3].x / 2 / Const::PixelPerUnit, vertices[3].y / 2 / Const::PixelPerUnit);
     fixtureDef.shape = &shape;
     m_body->CreateFixture(&fixtureDef);
 }
@@ -75,12 +76,14 @@ void PhysicBodyComponent::InitPrototype(const std::string& prototypeName)
 {
     this->SetPrototype(prototypeName);
     this->InitFromPrototype();
+    m_status = EComponentStatus::PostPrototypeInit;
 }
 
 void PhysicBodyComponent::InitPrototype(size_t prototypeID)
 {
     this->SetPrototype(prototypeID);
     this->InitFromPrototype();
+    m_status = EComponentStatus::PostPrototypeInit;
 }
 
 void PhysicBodyComponent::InitFromPrototype()
@@ -113,17 +116,23 @@ void PhysicBodyComponent::InitFromMesh(MeshComponent* mesh)
 {
     M42_ASSERT(m_body, "create body first");
 
-    auto meshSize = mesh->getLocalBounds();
-
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(meshSize.width / 2 / Const::PixelPerUnit, meshSize.height / 2 / Const::PixelPerUnit);
-
     b2FixtureDef fixtureDef;
-    fixtureDef.shape = &dynamicBox;
 
-    fixtureDef.density = Const::DefaultDensity;
-    fixtureDef.friction = Const::DefaultFriction;
-    fixtureDef.userData.pointer = (uintptr_t)GetOwner();
+    const auto tileCollisionData = mesh->GetTileCollisionParamData();
+    if (tileCollisionData)
+    {
+        SetFixtures(tileCollisionData->m_origin, tileCollisionData->m_vertices);
+    }
+    else
+    {
+        const auto meshSize = mesh->getLocalBounds();
+        b2PolygonShape dynamicBox;
+        dynamicBox.SetAsBox(meshSize.width / 2 / Const::PixelPerUnit, meshSize.height / 2 / Const::PixelPerUnit);
+        fixtureDef.shape = &dynamicBox;
+        fixtureDef.density = Const::DefaultDensity;
+        fixtureDef.friction = Const::DefaultFriction;
+        fixtureDef.userData.pointer = (uintptr_t)GetOwner();
 
-    m_body->CreateFixture(&fixtureDef);
+        m_body->CreateFixture(&fixtureDef);
+    }
 }

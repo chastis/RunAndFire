@@ -2,7 +2,9 @@
     <Default>
     </Default>
     <PlayerPrototype>
-        <mesh_tile_name value = "anim_idle"/>
-        <tile_id value = "0"/>
+        <animation_tiles>
+            <animation_tile name = "anim_idle" id = "0"/>
+        </animation_tiles>
+        <collision_tile name = "anim_collision" id = "0"/>
     </PlayerPrototype>
 </MeshPrototype>

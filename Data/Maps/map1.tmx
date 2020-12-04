@@ -6,6 +6,7 @@
  <tileset firstgid="1" source="../Tiles/MagicCliffsEnvironment_tileset.tsx"/>
  <tileset firstgid="1161" source="../Tiles/MagicCliffsEnvironment_clouds.tsx"/>
  <tileset firstgid="1637" source="../Tiles/anim_idle.tsx"/>
+ <tileset firstgid="1641" source="../Tiles/anim_collision.tsx"/>
  <imagelayer id="4" name="Image Layer 1"/>
  <layer id="5" name="bottom_layer" width="20" height="20">
   <data encoding="csv">
@@ -85,7 +86,7 @@
   <object id="7" name="CollisionSimple" type="Rect" x="223.333" y="174.667" width="88.6667" height="15.3333"/>
  </objectgroup>
  <objectgroup id="3" name="object_layer">
-  <object id="1" name="PlayerPrototype" x="27.1667" y="195.667" width="54.5" height="35">
+  <object id="1" name="PlayerPrototype" type="Player" x="27.1667" y="195.667" width="54.5" height="35">
    <properties>
     <property name="spawn" type="bool" value="true"/>
    </properties>

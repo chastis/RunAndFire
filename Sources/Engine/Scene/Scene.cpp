@@ -45,7 +45,7 @@ void Scene::Draw()
     {
         for (auto en : layer.objects)
         {
-            if (const auto enMeshComp = en->GetKindOfComponent<MeshComponentBase>())
+            for (const auto enMeshComp : en->GetKindOfComponents<MeshComponentBase>())
             {
                 sf::Transform enTransform = en->getTransform();
                 constexpr bool enableScaling = true;
@@ -145,6 +145,17 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
             meshComp->setTexture(*texture);
             const sf::IntRect drawingRect = {0, 0, obj.getSize().x, obj.getSize().y};
             meshComp->setTextureRect(drawingRect);
+        }
+
+        if (true && obj.getType() == "Player")
+        {
+            const auto baseMeshComp = entity->GetKindOfComponent<MeshComponentBase>();
+            const auto baseBounds = baseMeshComp->getLocalBounds();
+            auto meshComp = entity->AddComponent<MeshComponentBase>();
+            const sf::Texture* texture = AssetManager::GetInstanceRef().GetAsset<sf::Texture>("Content/red.png");
+            meshComp->setTexture(*texture);
+            meshComp->setTextureRect(static_cast<sf::IntRect>(baseBounds));
+            meshComp->setColor(sf::Color(0, 0, 0, 128));
         }
 
         entity->PostInitComponents();

@@ -24569,6 +24569,7 @@ namespace tson
 
 			inline tson::Object *getObj(int id);
 			inline tson::Object *firstObj(const std::string &name);
+			inline const tson::Object *firstObjConst(const std::string &name) const;
 			inline std::vector<tson::Object> getObjectsByName(const std::string &name);
 			inline std::vector<tson::Object> getObjectsByType(tson::ObjectType type);
 
@@ -24763,6 +24764,15 @@ std::vector<tson::Object> tson::Layer::getObjectsByType(tson::ObjectType type)
  * @return A pointer to the object if found. nullptr otherwise.
  */
 tson::Object *tson::Layer::firstObj(const std::string &name)
+{
+	auto result = std::find_if(m_objects.begin(), m_objects.end(), [&](const tson::Object &obj){return obj.getName() == name; });
+	if(result == m_objects.end())
+		return nullptr;
+
+	return &result.operator*();
+}
+
+const tson::Object *tson::Layer::firstObjConst(const std::string &name) const
 {
 	auto result = std::find_if(m_objects.begin(), m_objects.end(), [&](const tson::Object &obj){return obj.getName() == name; });
 	if(result == m_objects.end())
@@ -25614,6 +25624,7 @@ namespace tson
 			[[nodiscard]] inline const std::vector<tson::Frame> &getAnimation() const;
 			[[nodiscard]] inline const Layer &getObjectgroup() const;
 			[[nodiscard]] inline PropertyCollection &getProperties();
+			[[nodiscard]] inline const PropertyCollection &getPropertiesConst() const;
 			[[nodiscard]] inline const std::vector<int> &getTerrain() const;
 
 			template <typename T>
@@ -25815,6 +25826,11 @@ const tson::Layer &tson::Tile::getObjectgroup() const
  * @return
  */
 tson::PropertyCollection &tson::Tile::getProperties()
+{
+	return m_properties;
+}
+
+const tson::PropertyCollection &tson::Tile::getPropertiesConst() const
 {
 	return m_properties;
 }
@@ -27665,10 +27681,9 @@ void tson::Tile::performDataCalculations()
 	int lastId = (m_tileset->getFirstgid() + m_tileset->getTileCount()) - 1;
 
 
-	// ms : later all m_map was replaced to m_tileset
-	if (getGid() >= static_cast<uint32_t>(firstId) && getGid() <= static_cast<uint32_t>(lastId))
+	auto calc = [&](int gid)
 	{
-		int baseTilePosition = ((int)getGid() - firstId);
+	    int baseTilePosition = (gid - firstId);
 
 		int tileModX = (baseTilePosition % columns);
 		int currentRow = (baseTilePosition / columns);
@@ -27676,9 +27691,34 @@ void tson::Tile::performDataCalculations()
 		int offsetY =  (currentRow < rows-1) ? (currentRow * m_tileset->getTileSize().y) : ((rows-1) * m_tileset->getTileSize().y);
 
 		m_drawingRect = { offsetX, offsetY, m_tileset->getTileSize().x, m_tileset->getTileSize().y };
+	};
+
+	// ms : later all m_map was replaced to m_tileset
+	if (getGid() >= static_cast<uint32_t>(firstId) && getGid() <= static_cast<uint32_t>(lastId))
+	{
+		calc(getGid());
+		/*int baseTilePosition = ((int)getGid() - firstId);
+
+		int tileModX = (baseTilePosition % columns);
+		int currentRow = (baseTilePosition / columns);
+		int offsetX = (tileModX != 0) ? ((tileModX) * m_tileset->getTileSize().x) : (0 * m_tileset->getTileSize().x);
+		int offsetY =  (currentRow < rows-1) ? (currentRow * m_tileset->getTileSize().y) : ((rows-1) * m_tileset->getTileSize().y);
+
+		m_drawingRect = { offsetX, offsetY, m_tileset->getTileSize().x, m_tileset->getTileSize().y };*/
 	}
 	else
-		m_drawingRect = {0, 0, 0, 0};
+	{
+		int gid = (int)getGid() + firstId - 1;
+		if (gid >= firstId && gid <= lastId)
+	    {
+			calc(gid);
+		}
+		else
+		{
+		    m_drawingRect = {0, 0, 0, 0};
+		}
+	}
+		
 }
 
 /*!

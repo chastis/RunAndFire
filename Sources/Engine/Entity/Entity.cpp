@@ -19,7 +19,6 @@ void Entity::InitFromPrototype()
             newComponent->InitPrototype(componentInfo.second.value());
         }
     }
-    //PostInitComponents();
 }
 
 BaseComponent* Entity::AddComponent(const TypeId& typeId)
@@ -60,6 +59,32 @@ BaseComponent* Entity::GetKindOfComponent(const TypeId& typeId) const
     return nullptr;
 }
 
+std::vector<BaseComponent*> Entity::GetComponents(const TypeId& typeId) const
+{
+    std::vector<BaseComponent*> components;
+    for (const auto& componentIt : m_components)
+    {
+        if (componentIt->GetStaticType() == typeId)
+        {
+            components.push_back(componentIt.get());
+        }
+    }
+    return components;
+}
+
+std::vector<BaseComponent*> Entity::GetKindOfComponents(const TypeId& typeId) const
+{
+    std::vector<BaseComponent*> components;
+    for (const auto& componentIt : m_components)
+    {
+        if (componentIt->IsKindOf(typeId))
+        {
+            components.push_back(componentIt.get());
+        }
+    }
+    return components;
+}
+
 void Entity::Update(float deltaTime)
 {
     for (const auto& componentIt : m_components)
@@ -68,8 +93,17 @@ void Entity::Update(float deltaTime)
     } 
 }
 
+void Entity::PostPrototypeInitComponents()
+{
+    for (const auto& componentIt : m_components)
+    {
+        componentIt->PostPrototypeInit();
+    } 
+}
+
 void Entity::PostInitComponents()
 {
+    PostPrototypeInitComponents();
     for (const auto& componentIt : m_components)
     {
         componentIt->PostInit();

@@ -28,10 +28,12 @@ public:
     {
         this->SetPrototype(prototypeName);
         this->InitFromPrototype();
+        m_status = EComponentStatus::PostPrototypeInit;
     }
     void InitPrototype(size_t prototypeID) override
     {
         this->SetPrototype(prototypeID);
         this->InitFromPrototype();
+        m_status = EComponentStatus::PostPrototypeInit;
     }
 };

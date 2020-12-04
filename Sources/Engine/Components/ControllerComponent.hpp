@@ -26,12 +26,12 @@ class PrototypeableControllerComponent : public ControllerComponent, public IPro
 public:
     void InitPrototype(const std::string& prototypeName) override
     {
-        IPrototypeable<T>::SetPrototype(prototypeName);
-        IPrototypeable<T>::InitFromPrototype();
+        this->SetPrototype(prototypeName);
+        this->InitFromPrototype();
     }
     void InitPrototype(size_t prototypeID) override
     {
-        IPrototypeable<T>::SetPrototype(prototypeID);
-        IPrototypeable<T>::InitFromPrototype();
+        this->SetPrototype(prototypeID);
+        this->InitFromPrototype();
     }
 };

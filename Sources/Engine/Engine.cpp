@@ -30,6 +30,11 @@ void Engine::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
 #endif //DEBUG
 }
 
+void Engine::Draw()
+{
+    m_scenes.top().Draw();
+}
+
 void Engine::Shutdown()
 {
     EntityManager::GetInstanceRef().DeleteAllEntities();
@@ -45,6 +50,10 @@ void Engine::ChangeGameMode(EGameMode newMode)
     case EGameMode::Game:
         {
             InputManager::GetInstanceRef().PushActionMap("game_input");
+            Scene scene;
+            scene.Initialize(m_renderTargetWeak);
+            scene.InitFromPrototype();
+            m_scenes.push(scene);
         }
     case EGameMode::Menu: break;
     default: ;
@@ -53,15 +62,7 @@ void Engine::ChangeGameMode(EGameMode newMode)
 
 void Engine::Update(float deltaTime)
 {
-    std::vector<Entity*> entities = EntityManager::GetInstanceRef().GetEntities();
-    for (auto en : entities)
-    {
-        en->Update(deltaTime);
-        if (const auto enMeshComp = en->GetComponent<MeshComponent>())
-        {
-            m_renderTargetWeak.lock()->draw(*enMeshComp, en->getTransform());
-        }
-    }
+    m_scenes.top().Update(deltaTime);
 #if defined(DEBUG)
     m_debug->Update(deltaTime);
 #endif //DEBUG

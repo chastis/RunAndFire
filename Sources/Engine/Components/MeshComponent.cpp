@@ -19,3 +19,15 @@ void MeshComponent::Update(float deltaTime)
 {
     // todo
 }
+
+void MeshComponent::InitPrototype(const std::string& prototypeName)
+{
+    this->SetPrototype(prototypeName);
+    this->InitFromPrototype();
+}
+
+void MeshComponent::InitPrototype(size_t prototypeID)
+{
+    this->SetPrototype(prototypeID);
+    this->InitFromPrototype();
+}

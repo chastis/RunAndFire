@@ -16,7 +16,7 @@ void PhysicComponent::Update(float deltaTime)
     {
         if (auto controllerComp = GetOwnerRef().GetKindOfComponent<ControllerComponent>())
         {
-            controllerComp->m_velocity.y += Const::FallingForce * deltaTime;
+            //controllerComp->m_velocity.y += Const::FallingForce * deltaTime;
         }
         else
         {

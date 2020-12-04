@@ -25,22 +25,6 @@ void Application_Impl::Initialize()
     m_applicationEventHandler.JoinChannel<EngineEventChannel>();
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnClosedEvent);
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnResizedEvent);
-
-    Entity* a = EntityManager::GetInstanceRef().CreateEntity();
-    a->SetPrototype("PlayerPrototype");
-    a->InitFromPrototype();
-
-    Entity* b = EntityManager::GetInstanceRef().CreateEntity();
-    b->SetPrototype("GroundPrototype");
-    b->InitFromPrototype();
-
-    b->setPosition(0.f, 500.f);
-
-    Entity* c = EntityManager::GetInstanceRef().CreateEntity();
-    c->SetPrototype("GroundPrototype");
-    c->InitFromPrototype();
-
-    c->setPosition(300.f, 300.f);
 }
 
 void Application_Impl::Run()
@@ -54,8 +38,9 @@ void Application_Impl::Run()
             std::shared_ptr<Event> applicationEvent(EngineEvents::Create(event));
             EventSystem::Broadcast(applicationEvent, EngineEventChannel::GetInstance());
         }
-        m_window->clear();
         m_engineInstance.Update(frameClock.restart().asSeconds());
+        m_window->clear();
+        m_engineInstance.Draw();
         m_window->display();
     }
 }

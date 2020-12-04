@@ -23854,6 +23854,7 @@ namespace tson
 			inline bool hasProperty(const std::string &name);
 			inline tson::Property * getProperty(const std::string &name);
 			inline std::map<std::string, Property> &getProperties();
+			inline const std::map<std::string, Property> &getPropertiesConst() const;
 			inline std::vector<Property*> get();
 			template <typename T>
 			inline T getValue(const std::string &name);
@@ -23931,6 +23932,11 @@ tson::Property *tson::PropertyCollection::getProperty(const std::string &name)
 }
 
 std::map<std::string, tson::Property> &tson::PropertyCollection::getProperties()
+{
+	return m_properties;
+}
+
+const std::map<std::string, tson::Property> &tson::PropertyCollection::getPropertiesConst() const
 {
 	return m_properties;
 }
@@ -24033,6 +24039,7 @@ namespace tson
 			[[nodiscard]] inline const std::vector<tson::Vector2i> &getPolygons() const;
 			[[nodiscard]] inline const std::vector<tson::Vector2i> &getPolylines() const;
 			[[nodiscard]] inline PropertyCollection &getProperties();
+			[[nodiscard]] inline const PropertyCollection &getPropertiesConst() const;
 			[[nodiscard]] inline const Text &getText() const;
 
 			template <typename T>
@@ -24311,6 +24318,11 @@ tson::PropertyCollection &tson::Object::getProperties()
 	return m_properties;
 }
 
+const tson::PropertyCollection &tson::Object::getPropertiesConst() const
+{
+	return m_properties;
+}
+
 /*!
  * 'type': String assigned to type field in editor
  * @return
@@ -24550,7 +24562,9 @@ namespace tson
 
 			[[nodiscard]] inline std::vector<tson::Chunk> &getChunks();
 			[[nodiscard]] inline std::vector<tson::Layer> &getLayers();
+			[[nodiscard]] inline const std::vector<tson::Layer> &getLayersConst() const;
 			[[nodiscard]] inline std::vector<tson::Object> &getObjects();
+			[[nodiscard]] inline const std::vector<tson::Object> &getObjectsConst() const;
 			[[nodiscard]] inline PropertyCollection &getProperties();
 
 			inline tson::Object *getObj(int id);
@@ -24947,6 +24961,11 @@ std::vector<tson::Layer> &tson::Layer::getLayers()
 	return m_layers;
 }
 
+const std::vector<tson::Layer> &tson::Layer::getLayersConst() const
+{
+	return m_layers;
+}
+
 /*!
  * 'objects': Array of objects. objectgroup only.
  * @return
@@ -24955,6 +24974,12 @@ std::vector<tson::Object> &tson::Layer::getObjects()
 {
 	return m_objects;
 }
+
+const std::vector<tson::Object> &tson::Layer::getObjectsConst() const
+{
+	return m_objects;
+}
+
 
 /*!
  * 'properties': A list of properties (name, value, type).
@@ -25059,8 +25084,9 @@ void tson::Layer::createTileData(const Vector2i &mapSize, bool isInfiniteMap)
 
 			if (tileId > 0 && m_tileMap->count(tileId) > 0)
 			{
-				m_tileData[{x, y}] = m_tileMap->at(tileId);
-				m_tileObjects[{x, y}] = {{x, y}, m_tileData[{x, y}]};
+				std::tuple<int, int> pair = {static_cast<int>(x), static_cast<int>(y)};
+				m_tileData[pair] = m_tileMap->at(tileId);
+				m_tileObjects[pair] = {pair, m_tileData[pair]};
 			}
 			else if(tileId > 0 && m_tileMap->count(tileId) == 0) //Tile with flip flags!
 			{
@@ -25093,8 +25119,9 @@ void tson::Layer::resolveFlaggedTiles()
 	{
 		if (tile.id > 0 && m_tileMap->count(tile.id) > 0)
 		{
-			m_tileData[{tile.x, tile.y}] = m_tileMap->at(tile.id);
-			m_tileObjects[{tile.x, tile.y}] = {{tile.x, tile.y}, m_tileData[{tile.x, tile.y}]};
+			std::tuple<int, int> pair = {static_cast<int>(tile.x), static_cast<int>(tile.y)};
+			m_tileData[pair] = m_tileMap->at(tile.id);
+			m_tileObjects[pair] = {pair, m_tileData[pair]};
 		}
 	});
 }
@@ -26097,6 +26124,7 @@ namespace tson
 	{
 		public:
 			inline Tileset() = default;
+		    inline Tileset(Tileset&&) noexcept = default;
 			inline explicit Tileset(const nlohmann::json &json, tson::Map *map);
 			inline bool parse(const nlohmann::json &json, tson::Map *map);
 
@@ -26453,11 +26481,11 @@ void tson::Tileset::generateMissingTiles()
 	for(auto &tile : m_tiles)
 		tileIds.push_back(tile.getId());
 
-	for(uint32_t i = m_firstgid; i < m_firstgid + m_tileCount; ++i)
+	for(uint32_t i = static_cast<uint32_t>(m_firstgid); i < static_cast<uint32_t>(m_firstgid + m_tileCount); ++i)
 	{
 		if(std::count(tileIds.begin(), tileIds.end(), i) == 0)
 		{
-			m_tiles.emplace_back(Tile(i, this, m_map));
+			m_tiles.emplace_back(i, this, m_map);
 		}
 	}
 }
@@ -26526,6 +26554,7 @@ namespace tson
 			[[nodiscard]] inline int getVersion() const;
 
 			[[nodiscard]] inline std::vector<tson::Layer> &getLayers();
+			[[nodiscard]] inline const std::vector<tson::Layer> &getLayersConst() const;
 			[[nodiscard]] inline PropertyCollection &getProperties();
 			[[nodiscard]] inline std::vector<tson::Tileset> &getTilesets();
 
@@ -26641,12 +26670,21 @@ bool tson::Map::parse(const nlohmann::json &json, tson::DecompressorContainer *d
 
 	//More advanced data
 	if(json.count("layers") > 0 && json["layers"].is_array())
+	{
+		auto count = json["layers"].size();
+		m_layers.reserve(count);
 		std::for_each(json["layers"].begin(), json["layers"].end(), [&](const nlohmann::json &item) { m_layers.emplace_back(item, this); });
+	}
 	if(json.count("tilesets") > 0 && json["tilesets"].is_array())
+	{
+		auto count = json["tilesets"].size();
+		m_tilesets.reserve(count);
 		std::for_each(json["tilesets"].begin(), json["tilesets"].end(), [&](const nlohmann::json &item) { m_tilesets.emplace_back(item, this); });
+	}
 	if(json.count("properties") > 0 && json["properties"].is_array())
+	{
 		std::for_each(json["properties"].begin(), json["properties"].end(), [&](const nlohmann::json &item) { m_properties.add(item); });
-
+	}
 	processData();
 
 	return allFound;
@@ -26814,6 +26852,11 @@ int tson::Map::getVersion() const
  * @return
  */
 std::vector<tson::Layer> &tson::Map::getLayers()
+{
+	return m_layers;
+}
+
+const std::vector<tson::Layer> &tson::Map::getLayersConst() const
 {
 	return m_layers;
 }
@@ -27166,7 +27209,8 @@ namespace tson
 				m_subFolders.emplace_back(entry.path());//.loadData(); - loadData() is called in the constructor, so don't call again.
 			else if (fs::is_regular_file(entry.path()))
 			{
-				if(m_hasWorldFile && m_world.contains(entry.path().filename().u8string()))
+				//if(m_hasWorldFile && m_world.contains(entry.path().filename().u8string()))
+				if(m_hasWorldFile && m_world.contains(entry.path().filename().generic_string()))
 					m_files.emplace_back(entry.path());
 				else if(!m_hasWorldFile)
 					m_files.emplace_back(entry.path());
@@ -27456,7 +27500,8 @@ std::unique_ptr<tson::Map> tson::Tileson::parse(const fs::path &path)
 	}
 
 	std::string msg = "File not found: ";
-	msg += std::string(path.u8string());
+	//msg += std::string(path.u8string());
+	msg += path.generic_string();
 	return std::make_unique<tson::Map>(tson::ParseStatus::FileNotFound, msg);
 }
 #else
@@ -27581,12 +27626,18 @@ void tson::Tile::performDataCalculations()
 	if(m_tileset == nullptr || m_map == nullptr)
 		return;
 
+	/*m_image = m_tileset->getImage();
+	m_imageSize = m_tileset->getImageSize();  
+	m_properties = m_tileset->getProperties(); 
+	m_type = m_tileset->getType();   */    
+
+
 	int firstId = m_tileset->getFirstgid(); //First tile id of the tileset
 	int columns = m_tileset->getColumns();
 	int rows = m_tileset->getTileCount() / columns;
 	int lastId = (m_tileset->getFirstgid() + m_tileset->getTileCount()) - 1;
 
-	if (getGid() >= firstId && getGid() <= lastId)
+	if (getGid() >= static_cast<uint32_t>(firstId) && getGid() <= static_cast<uint32_t>(lastId))
 	{
 		int baseTilePosition = ((int)getGid() - firstId);
 
@@ -27687,7 +27738,7 @@ int tson::World::loadMaps(tson::Tileson *parser)
 		}
 	});
 
-	return m_maps.size();
+	return static_cast<int>(m_maps.size());
 }
 
 #endif //TILESON_TILESON_FORWARD_HPP

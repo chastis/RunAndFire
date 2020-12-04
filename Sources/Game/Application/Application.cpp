@@ -1,8 +1,8 @@
 #include <Game/Application/Application.hpp>
-#include <Engine/Managers/EntityManager.hpp>
+#include <Game/Managers/GameManager.hpp>
 #include <Engine/EventSystem/EventDispatcher.hpp>
 #include <Engine/InputSystem/InputEvent.hpp>
-#include <Game/Managers/GameManager.hpp>
+
 #include <SFML/Graphics.hpp>
 
 Application_Impl::Application_Impl()
@@ -20,27 +20,12 @@ void Application_Impl::Initialize()
     m_window = std::make_shared<sf::RenderWindow>();
     m_window->create(sf::VideoMode(800, 600), "RUN & FIRE");
     m_window->setKeyRepeatEnabled(false); // https://www.sfml-dev.org/tutorials/2.5/window-events.php
+    m_window->setFramerateLimit(60);
     m_engineInstance.Initialize(m_window);
 
     m_applicationEventHandler.JoinChannel<EngineEventChannel>();
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnClosedEvent);
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnResizedEvent);
-
-    Entity* a = EntityManager::GetInstanceRef().CreateEntity();
-    a->SetPrototype("PlayerPrototype");
-    a->InitFromPrototype();
-
-    Entity* b = EntityManager::GetInstanceRef().CreateEntity();
-    b->SetPrototype("GroundPrototype");
-    b->InitFromPrototype();
-
-    b->setPosition(0.f, 500.f);
-
-    Entity* c = EntityManager::GetInstanceRef().CreateEntity();
-    c->SetPrototype("GroundPrototype");
-    c->InitFromPrototype();
-
-    c->setPosition(300.f, 300.f);
 }
 
 void Application_Impl::Run()

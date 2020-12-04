@@ -7,7 +7,7 @@ project "Engine"
     objdir (OUTPUT_DIR .. "/%{prj.name}")
     kind "StaticLib"
 
-    files { "**.hpp", "**.cpp" }
+    files { "**.hpp", "**.h", "**.cpp" }
 
     includedirs
     {

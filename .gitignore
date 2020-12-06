@@ -1,5 +1,9 @@
 .git
 
+*.tiled-project
+*.tiled-session
+
+
 # Visual studio specific
 *.sln
 *.vcxproj

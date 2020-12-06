@@ -10,6 +10,8 @@ class FileManager_Impl
 public:
     std::ifstream OpenFile(const std::string& filepath, std::ios_base::openmode mode = std::ios_base::in);
 
+    std::vector<char> ReadFile(const std::string& filepath);
+
     void SetWorkingDirectory(const std::filesystem::path& workingDirectory);
 
 private:

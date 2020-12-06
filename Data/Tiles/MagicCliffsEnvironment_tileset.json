@@ -1,0 +1,15 @@
+{ "columns":58,
+ "image":"..\/Content\/MagicCliffsEnvironment\/MagicCliffsEnvironment_tileset.png",
+ "imageheight":320,
+ "imagewidth":928,
+ "margin":0,
+ "name":"MagicCliffsEnvironment_tileset",
+ "spacing":0,
+ "tilecount":1160,
+ "tiledversion":"2020.11.25",
+ "tileheight":16,
+ "tilewidth":16,
+ "transparentcolor":"#ffffff",
+ "type":"tileset",
+ "version":1.4
+}

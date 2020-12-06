@@ -14,7 +14,8 @@ public:
     sf::Vector2f m_velocity;
 protected:
     void UpdateMovement(float deltaTime);
-
+    void SetMeshScale(sf::Vector2f scale);
+    void SetMeshScale(float x, float y);
     //void OnCollision(EntityEvents::CollisionEntityEvent& entityEvent);
 };
 
@@ -27,10 +28,12 @@ public:
     {
         this->SetPrototype(prototypeName);
         this->InitFromPrototype();
+        m_status = EComponentStatus::PostPrototypeInit;
     }
     void InitPrototype(size_t prototypeID) override
     {
         this->SetPrototype(prototypeID);
         this->InitFromPrototype();
+        m_status = EComponentStatus::PostPrototypeInit;
     }
 };

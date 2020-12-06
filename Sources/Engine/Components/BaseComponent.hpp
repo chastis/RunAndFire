@@ -37,6 +37,9 @@ protected:
     Entity* m_owner = nullptr;
     EventHandler m_eventHandler;
     EComponentStatus m_status = EComponentStatus::Created;
+
+    // todo : rewrite using this, instead of inheritance
+    std::unique_ptr<IPrototypeableBase> m_prototype; 
 };
 
 template <class T>

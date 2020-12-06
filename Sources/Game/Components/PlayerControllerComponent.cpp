@@ -11,15 +11,6 @@ void PlayerControllerComponent::Update(float deltaTime)
 {
     const auto delta = m_speed * m_direction.getNormilized() * deltaTime;
     m_physicComponent->SetLinearVelocity(delta.x, delta.y);
-
-    if (m_direction.x < 0.f)
-    {
-        GetOwnerRef().setScale(-1.f, 1.f);
-    }
-    else if (m_direction.x > 0.f)
-    {
-        GetOwnerRef().setScale(1.f, 1.f);
-    }
 }
 
 bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)

@@ -31,13 +31,18 @@ void Engine::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
 {
     m_renderTargetWeak = renderTarget;
     m_physicEngine.SetFramerate(1.f / 60.f);
-    m_physicEngine.SetGravity(0, 200);
+    m_physicEngine.SetGravity(0, 500);
 
     ChangeGameMode(EGameMode::Game);
 
 #if defined(DEBUG)
     m_debug->Initialize();
 #endif //DEBUG
+}
+
+void Engine::Draw()
+{
+    m_scenes.top().Draw();
 }
 
 void Engine::Shutdown()
@@ -53,10 +58,13 @@ void Engine::ChangeGameMode(EGameMode newMode)
     switch (newMode)
     {
     case EGameMode::Game:
-    {
-        InputManager::GetInstanceRef().PushActionMap("game_input");
-        break;
-    }
+        {
+            InputManager::GetInstanceRef().PushActionMap("game_input");
+            Scene scene;
+            scene.Initialize(m_renderTargetWeak);
+            scene.InitFromPrototype();
+            m_scenes.push(scene);
+        }
     case EGameMode::Menu: break;
     default: ;
     }
@@ -65,26 +73,16 @@ void Engine::ChangeGameMode(EGameMode newMode)
 void Engine::Update(float deltaTime)
 {
     m_physicEngine.Update();
-
-    std::vector<Entity*> entities = EntityManager::GetInstanceRef().GetEntities();
-    for (auto en : entities)
-    {
-        en->Update(deltaTime);
-        if (const auto enMeshComp = en->GetComponent<MeshComponent>())
-        {
-            m_renderTargetWeak.lock()->draw(*enMeshComp, en->getTransform());
-        }
-    }
+    m_scenes.top().Update(deltaTime);
 #if defined(DEBUG)
     m_debug->Update(deltaTime);
 #endif //DEBUG
 }
-
 void Engine::OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event)
 {
-    if (event.component->IsKindOf(PhysicBodyComponent::GetStaticType()))
+    if (event.component->IsKindOf(PhysicBodyComponentBase::GetStaticType()))
     {
-        auto physicComponent = static_cast<PhysicBodyComponent*>(event.component);
+        auto physicComponent = static_cast<PhysicBodyComponentBase*>(event.component);
         physicComponent->BindToPhysicEngine(&m_physicEngine);
     }
 }

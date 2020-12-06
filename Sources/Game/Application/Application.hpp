@@ -4,7 +4,6 @@
 #include <Engine/Engine.hpp>
 #include <Engine/EngineEvents.hpp>
 #include <Utility/Core/Singleton.hpp>
-
 #include <SFML/Graphics/RenderWindow.hpp>
 
 class Application_Impl

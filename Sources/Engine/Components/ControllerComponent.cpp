@@ -1,4 +1,5 @@
 #include <Engine/Components/ControllerComponent.hpp>
+#include <Engine/Components/MeshComponent.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Static/Misc.hpp>
 
@@ -15,6 +16,20 @@ void ControllerComponent::UpdateMovement(float deltaTime)
     sf::Vector2f delta = m_velocity * deltaTime;
     //delta += deltaTime * deltaTime * m_accel / 2.f;
     GetOwnerRef().move(delta);
+}
+
+void ControllerComponent::SetMeshScale(sf::Vector2f scale)
+{
+    SetMeshScale(scale.x, scale.y);
+}
+
+void ControllerComponent::SetMeshScale(float x, float y)
+{
+    auto meshComponent = GetOwnerRef().GetKindOfComponent<MeshComponentBase>();
+    if (meshComponent)
+    {
+        meshComponent->setScale(x, y);
+    }
 }
 
 //void ControllerComponent::OnCollision(EntityEvents::CollisionEntityEvent& entityEvent)
@@ -41,6 +56,7 @@ void ControllerComponent::UpdateMovement(float deltaTime)
 //    }
 //    else if (Misc::IsNearlyEqual(collisionBox.left, entityEvent.intersection.left))
 //    {
+
 //        shift.x = entityEvent.intersection.width;
 //    }
 //    GetOwnerRef().move(shift);

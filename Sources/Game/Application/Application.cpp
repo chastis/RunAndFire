@@ -18,7 +18,7 @@ void Application_Impl::Initialize()
     GameManager::GetInstanceRef().SetEngineInstance(&m_engineInstance);
 
     m_window = std::make_shared<sf::RenderWindow>();
-    m_window->create(sf::VideoMode(800, 600), "RUN & FIRE");
+    m_window->create(sf::VideoMode(960, 960), "RUN & FIRE");
     m_window->setKeyRepeatEnabled(false); // https://www.sfml-dev.org/tutorials/2.5/window-events.php
     m_window->setFramerateLimit(60);
     m_engineInstance.Initialize(m_window);
@@ -39,8 +39,9 @@ void Application_Impl::Run()
             std::shared_ptr<Event> applicationEvent(EngineEvents::Create(event));
             EventSystem::Broadcast(applicationEvent, EngineEventChannel::GetInstance());
         }
-        m_window->clear();
         m_engineInstance.Update(frameClock.restart().asSeconds());
+        m_window->clear();
+        m_engineInstance.Draw();
         m_window->display();
     }
 }

@@ -14,8 +14,8 @@
             </fixture> -->
         </fixtures>
     </PlayerPhysicBody>
-    <GroundPhysicBody>
+    <CollisionSimpleBody>
         <body_definition is_static="true" lock_rotation="true" />
-        <fixtures init_from_mesh="true" />
-    </GroundPhysicBody>
+        <fixtures init_from_mesh="false" />
+    </CollisionSimpleBody>
 </CollisionPrototype>

@@ -138,7 +138,7 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
 
         const bool isRect = obj.getType() == "Rect";
 
-        if (isRect)
+        if (true && isRect)
         {
             auto meshComp = entity->AddComponent<MeshComponentBase>();
             const sf::Texture* texture = AssetManager::GetInstanceRef().GetAsset<sf::Texture>("Content/red.png");
@@ -147,7 +147,7 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
             meshComp->setTextureRect(drawingRect);
         }
 
-        if (true && obj.getType() == "Player")
+        if (false && obj.getType() == "Player")
         {
             const auto baseMeshComp = entity->GetKindOfComponent<MeshComponentBase>();
             const auto baseBounds = baseMeshComp->getLocalBounds();

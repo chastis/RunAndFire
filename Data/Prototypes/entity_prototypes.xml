@@ -9,10 +9,9 @@
             <EventHandlerComponent prototype = "PlayerPrototype"/>
         </components>
     </PlayerPrototype>
-    <GroundPrototype>
+    <CollisionSimple>
         <components>
-            <MeshComponent prototype = "GroundPrototype"/>
-            <PhysicBodyComponent prototype = "GroundPhysicBody"/>
+            <PhysicBodyComponent prototype = "CollisionSimpleBody"/>
         </components>
-    </GroundPrototype>
+    </CollisionSimple>
 </EntityPrototype>

@@ -18,6 +18,7 @@ public:
     ~Entity();
 
     void InitFromPrototype() override;
+    void PostInitComponents();
 
     template <class T>
     [[nodiscard]] T* GetComponent() const;
@@ -25,6 +26,12 @@ public:
     template <class T>
     [[nodiscard]] T* GetKindOfComponent() const;
     [[nodiscard]] BaseComponent* GetKindOfComponent(const TypeId& typeId) const;
+    template <class T>
+    [[nodiscard]] std::vector<T*> GetComponents() const;
+    [[nodiscard]] std::vector<BaseComponent*> GetComponents(const TypeId& typeId) const;
+    template <class T>
+    [[nodiscard]] std::vector<T*> GetKindOfComponents() const;
+    [[nodiscard]] std::vector<BaseComponent*> GetKindOfComponents(const TypeId& typeId) const;
     UID GetUID() const;
 
     template <class T>
@@ -32,8 +39,8 @@ public:
     BaseComponent* AddComponent(const TypeId& typeId);
 
     void Update(float deltaTime);
-    void PostInitComponents();
 private:
+    void PostPrototypeInitComponents();
     std::vector<std::unique_ptr<BaseComponent>> m_components;
     UID m_UID = 0;
     friend class EntityManager_Impl;
@@ -64,4 +71,26 @@ T* Entity::GetKindOfComponent() const
     const TypeId& componentId = T::GetStaticType();
     BaseComponent* findComponent = GetKindOfComponent(componentId);
     return static_cast<T*>(findComponent);
+}
+
+template <class T>
+std::vector<T*> Entity::GetComponents() const
+{
+    std::vector<T*> components;
+    for (auto& comp : GetComponents(T::GetStaticType()))
+    {
+        components.push_back(static_cast<T*>(comp));
+    }
+    return components;
+}
+
+template <class T>
+std::vector<T*> Entity::GetKindOfComponents() const
+{
+    std::vector<T*> components;
+    for (auto& comp : GetKindOfComponents(T::GetStaticType()))
+    {
+        components.push_back(static_cast<T*>(comp));
+    }
+    return components;
 }

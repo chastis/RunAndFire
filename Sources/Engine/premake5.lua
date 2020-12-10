@@ -24,7 +24,7 @@ project "Engine"
     defines { "SFML_STATIC" }
 
     filter "configurations:Debug"
-        defines { "DEBUG" }
+        defines { "DEBUG", "PROFILE_ENABLED" }
         symbols "On"
         runtime "Debug"
 

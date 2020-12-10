@@ -2,9 +2,9 @@
     <Default>
     </Default>
     <PlayerPrototype>
-        <mesh_path value = "Content/player.png"/>
+        <animation_tiles>
+            <animation_tile name = "anim_idle" id = "0"/>
+        </animation_tiles>
+        <collision_tile name = "anim_collision" id = "0"/>
     </PlayerPrototype>
-    <GroundPrototype>
-        <mesh_path value = "Content/ground.png"/>
-    </GroundPrototype>
 </MeshPrototype>

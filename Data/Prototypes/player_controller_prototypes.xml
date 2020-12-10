@@ -1,7 +1,7 @@
 <PlayerControllerPrototype>
     <Default>
     </Default>
-    <PlayerPrototype>
-        <speed x = "200" y = "400"/>
+    <PlayerPrototype jump_force="6.0">
+        <speed x = "200" y = "200"/>
     </PlayerPrototype>
 </PlayerControllerPrototype>

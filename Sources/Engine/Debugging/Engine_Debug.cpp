@@ -13,7 +13,7 @@ Engine::Debug::Debug(Engine& owner)
 
 void Engine::Debug::Initialize()
 {
-
+    return;
     Entity* a = EntityManager::GetInstanceRef().CreateEntity();
     a->setPosition(150.f, 0.f);
     a->SetPrototype("PlayerPrototype");

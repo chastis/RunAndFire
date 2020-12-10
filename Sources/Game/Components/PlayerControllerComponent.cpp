@@ -4,48 +4,41 @@
 
 void PlayerControllerComponent::InitFromPrototype()
 {
-    m_speed = GetPrototype().GetSpeed();
+    const auto& prototype = GetPrototype();
+ 
+    m_speed = prototype.GetSpeed();
+    m_jumpForce = prototype.GetJumpForce();
 }
 
 void PlayerControllerComponent::Update(float deltaTime)
 {
-    const auto delta = m_speed * m_direction.getNormilized() * deltaTime;
-    m_physicComponent->SetLinearVelocity(delta.x, delta.y);
+    auto velocity = m_physicComponent->GetLinearVelocity();
+    const auto delta = m_speed * m_direction * deltaTime;
+    velocity.x = delta.x;
+    m_physicComponent->SetLinearVelocity(velocity.x, velocity.y);
 }
 
 bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
 {
-    if (signal == ActionSignal("move_up"))
+    if (signal == ActionSignal("player_jump"))
     {
-        m_direction.y += -1.f;
-    }
-    if (signal == ActionSignal("move_down"))
-    {
-        m_direction.y += 1.f;
+        Jump();
     }
     if (signal == ActionSignal("move_left"))
     {
-        m_direction.x += -1.f;
+        m_direction += -1.f;
     }
     if (signal == ActionSignal("move_right"))
     {
-        m_direction.x += 1.f;
-    }
-    if (signal == ActionSignal("stop_move_up"))
-    {
-        m_direction.y -= -1.f;
-    }
-    if (signal == ActionSignal("stop_move_down"))
-    {
-        m_direction.y -= 1.f;
+        m_direction += 1.f;
     }
     if (signal == ActionSignal("stop_move_left"))
     {
-        m_direction.x -= -1.f;
+        m_direction -= -1.f;
     }
     if (signal == ActionSignal("stop_move_right"))
     {
-        m_direction.x -= 1.f;
+        m_direction -= 1.f;
     }
     return false;
 }
@@ -53,4 +46,10 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
 void PlayerControllerComponent::PostInitSpecific()
 {
     m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
+}
+
+void PlayerControllerComponent::Jump()
+{
+    float force = m_physicComponent->GetMass() * m_jumpForce;
+    m_physicComponent->ApplyImpulse(0, -force);
 }

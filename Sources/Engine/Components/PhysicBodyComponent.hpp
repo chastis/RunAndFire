@@ -2,11 +2,16 @@
 
 #include <Engine/Components/BaseComponent.hpp>
 #include <Engine/Prototypes/PhysicBodyPrototype.hpp>
+#include <Utility/Core/Callback.hpp>
 #include <SFML/System/Vector2.hpp>
+
+
+#include <map>
 
 class MeshComponent;
 class PhysicEngine;
 class b2Body;
+class b2Fixture;
 struct b2FixtureDef;
 
 class PhysicBodyComponentBase : public BaseComponent
@@ -23,12 +28,15 @@ public:
     void ApplyImpulse(float x, float y);
     float GetMass() const;
 
+    b2Fixture* GetFixtures();
+    const b2Fixture* GetFixtures() const;
+
     sf::Vector2f GetLinearVelocity() const;
 
     void SetFixtures(sf::Vector2f origin, const std::vector<sf::Vector2f>& vertices);
 protected:
     void PostInitSpecific() override;
-    void CreateFixture(const b2FixtureDef& fixtureDef);
+    virtual void CreateFixture(const b2FixtureDef& fixtureDef);
 
     b2BodyDef m_bodyDef;
     PhysicEngine* m_engine = nullptr;
@@ -39,9 +47,7 @@ class PhysicBodyComponent : public PhysicBodyComponentBase
 {
     DECLARE_DYNAMIC_TYPE(PhysicBodyComponent, PhysicBodyComponentBase)
 public:
-    PhysicBodyComponent();
-    ~PhysicBodyComponent();
-    
+    PhysicBodyComponent();    
 private:
     void PostInitSpecific() override;
     void InitFromPrototypeSpecific() override;

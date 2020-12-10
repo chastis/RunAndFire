@@ -2,9 +2,10 @@
 
 #include <Engine/Components/ControllerComponent.hpp>
 #include <Engine/Components/BaseComponent.hpp>
+#include <Engine/Entity/EntityEvents.hpp>
 #include <Engine/InputSystem/InputClient.hpp>
-#include <Game/Prototypes/PlayerControllerPrototype.hpp>
 #include <Engine/InputSystem/ActionMap.hpp>
+#include <Game/Prototypes/PlayerControllerPrototype.hpp>
 
 class PhysicBodyComponent;
 
@@ -19,8 +20,12 @@ public:
 private:
     void InitFromPrototypeSpecific() override;
     void PostInitSpecific() override;
+    void SetPlayerFriction(float friction);
 
     void Jump();
+
+    void OnPlayerCollisionStarted(EntityEvents::CollisionStartedEvent& event);
+    void OnPlayerCollisionEnded(EntityEvents::CollisionEndedEvent& event);
 private:
     sf::Vector2f m_speed;
 
@@ -28,4 +33,5 @@ private:
 
     float m_direction = 0.f;
     float m_jumpForce = 0.f;
+    float m_friction = 0.f;
 };

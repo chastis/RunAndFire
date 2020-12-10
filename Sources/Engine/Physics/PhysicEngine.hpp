@@ -1,4 +1,5 @@
 #include <Engine/Physics/Box2D/box2d.h>
+#include <Engine/Physics/ContactListener.hpp>
 
 #include <cstdint>
 
@@ -16,6 +17,7 @@ public:
 
     void Update(std::uint32_t velocityIterations = 1, std::uint32_t positionIterations = 1);
 private:
+    ContactListener m_contactListener;
     b2Vec2 m_gravity = { 0, 10.f };
     b2World* m_world = nullptr;
     float m_framerate = 1 / 60.f;

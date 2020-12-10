@@ -1,5 +1,6 @@
 #include <Game/Application/Application.hpp>
 #include <Game/Managers/GameManager.hpp>
+#include <Engine/Scene/Scene.hpp>
 #include <Engine/EventSystem/EventDispatcher.hpp>
 #include <Engine/InputSystem/InputEvent.hpp>
 
@@ -18,10 +19,12 @@ void Application_Impl::Initialize()
     GameManager::GetInstanceRef().SetEngineInstance(&m_engineInstance);
 
     m_window = std::make_shared<sf::RenderWindow>();
-    m_window->create(sf::VideoMode(960, 960), "RUN & FIRE");
+    m_window->create(sf::VideoMode(960, 960), "RUN & FIRE & 2");
     m_window->setKeyRepeatEnabled(false); // https://www.sfml-dev.org/tutorials/2.5/window-events.php
     m_window->setFramerateLimit(60);
+
     m_engineInstance.Initialize(m_window);
+    m_engineInstance.GetCurrentScene()->InitFromPrototype("Map1");
 
     m_applicationEventHandler.JoinChannel<EngineEventChannel>();
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnClosedEvent);

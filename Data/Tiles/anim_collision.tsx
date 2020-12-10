@@ -11,7 +11,7 @@
    <property name="originY" type="int" value="36"/>
   </properties>
   <objectgroup draworder="index" id="2">
-   <object id="1" name="Collision" x="10" y="24" width="20" height="24"/>
+   <object id="1" name="Collision" type="Collision" x="10" y="24" width="17.25" height="24"/>
   </objectgroup>
  </tile>
 </tileset>

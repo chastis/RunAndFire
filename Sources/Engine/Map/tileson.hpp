@@ -24573,6 +24573,9 @@ namespace tson
 			inline std::vector<tson::Object> getObjectsByName(const std::string &name);
 			inline std::vector<tson::Object> getObjectsByType(tson::ObjectType type);
 
+			inline std::vector<tson::Object> getObjectsByNameConst(const std::string &name) const;
+			inline std::vector<tson::Object> getObjectsByTypeConst(tson::ObjectType type) const;
+
 			template <typename T>
 			inline T get(const std::string &name);
 			inline tson::Property * getProp(const std::string &name);
@@ -24741,12 +24744,36 @@ std::vector<tson::Object> tson::Layer::getObjectsByName(const std::string &name)
 	return found;
 }
 
+std::vector<tson::Object> tson::Layer::getObjectsByNameConst(const std::string &name) const
+{
+	std::vector<tson::Object> found;
+
+	std::copy_if(m_objects.begin(), m_objects.end(), std::back_inserter(found), [&](const tson::Object &item)
+	{
+		return item.getName() == name;
+	});
+
+	return found;
+}
+
 /*!
  * Copies all objects with a type that equals the parameter
  * @param type LayerType of the objects to return
  * @return All objects with a matching type
  */
 std::vector<tson::Object> tson::Layer::getObjectsByType(tson::ObjectType type)
+{
+	std::vector<tson::Object> found;
+
+	std::copy_if(m_objects.begin(), m_objects.end(), std::back_inserter(found), [&](const tson::Object &item)
+	{
+		return item.getObjectType() == type;
+	});
+
+	return found;
+}
+
+std::vector<tson::Object> tson::Layer::getObjectsByTypeConst(tson::ObjectType type) const
 {
 	std::vector<tson::Object> found;
 

@@ -120,13 +120,14 @@ void MeshComponent::UpdateCollisionParamsFromTile(const tson::Tile* tile)
         const auto& layer = tile->getObjectgroup();
         if (layer.getType() == tson::LayerType::ObjectGroup)
         {
-            const auto& objects = layer.getObjectsConst();
+            const auto& objects = layer.getObjectsByNameConst("Collision");
             if (objects.empty())
             {
                 M42_ASSERT(false, "smth foes wrong");
                 return;
             }
 
+            // todo : add support few collision objects ?
             const auto& obj = objects[0];
 
             m_tileCollisionData.release();

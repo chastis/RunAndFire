@@ -62,8 +62,7 @@ void Engine::ChangeGameMode(EGameMode newMode)
             InputManager::GetInstanceRef().PushActionMap("game_input");
             Scene scene;
             scene.Initialize(m_renderTargetWeak);
-            scene.InitFromPrototype();
-            m_scenes.push(scene);
+            m_scenes.push(std::move(scene));
         }
     case EGameMode::Menu: break;
     default: ;
@@ -78,6 +77,16 @@ void Engine::Update(float deltaTime)
     m_debug->Update(deltaTime);
 #endif //DEBUG
 }
+
+Scene* Engine::GetCurrentScene()
+{
+    if (m_scenes.empty())
+    {
+        return nullptr;
+    }
+    return &m_scenes.top();
+}
+
 void Engine::OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event)
 {
     if (event.component->IsKindOf(PhysicBodyComponentBase::GetStaticType()))

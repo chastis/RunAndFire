@@ -33,7 +33,7 @@ public:
     void Shutdown();
     void ChangeGameMode(EGameMode newMode);
     void Update(float deltaTime);
-
+    Scene* GetCurrentScene();
 private:
     void OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event);
 private:

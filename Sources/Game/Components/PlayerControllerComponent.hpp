@@ -14,14 +14,18 @@ class PlayerControllerComponent : public ControllerComponent, public InputClient
 public:
     PlayerControllerComponent();
 
-    void InitFromPrototypeSpecific() override;
     void Update(float deltaTime) override;
     bool HandleInput(const ActionSignal& signal) override;
 private:
+    void InitFromPrototypeSpecific() override;
     void PostInitSpecific() override;
+
+    void Jump();
 private:
     sf::Vector2f m_speed;
-    sf::Vector2f m_direction;
 
     PhysicBodyComponent* m_physicComponent = nullptr;
+
+    float m_direction = 0.f;
+    float m_jumpForce = 0.f;
 };

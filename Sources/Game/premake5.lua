@@ -42,7 +42,7 @@ project "RunAndFire"
 
     filter "configurations:Debug"
         kind "ConsoleApp"
-        defines { "DEBUG", "WORKING_DIRECTORY=".."\"%{wks.location}/../Data\"" }
+        defines { "DEBUG", "WORKING_DIRECTORY=".."\"%{wks.location}/../Data\"", "PROFILE_ENABLED" }
         symbols "On"
         runtime "Debug"
 

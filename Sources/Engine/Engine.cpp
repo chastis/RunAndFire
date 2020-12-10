@@ -32,7 +32,7 @@ void Engine::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
 {
     m_renderTargetWeak = renderTarget;
     m_physicEngine.SetFramerate(1.f / 60.f);
-    m_physicEngine.SetGravity(0, 500);
+    m_physicEngine.SetGravity(0, Const::G);
 
     ChangeGameMode(EGameMode::Game);
 

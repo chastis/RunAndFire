@@ -28,6 +28,22 @@ void PhysicBodyComponentBase::SetLinearVelocity(float x, float y)
     m_body->SetLinearVelocity({ x, y });
 }
 
+void PhysicBodyComponentBase::ApplyImpulse(float x, float y)
+{
+    m_body->ApplyLinearImpulseToCenter({ x, y }, true);
+}
+
+float PhysicBodyComponentBase::GetMass() const
+{
+    return m_body->GetMass();
+}
+
+sf::Vector2f PhysicBodyComponentBase::GetLinearVelocity() const
+{
+    auto velocity = m_body->GetLinearVelocity();
+    return { velocity.x, velocity.y };
+}
+
 void PhysicBodyComponentBase::SetFixtures(sf::Vector2f origin, const std::vector<sf::Vector2f>& vertices)
 {
     M42_ASSERT(m_body, "there is no body");

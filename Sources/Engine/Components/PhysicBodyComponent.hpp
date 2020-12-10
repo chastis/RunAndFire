@@ -7,6 +7,7 @@
 class MeshComponent;
 class PhysicEngine;
 class b2Body;
+class b2Fixture;
 struct b2FixtureDef;
 
 class PhysicBodyComponentBase : public BaseComponent
@@ -22,6 +23,9 @@ public:
     void SetLinearVelocity(float x, float y);
     void ApplyImpulse(float x, float y);
     float GetMass() const;
+
+    b2Fixture* GetFixtures();
+    const b2Fixture* GetFixtures() const;
 
     sf::Vector2f GetLinearVelocity() const;
 

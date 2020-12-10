@@ -38,6 +38,16 @@ float PhysicBodyComponentBase::GetMass() const
     return m_body->GetMass();
 }
 
+b2Fixture* PhysicBodyComponentBase::GetFixtures()
+{
+    return m_body->GetFixtureList();
+}
+
+const b2Fixture* PhysicBodyComponentBase::GetFixtures() const
+{
+    return m_body->GetFixtureList();
+}
+
 sf::Vector2f PhysicBodyComponentBase::GetLinearVelocity() const
 {
     auto velocity = m_body->GetLinearVelocity();

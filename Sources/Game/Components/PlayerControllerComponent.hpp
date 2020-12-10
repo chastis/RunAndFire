@@ -17,6 +17,7 @@ public:
     bool HandleInput(const ActionSignal& signal) override;
 private:
     void PostInitSpecific() override;
+    void SetPlayerFriction(float friction);
 
     void Jump();
 private:
@@ -26,4 +27,5 @@ private:
 
     float m_direction = 0.f;
     float m_jumpForce = 0.f;
+    float m_friction = 0.f;
 };

@@ -80,7 +80,7 @@ void PlayerControllerComponent::Attack()
     auto b = GetOwnerRef().getPosition();
     auto c = GetOwnerRef().getTransform().transformPoint(0.f, 0.f);
     auto d = GetOwnerRef().getPosition() - GetOwnerRef().getOrigin();
-    sf::Vector2f attackPoint = GetOwnerRef().getPosition() + sf::Vector2f(m_viewDirection, 0.f) * 200.f;
+    sf::Vector2f attackPoint = GetOwnerRef().getPosition() + sf::Vector2f(m_viewDirection, 0.f) * 42.f;
     auto enemy = m_physicComponent->RayCastGetEntity(attackPoint);
     if (enemy)
     {

@@ -56,11 +56,14 @@ Entity* PhysicEngine::RayCastGetEntity(Entity* caster, sf::Vector2f point) const
         return nullptr;
     }
     EntityRayCastCallback callback(caster);
-    sf::Vector2f meshStart = caster->getPosition();// - caster->getOrigin();
+    const sf::Vector2f casterOriginPosition = caster->getPosition() - caster->getOrigin();
+    sf::Vector2f meshStart = casterOriginPosition;
+    point -= caster->getOrigin();
     if (const auto meshComponent = caster->GetKindOfComponent<MeshComponentBase>())
     {
-        //meshStart += meshComponent->getPosition();
-        //point  += meshComponent->getPosition();
+        meshStart += meshComponent->getOrigin();
+        point += meshComponent->getOrigin();
+        //point  += meshComponent->getPosition() + meshComponent->getOrigin();
     }
     #if defined(DEBUG)
     if (!caster->GetComponent<DebugInfoComponent>())
@@ -73,9 +76,12 @@ Entity* PhysicEngine::RayCastGetEntity(Entity* caster, sf::Vector2f point) const
         debugComponent->shape.setOutlineColor(sf::Color::Red);
         debugComponent->shape.setPointCount(3);
         debugComponent->shape.setPosition(0.f, 0.f);
-        debugComponent->shape.setPoint(0, meshStart - caster->getPosition());
-        debugComponent->shape.setPoint(1, point - caster->getPosition());
-        debugComponent->shape.setPoint(2, meshStart - caster->getPosition() - sf::Vector2f(2.f, 2.f));
+        //debugComponent->shape.setPoint(0, meshStart - caster->getPosition());
+        debugComponent->shape.setPoint(0, {0.f, 0.f});
+        //debugComponent->shape.setPoint(1, point - caster->getPosition());
+        debugComponent->shape.setPoint(1, point - casterOriginPosition);
+        //debugComponent->shape.setPoint(2, meshStart - caster->getPosition() - sf::Vector2f(2.f, 2.f));
+        debugComponent->shape.setPoint(2, - sf::Vector2f(2.f, 2.f));
     }
     #endif //DEBUG
 

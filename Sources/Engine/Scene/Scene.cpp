@@ -5,10 +5,7 @@
 #include <Engine/Components/MeshComponent.hpp>
 #include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Prototypes/ScenePrototype.hpp>
-
-#if defined(DEBUG)
 #include <Engine/Debugging/Scene_Debug.hpp>
-#endif
 
 Scene::Scene()
 #if defined(DEBUG)

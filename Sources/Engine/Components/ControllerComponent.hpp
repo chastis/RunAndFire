@@ -13,8 +13,7 @@ public:
     void ConnectEvent(TypeId eventType) override;
     sf::Vector2f m_velocity;
 protected:
-    void UpdateMovement(float deltaTime);
     void SetMeshScale(sf::Vector2f scale);
     void SetMeshScale(float x, float y);
-    //void OnCollision(EntityEvents::CollisionEntityEvent& entityEvent);
+    void ChangeAnimation(const std::string& animationName);
 };

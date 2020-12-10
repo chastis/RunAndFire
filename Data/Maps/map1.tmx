@@ -7,6 +7,7 @@
  <tileset firstgid="1161" source="../Tiles/MagicCliffsEnvironment_clouds.tsx"/>
  <tileset firstgid="1637" source="../Tiles/anim_idle.tsx"/>
  <tileset firstgid="1641" source="../Tiles/anim_collision.tsx"/>
+ <tileset firstgid="1642" source="../Tiles/anim_run.tsx"/>
  <imagelayer id="4" name="Image Layer 1"/>
  <layer id="5" name="bottom_layer" width="20" height="20">
   <data encoding="csv">

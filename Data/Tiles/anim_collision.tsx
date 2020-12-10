@@ -11,7 +11,8 @@
    <property name="originY" type="int" value="36"/>
   </properties>
   <objectgroup draworder="index" id="2">
-   <object id="1" name="Collision" type="Collision" x="10" y="24" width="17.25" height="24"/>
+   <object id="1" name="Collision" type="Collision" x="11.4545" y="25.2727" width="14.3409" height="22"/>
+   <object id="2" name="Overlap" type="Overlap" x="12.7273" y="47.2727" width="12" height="1.27273"/>
   </objectgroup>
  </tile>
 </tileset>

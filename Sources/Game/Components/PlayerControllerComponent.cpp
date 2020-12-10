@@ -32,18 +32,22 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
     }
     if (signal == ActionSignal("move_left"))
     {
+        ChangeAnimation("anim_run");
         m_direction += -1.f;
     }
     if (signal == ActionSignal("move_right"))
     {
+        ChangeAnimation("anim_run");
         m_direction += 1.f;
     }
     if (signal == ActionSignal("stop_move_left"))
     {
+        ChangeAnimation("anim_idle");
         m_direction -= -1.f;
     }
     if (signal == ActionSignal("stop_move_right"))
     {
+        ChangeAnimation("anim_idle");
         m_direction -= 1.f;
     }
 
@@ -62,11 +66,7 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
 void PlayerControllerComponent::PostInitSpecific()
 {
     m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
-    auto meshComponent = GetOwnerRef().GetComponent<MeshComponent>();
-    if (meshComponent)
-    {
-        meshComponent->ChangeAnimation("anim_idle");
-    }
+    ChangeAnimation("anim_idle");
 }
 
 void PlayerControllerComponent::Jump()

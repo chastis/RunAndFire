@@ -8,14 +8,16 @@
 
 class PhysicBodyComponent;
 
-class PlayerControllerComponent : public PrototypeableControllerComponent<PlayerControllerPrototype>, public InputClient
+class PlayerControllerComponent : public ControllerComponent, public InputClient
 {
-    DECLARE_DYNAMIC_TYPE(PlayerControllerComponent, PrototypeableControllerComponent<PlayerControllerPrototype>)
+    DECLARE_DYNAMIC_TYPE(PlayerControllerComponent, ControllerComponent)
 public:
-    void InitFromPrototype() override;
+    PlayerControllerComponent();
+
     void Update(float deltaTime) override;
     bool HandleInput(const ActionSignal& signal) override;
 private:
+    void InitFromPrototypeSpecific() override;
     void PostInitSpecific() override;
     void SetPlayerFriction(float friction);
 

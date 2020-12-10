@@ -3,8 +3,8 @@
     </Default>
     <PlayerPrototype>
         <components>
-            <PhysicBodyComponent prototype = "PlayerPhysicBody"/>
             <MeshComponent prototype = "PlayerPrototype"/>
+            <PhysicBodyComponent prototype = "PlayerPhysicBody"/>
             <PlayerControllerComponent prototype = "PlayerPrototype"/>
             <EventHandlerComponent prototype = "PlayerPrototype"/>
         </components>

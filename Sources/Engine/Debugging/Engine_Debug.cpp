@@ -14,7 +14,7 @@ Engine::Debug::Debug(Engine& owner)
 void Engine::Debug::Initialize()
 {
     return;
-    Entity* a = EntityManager::GetInstanceRef().CreateEntity();
+    /*Entity* a = EntityManager::GetInstanceRef().CreateEntity();
     a->setPosition(150.f, 0.f);
     a->SetPrototype("PlayerPrototype");
     a->InitFromPrototype();
@@ -28,7 +28,7 @@ void Engine::Debug::Initialize()
     Entity* c = EntityManager::GetInstanceRef().CreateEntity();
     c->setPosition(300.f, 300.f);
     c->SetPrototype("GroundPrototype");
-    c->InitFromPrototype();
+    c->InitFromPrototype();*/
 
 }
 

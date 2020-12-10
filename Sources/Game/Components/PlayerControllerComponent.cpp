@@ -1,12 +1,22 @@
 #include <Game/Components/PlayerControllerComponent.hpp>
 #include <Engine/Components/PhysicBodyComponent.hpp>
+#include <Engine/Components/MeshComponent.hpp>
 #include <Engine/Entity/Entity.hpp>
-
 #include <Engine/Physics/Box2D/b2_fixture.h>
+
+PlayerControllerComponent::PlayerControllerComponent()
+{
+    m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<PlayerControllerPrototype>>());
+}
 
 void PlayerControllerComponent::InitFromPrototype()
 {
-    const auto& prototype = GetPrototype();
+    m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<PlayerControllerPrototype>>());
+}
+
+void PlayerControllerComponent::InitFromPrototypeSpecific()
+{
+    const auto& prototype = GetPrototype<PlayerControllerPrototype>();
  
     m_speed = prototype.GetSpeed();
     m_jumpForce = prototype.GetJumpForce();
@@ -26,32 +36,46 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
     }
     if (signal == ActionSignal("move_left"))
     {
+        ChangeAnimation("anim_run");
         m_direction += -1.f;
         SetPlayerFriction(0.f);
     }
     if (signal == ActionSignal("move_right"))
     {
+        ChangeAnimation("anim_run");
         m_direction += 1.f;
         SetPlayerFriction(0.f);
     }
     if (signal == ActionSignal("stop_move_left"))
     {
+        ChangeAnimation("anim_idle");
         m_direction -= -1.f;
         SetPlayerFriction(m_friction);
     }
     if (signal == ActionSignal("stop_move_right"))
     {
+        ChangeAnimation("anim_idle");
         m_direction -= 1.f;
         SetPlayerFriction(m_friction);
     }
+
+    if (m_direction > 0)
+    {
+        SetMeshScale(1.f, 1.f);
+    }
+    else if (m_direction < 0)
+    {
+        SetMeshScale(-1.f, 1.f);
+    }
+
     return false;
 }
 
 void PlayerControllerComponent::PostInitSpecific()
 {
-    m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
-
+    m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>(
     m_friction = m_physicComponent->GetFixtures()->GetFriction();
+    ChangeAnimation("anim_idle");
 }
 
 void PlayerControllerComponent::SetPlayerFriction(float friction)

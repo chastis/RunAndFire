@@ -5,16 +5,9 @@
 #include <Utility/Types/DynamicType.hpp>
 #include <Utility/Core/Noncopyable.hpp>
 
-enum class EComponentStatus
-{
-    Created,
-    PostPrototypeInit,
-    Initialized
-};
-
 class Entity;
 
-class BaseComponent : public DynamicType, public Noncopyable
+class BaseComponent : public DynamicType, public Noncopyable, public IPrototypeable
 {
     DECLARE_DYNAMIC_TYPE(BaseComponent, DynamicType)
 public:
@@ -25,38 +18,19 @@ public:
     void Init(Entity* owner);
     void PostInit();
 
-    virtual void InitPrototype(const std::string& prototypeName);
-    virtual void InitPrototype(size_t prototypeID);
-    void PostPrototypeInit();
     virtual void ConnectEvent(TypeId eventType);
+    template <class T>
+    const T& GetPrototype() const;
 protected:    
-
     virtual void InitSpecific() {};
-    virtual void PostPrototypeInitSpecific() {};
     virtual void PostInitSpecific() {};
+
     Entity* m_owner = nullptr;
     EventHandler m_eventHandler;
-    EComponentStatus m_status = EComponentStatus::Created;
-
-    // todo : rewrite using this, instead of inheritance
-    std::unique_ptr<IPrototypeableBase> m_prototype; 
 };
 
 template <class T>
-class PrototypeableBaseComponent : public BaseComponent, public IPrototypeable<T>
+const T& BaseComponent::GetPrototype() const
 {
-    DECLARE_DYNAMIC_TYPE(BasePrototypeableComponent, BaseComponent)
-public:
-    void InitPrototype(const std::string& prototypeName) override
-    {
-        this->SetPrototype(prototypeName);
-        this->InitFromPrototype();
-        m_status = EComponentStatus::PostPrototypeInit;
-    }
-    void InitPrototype(size_t prototypeID) override
-    {
-        this->SetPrototype(prototypeID);
-        this->InitFromPrototype();
-        m_status = EComponentStatus::PostPrototypeInit;
-    }
-};
+    return *reinterpret_cast<const T *>(m_prototypeWrapper->GetBasePrototype());
+}

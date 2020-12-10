@@ -11,13 +11,12 @@ class BaseComponent;
 
 using UID = size_t;
 
-class Entity final : public sf::Transformable, public Noncopyable, public ReferenceCountable<DefaultThreadPolicy>, public IPrototypeable<EntityPrototype>
+class Entity final : public sf::Transformable, public Noncopyable, public IPrototypeable, public ReferenceCountable<DefaultThreadPolicy>
 {
 public:
     Entity();
     ~Entity();
 
-    void InitFromPrototype() override;
     void PostInitComponents();
 
     template <class T>
@@ -40,7 +39,8 @@ public:
 
     void Update(float deltaTime);
 private:
-    void PostPrototypeInitComponents();
+    void InitFromPrototypeSpecific() override;
+
     std::vector<std::unique_ptr<BaseComponent>> m_components;
     UID m_UID = 0;
     friend class EntityManager_Impl;

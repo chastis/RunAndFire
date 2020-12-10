@@ -2,9 +2,14 @@
 #include <Engine/Entity/EntityEvents.hpp>
 #include <Engine/Entity/Entity.hpp>
 
-void EventHandlerComponent::InitFromPrototype()
+EventHandlerComponent::EventHandlerComponent()
 {
-    const auto& componentEventsInfo = GetPrototype().GetEventsInfo();
+    m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<EventHandlerPrototype>>());
+}
+
+void EventHandlerComponent::InitFromPrototypeSpecific()
+{
+    const auto& componentEventsInfo = GetPrototype<EventHandlerPrototype>().GetEventsInfo();
     for (const auto& eventInfo : componentEventsInfo)
     {
         for (const auto& eventId : eventInfo.second)

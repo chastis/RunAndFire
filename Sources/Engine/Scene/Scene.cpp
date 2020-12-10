@@ -10,11 +10,16 @@
 #include <Engine/Debugging/Scene_Debug.hpp>
 #endif
 
-Scene::Scene() 
+Scene::Scene()
+#if defined(DEBUG)
+    : m_debug(*this)
+#endif
 {
 
     m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<ScenePrototype>>());
 }
+
+Scene::~Scene() = default;
 
 void Scene::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
 {
@@ -144,7 +149,7 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
         const bool isCollision = obj.getType() == "Collision";
 
         #if defined(DEBUG)
-        //m_debug->DebugInitObject(*entity, obj);
+        m_debug->DebugInitObject(*entity, obj);
         #endif //DEBUG
 
         if (isCollision)

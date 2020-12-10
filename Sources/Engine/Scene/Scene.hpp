@@ -27,6 +27,7 @@ class Scene : public IPrototypeable
 {
 public:
     Scene();
+    ~Scene();
 
     void Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget);
     void Update(float deltaTime);
@@ -44,7 +45,7 @@ private:
 
     #if defined(DEBUG)
     class SceneDebug;
-    SceneDebug* m_debug;
+    FastPimpl<SceneDebug, 8, 8> m_debug;
     #endif
 };
 

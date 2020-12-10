@@ -38,7 +38,7 @@ private:
     void OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event);
 private:
     std::weak_ptr<sf::RenderTarget> m_renderTargetWeak;
-    std::stack<Scene> m_scenes;
+    std::stack<std::unique_ptr<Scene>> m_scenes;
     PhysicEngine m_physicEngine;
     EventHandler m_eventHandler;
 

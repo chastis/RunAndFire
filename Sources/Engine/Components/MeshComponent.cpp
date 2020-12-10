@@ -51,6 +51,17 @@ const TileCollisionData* MeshComponent::GetTileCollisionParamData() const
     return m_tileCollisionData.get();
 }
 
+void MeshComponent::PostPrototypeInitSpecific()
+{
+    MeshComponentBase::PostPrototypeInitSpecific();
+    if (m_tileCollisionData)
+    {
+        //GetOwnerRef().setOrigin(m_tileCollisionData->m_origin);
+        setOrigin(m_tileCollisionData->m_origin);
+        setPosition(m_tileCollisionData->m_origin);
+    }
+}
+
 void MeshComponent::ChangeTile(uint32_t id)
 {
     if (!m_tile)
@@ -129,18 +140,27 @@ void MeshComponent::UpdateCollisionParamsFromTile(const tson::Tile* tile)
             m_tileCollisionData->m_vertices.emplace_back(objPos.x, objPos.y + objPos.y);
             m_tileCollisionData->m_vertices.emplace_back(objPos.x + objSize.x, objPos.y + objPos.y);
 
+            const auto size = getLocalBounds();
+            m_tileCollisionData->m_origin.x = size.width / 2;
+            m_tileCollisionData->m_origin.y = size.height / 2;
+
             const auto& prop = tile->getPropertiesConst().getPropertiesConst();
             auto propIt = prop.find("originX");
             if (propIt != prop.end())
             {
                 const tson::Property& value = propIt->second;
-                //m_tileCollisionData->m_origin.x = static_cast<float>(value.getValue<int>());
+                m_tileCollisionData->m_origin.x = static_cast<float>(value.getValue<int>());
             }
             propIt = prop.find("originY");
             if (propIt != prop.end())
             {
                 const tson::Property& value = propIt->second;
-                //m_tileCollisionData->m_origin.y = static_cast<float>(value.getValue<int>());
+                m_tileCollisionData->m_origin.y = static_cast<float>(value.getValue<int>());
+            }
+
+            for (auto& vertices : m_tileCollisionData->m_vertices)
+            {
+                vertices -= m_tileCollisionData->m_origin;
             }
         }
     }

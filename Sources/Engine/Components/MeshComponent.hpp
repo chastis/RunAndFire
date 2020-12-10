@@ -36,6 +36,8 @@ public:
     void ChangeAnimation(std::string animationName);
     const TileCollisionData* GetTileCollisionParamData() const;
 protected:
+    void PostPrototypeInitSpecific() override;
+
     void ChangeTile(uint32_t id);
     void ChangeAnimation(const TileInfo& tileInfo);
     void UpdateCollisionParamsFromTile(const tson::Tile* tile);

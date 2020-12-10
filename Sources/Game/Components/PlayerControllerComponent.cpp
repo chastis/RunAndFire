@@ -53,6 +53,16 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
     {
         m_direction.x -= 1.f;
     }
+
+    if (m_direction.x > 0)
+    {
+        SetMeshScale(1.f, 1.f);
+    }
+    else if (m_direction.x < 0)
+    {
+        SetMeshScale(-1.f, 1.f);
+    }
+
     return false;
 }
 

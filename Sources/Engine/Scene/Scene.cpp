@@ -110,7 +110,6 @@ void Scene::InitTiledLayer(const tson::Layer& layer)
         
         const tson::Vector2f position = tileObject.getPosition(); 
         entity->setPosition({position.x + drawingRect.width / 2, position.y + drawingRect.height / 2});
-
         entity->PostInitComponents();
 
         m_layers.back().objects.push_back(entity);
@@ -132,13 +131,12 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
         Entity* entity = EntityManager::GetInstanceRef().CreateEntity();
         const sf::Vector2f position = {static_cast<float>(obj.getPosition().x + obj.getSize().x / 2), static_cast<float>(obj.getPosition().y + obj.getSize().y / 2)};
         entity->setPosition({position.x, position.y});
-        
-        entity->SetPrototype(obj.getName());
-        entity->InitFromPrototype();
+
+        entity->InitFromPrototype(obj.getName());
 
         const bool isRect = obj.getType() == "Rect";
 
-        if (isRect)
+        if (false && isRect)
         {
             auto meshComp = entity->AddComponent<MeshComponentBase>();
             const sf::Texture* texture = AssetManager::GetInstanceRef().GetAsset<sf::Texture>("Content/red.png");
@@ -146,8 +144,12 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
             const sf::IntRect drawingRect = {0, 0, obj.getSize().x, obj.getSize().y};
             meshComp->setTextureRect(drawingRect);
         }
+        if (isRect)
+        {
+            entity->setOrigin(obj.getSize().x / 2.f, obj.getSize().y / 2.f);
+        }
 
-        if (true && obj.getType() == "Player")
+        if (false && obj.getType() == "Player")
         {
             const auto baseMeshComp = entity->GetKindOfComponent<MeshComponentBase>();
             const auto baseBounds = baseMeshComp->getLocalBounds();

@@ -67,28 +67,19 @@ void PhysicBodyComponentBase::CreateFixture(const b2FixtureDef& fixtureDef)
     m_body->CreateFixture(&fixtureDef);
 }
 
+PhysicBodyComponent::PhysicBodyComponent()
+{
+    m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<PhysicBodyPrototype>>());
+}
+
 PhysicBodyComponent::~PhysicBodyComponent()
 {
     m_engine->DestroyBody(m_body);
 }
 
-void PhysicBodyComponent::InitPrototype(const std::string& prototypeName)
+void PhysicBodyComponent::InitFromPrototypeSpecific()
 {
-    this->SetPrototype(prototypeName);
-    this->InitFromPrototype();
-    m_status = EComponentStatus::PostPrototypeInit;
-}
-
-void PhysicBodyComponent::InitPrototype(size_t prototypeID)
-{
-    this->SetPrototype(prototypeID);
-    this->InitFromPrototype();
-    m_status = EComponentStatus::PostPrototypeInit;
-}
-
-void PhysicBodyComponent::InitFromPrototype()
-{
-    const auto& prototype = GetPrototype();
+    const auto& prototype = GetPrototype<PhysicBodyPrototype>();
     m_bodyDef = prototype.GetBodyDefinition();
     auto entityPosition = GetOwnerRef().getPosition();
     m_bodyDef.position.Set(entityPosition.x / Const::PixelPerUnit, entityPosition.y / Const::PixelPerUnit);
@@ -104,7 +95,7 @@ void PhysicBodyComponent::InitFromPrototype()
 void PhysicBodyComponent::PostInitSpecific()
 {
     PhysicBodyComponentBase::PostInitSpecific();
-    if (GetPrototype().ShouldInitFromMesh())
+    if (m_prototypeWrapper &&  GetPrototype<PhysicBodyPrototype>().ShouldInitFromMesh())
     {
         auto meshComponent = GetOwnerRef().GetComponent<MeshComponent>();
         M42_ASSERT(meshComponent, "No mesh to initialize physic component!");

@@ -1,10 +1,16 @@
 #include <Game/Components/PlayerControllerComponent.hpp>
+#include <Engine/Components/MeshComponent.hpp>
 #include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Entity/Entity.hpp>
 
-void PlayerControllerComponent::InitFromPrototype()
+PlayerControllerComponent::PlayerControllerComponent()
 {
-    m_speed = GetPrototype().GetSpeed();
+    m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<PlayerControllerPrototype>>());
+}
+
+void PlayerControllerComponent::InitFromPrototypeSpecific()
+{
+    m_speed = GetPrototype<PlayerControllerPrototype>().GetSpeed();
 }
 
 void PlayerControllerComponent::Update(float deltaTime)
@@ -53,4 +59,9 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
 void PlayerControllerComponent::PostInitSpecific()
 {
     m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
+    auto meshComponent = GetOwnerRef().GetComponent<MeshComponent>();
+    if (meshComponent)
+    {
+        meshComponent->ChangeAnimation("anim_idle");
+    }
 }

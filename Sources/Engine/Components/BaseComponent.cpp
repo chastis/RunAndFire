@@ -22,33 +22,17 @@ void BaseComponent::Init(Entity* owner)
 
 void BaseComponent::PostInit()
 {
-    M42_ASSERT(m_status == EComponentStatus::PostPrototypeInit, "You forget to postProtInit your nonprototypeable component");
+    if (!m_prototypeWrapper)
+    {
+        // if there is no m_prototypeWrapper we still want to PostPrototypeInitSpecific
+        // because it called in InitFromPrototype, which will not call in NON-prototype component
+        PostPrototypeInitSpecific();
+    }
     PostInitSpecific();
     if (auto eventComponent = GetOwnerRef().GetComponent<EventHandlerComponent>())
     {
         eventComponent->ConnectHandler(m_eventHandler);
     }
-    m_status = EComponentStatus::Initialized;
-}
-
-void BaseComponent::InitPrototype(const std::string& prototypeName)
-{
-    M42_ASSERT(false, "you call this in not-inherited prototype class");
-}
-
-void BaseComponent::InitPrototype(size_t prototypeID)
-{
-    M42_ASSERT(false, "you call this in not-inherited prototype class");
-}
-
-void BaseComponent::PostPrototypeInit()
-{
-    if (m_status == EComponentStatus::PostPrototypeInit)
-    {
-        return;
-    }
-    PostPrototypeInitSpecific();
-    m_status = EComponentStatus::PostPrototypeInit;
 }
 
 void BaseComponent::ConnectEvent(TypeId eventType)

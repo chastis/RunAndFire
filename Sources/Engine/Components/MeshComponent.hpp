@@ -25,15 +25,14 @@ struct TileCollisionData
     sf::Vector2f m_origin;
 };
 
-class MeshComponent : public MeshComponentBase, public IPrototypeable<MeshPrototype>
+class MeshComponent : public MeshComponentBase
 {
     DECLARE_DYNAMIC_TYPE(MeshComponent, MeshComponentBase)
 public:
-    void InitFromPrototype() override;
-    void Update(float deltaTime) override;
+    MeshComponent();
 
-    void InitPrototype(const std::string& prototypeName) override;
-    void InitPrototype(size_t prototypeID) override;
+    void InitFromPrototypeSpecific() override;
+    void Update(float deltaTime) override;
     void ChangeAnimation(std::string animationName);
     const TileCollisionData* GetTileCollisionParamData() const;
 protected:

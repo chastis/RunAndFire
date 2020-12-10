@@ -7,11 +7,13 @@
 
 class Event;
 
-class EventHandlerComponent : public PrototypeableBaseComponent<EventHandlerPrototype>
+class EventHandlerComponent : public BaseComponent
 {
-    DECLARE_DYNAMIC_TYPE(EventHandlerComponent, PrototypeableBaseComponent<EventHandlerPrototype>)
+    DECLARE_DYNAMIC_TYPE(EventHandlerComponent, BaseComponent)
 public:
-    void InitFromPrototype() override;
+    EventHandlerComponent();
+
+    void InitFromPrototypeSpecific() override;
     void Update(float deltaTime) override;
     void DispatchEvent(Event& entityEvent);
     void ConnectHandler(EventHandler& handler);

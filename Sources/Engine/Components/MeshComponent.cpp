@@ -11,9 +11,14 @@ void MeshComponentBase::PostPrototypeInitSpecific()
     setPosition(size.width / 2, size.height / 2);
 }
 
-void MeshComponent::InitFromPrototype()
+MeshComponent::MeshComponent()
 {
-    const auto& collisionTile = GetPrototype().GetCollisionTile();
+    m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<MeshPrototype>>());
+}
+
+void MeshComponent::InitFromPrototypeSpecific()
+{
+    const auto& collisionTile = GetPrototype<MeshPrototype>().GetCollisionTile();
     ChangeAnimation(collisionTile);
     UpdateCollisionParamsFromTile(m_tile);
 }
@@ -35,23 +40,9 @@ void MeshComponent::Update(float deltaTime)
     }
 }
 
-void MeshComponent::InitPrototype(const std::string& prototypeName)
-{
-    this->SetPrototype(prototypeName);
-    this->InitFromPrototype();
-    m_status = EComponentStatus::PostPrototypeInit;
-}
-
-void MeshComponent::InitPrototype(size_t prototypeID)
-{
-    this->SetPrototype(prototypeID);
-    this->InitFromPrototype();
-    m_status = EComponentStatus::PostPrototypeInit;
-}
-
 void MeshComponent::ChangeAnimation(std::string animationName)
 {
-    const auto& tileInfo = GetPrototype().GetAnimationTile(animationName);
+    const auto& tileInfo = GetPrototype<MeshPrototype>().GetAnimationTile(animationName);
     ChangeAnimation(tileInfo);
 }
 

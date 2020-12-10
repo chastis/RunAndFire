@@ -9,6 +9,7 @@
 
 #if defined(DEBUG)
 #include <Engine/Debugging/Engine_Debug.hpp>
+#include <Engine/Debugging/Scene_Debug.hpp>
 #endif
 
 Engine::Engine()
@@ -42,7 +43,7 @@ void Engine::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
 
 void Engine::Draw()
 {
-    m_scenes.top().Draw();
+    m_scenes.top()->Draw();
 }
 
 void Engine::Shutdown()
@@ -60,10 +61,9 @@ void Engine::ChangeGameMode(EGameMode newMode)
     case EGameMode::Game:
         {
             InputManager::GetInstanceRef().PushActionMap("game_input");
-            Scene scene;
-            scene.Initialize(m_renderTargetWeak);
-            scene.InitFromPrototype();
-            m_scenes.push(scene);
+            auto scene = std::make_unique<Scene>();
+            scene->Initialize(m_renderTargetWeak);
+            m_scenes.push(std::move(scene));
         }
     case EGameMode::Menu: break;
     default: ;
@@ -73,11 +73,24 @@ void Engine::ChangeGameMode(EGameMode newMode)
 void Engine::Update(float deltaTime)
 {
     m_physicEngine.Update();
-    m_scenes.top().Update(deltaTime);
+    if (!m_scenes.empty())
+    {
+        m_scenes.top()->Update(deltaTime);
+    }
 #if defined(DEBUG)
     m_debug->Update(deltaTime);
 #endif //DEBUG
 }
+
+Scene* Engine::GetCurrentScene()
+{
+    if (m_scenes.empty())
+    {
+        return nullptr;
+    }
+    return m_scenes.top().get();
+}
+
 void Engine::OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event)
 {
     if (event.component->IsKindOf(PhysicBodyComponentBase::GetStaticType()))

@@ -11,9 +11,14 @@ void MeshComponentBase::PostPrototypeInitSpecific()
     setPosition(size.width / 2, size.height / 2);
 }
 
-void MeshComponent::InitFromPrototype()
+MeshComponent::MeshComponent()
 {
-    const auto& collisionTile = GetPrototype().GetCollisionTile();
+    m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<MeshPrototype>>());
+}
+
+void MeshComponent::InitFromPrototypeSpecific()
+{
+    const auto& collisionTile = GetPrototype<MeshPrototype>().GetCollisionTile();
     ChangeAnimation(collisionTile);
     UpdateCollisionParamsFromTile(m_tile);
 }
@@ -35,29 +40,26 @@ void MeshComponent::Update(float deltaTime)
     }
 }
 
-void MeshComponent::InitPrototype(const std::string& prototypeName)
-{
-    this->SetPrototype(prototypeName);
-    this->InitFromPrototype();
-    m_status = EComponentStatus::PostPrototypeInit;
-}
-
-void MeshComponent::InitPrototype(size_t prototypeID)
-{
-    this->SetPrototype(prototypeID);
-    this->InitFromPrototype();
-    m_status = EComponentStatus::PostPrototypeInit;
-}
-
 void MeshComponent::ChangeAnimation(std::string animationName)
 {
-    const auto& tileInfo = GetPrototype().GetAnimationTile(animationName);
+    const auto& tileInfo = GetPrototype<MeshPrototype>().GetAnimationTile(animationName);
     ChangeAnimation(tileInfo);
 }
 
 const TileCollisionData* MeshComponent::GetTileCollisionParamData() const
 {
     return m_tileCollisionData.get();
+}
+
+void MeshComponent::PostPrototypeInitSpecific()
+{
+    MeshComponentBase::PostPrototypeInitSpecific();
+    if (m_tileCollisionData)
+    {
+        //GetOwnerRef().setOrigin(m_tileCollisionData->m_origin);
+        setOrigin(m_tileCollisionData->m_origin);
+        setPosition(m_tileCollisionData->m_origin);
+    }
 }
 
 void MeshComponent::ChangeTile(uint32_t id)
@@ -118,13 +120,14 @@ void MeshComponent::UpdateCollisionParamsFromTile(const tson::Tile* tile)
         const auto& layer = tile->getObjectgroup();
         if (layer.getType() == tson::LayerType::ObjectGroup)
         {
-            const auto& objects = layer.getObjectsConst();
+            const auto& objects = layer.getObjectsByNameConst("Collision");
             if (objects.empty())
             {
                 M42_ASSERT(false, "smth foes wrong");
                 return;
             }
 
+            // todo : add support few collision objects ?
             const auto& obj = objects[0];
 
             m_tileCollisionData.release();
@@ -138,18 +141,27 @@ void MeshComponent::UpdateCollisionParamsFromTile(const tson::Tile* tile)
             m_tileCollisionData->m_vertices.emplace_back(objPos.x, objPos.y + objPos.y);
             m_tileCollisionData->m_vertices.emplace_back(objPos.x + objSize.x, objPos.y + objPos.y);
 
+            const auto size = getLocalBounds();
+            m_tileCollisionData->m_origin.x = size.width / 2;
+            m_tileCollisionData->m_origin.y = size.height / 2;
+
             const auto& prop = tile->getPropertiesConst().getPropertiesConst();
             auto propIt = prop.find("originX");
             if (propIt != prop.end())
             {
                 const tson::Property& value = propIt->second;
-                //m_tileCollisionData->m_origin.x = static_cast<float>(value.getValue<int>());
+                m_tileCollisionData->m_origin.x = static_cast<float>(value.getValue<int>());
             }
             propIt = prop.find("originY");
             if (propIt != prop.end())
             {
                 const tson::Property& value = propIt->second;
-                //m_tileCollisionData->m_origin.y = static_cast<float>(value.getValue<int>());
+                m_tileCollisionData->m_origin.y = static_cast<float>(value.getValue<int>());
+            }
+
+            for (auto& vertices : m_tileCollisionData->m_vertices)
+            {
+                vertices -= m_tileCollisionData->m_origin;
             }
         }
     }

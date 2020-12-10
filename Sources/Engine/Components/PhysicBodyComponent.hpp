@@ -35,18 +35,15 @@ protected:
     b2Body* m_body = nullptr;
 };
 
-class PhysicBodyComponent : public PhysicBodyComponentBase,  IPrototypeable<PhysicBodyPrototype>
+class PhysicBodyComponent : public PhysicBodyComponentBase
 {
     DECLARE_DYNAMIC_TYPE(PhysicBodyComponent, PhysicBodyComponentBase)
 public:
-    PhysicBodyComponent() = default;
+    PhysicBodyComponent();
     ~PhysicBodyComponent();
-
-    void InitPrototype(const std::string& prototypeName) override;
-    void InitPrototype(size_t prototypeID) override;
     
-    void InitFromPrototype() override;
 private:
     void PostInitSpecific() override;
+    void InitFromPrototypeSpecific() override;
     void InitFromMesh(MeshComponent* mesh);
 };

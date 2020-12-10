@@ -5,18 +5,21 @@
 #include <Engine/Factories/ComponentFactory.hpp>
 #include <Engine/Components/BaseComponent.hpp>
 
-Entity::Entity() = default;
+Entity::Entity()
+{
+    m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<EntityPrototype>>());
+}
 Entity::~Entity() = default;
 
-void Entity::InitFromPrototype()
+void Entity::InitFromPrototypeSpecific()
 {
-    const auto& componentsData = GetPrototype().GetComponents();
+    const auto& componentsData = GetPrototype<EntityPrototype>().GetComponents();
     for (const auto& componentInfo : componentsData)
     {
         BaseComponent* newComponent = AddComponent(componentInfo.first);
         if (componentInfo.second.has_value())
         {
-            newComponent->InitPrototype(componentInfo.second.value());
+            newComponent->InitFromPrototype(componentInfo.second.value());
         }
     }
 }
@@ -93,17 +96,8 @@ void Entity::Update(float deltaTime)
     } 
 }
 
-void Entity::PostPrototypeInitComponents()
-{
-    for (const auto& componentIt : m_components)
-    {
-        componentIt->PostPrototypeInit();
-    } 
-}
-
 void Entity::PostInitComponents()
 {
-    PostPrototypeInitComponents();
     for (const auto& componentIt : m_components)
     {
         componentIt->PostInit();

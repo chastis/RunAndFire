@@ -1,6 +1,9 @@
 #include <Engine/Physics/Box2D/box2d.h>
+#include <SFML/System/Vector2.hpp>
 
 #include <cstdint>
+
+class Entity;
 
 class PhysicEngine
 {
@@ -15,6 +18,8 @@ public:
     void DestroyBody(b2Body* body);
 
     void Update(std::uint32_t velocityIterations = 1, std::uint32_t positionIterations = 1);
+
+    Entity* RayCastGetEntity(Entity* caster, sf::Vector2f point) const;
 private:
     b2Vec2 m_gravity = { 0, 10.f };
     b2World* m_world = nullptr;

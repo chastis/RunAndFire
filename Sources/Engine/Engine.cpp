@@ -44,6 +44,9 @@ void Engine::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
 void Engine::Draw()
 {
     m_scenes.top()->Draw();
+#if defined(DEBUG)
+    m_debug->Draw();
+#endif //DEBUG
 }
 
 void Engine::Shutdown()

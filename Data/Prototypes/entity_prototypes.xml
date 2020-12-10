@@ -4,11 +4,16 @@
     <PlayerPrototype>
         <components>
             <MeshComponent prototype = "PlayerPrototype"/>
-            <PhysicBodyComponent prototype = "PlayerPhysicBody"/>
+            <PhysicBodyComponent prototype = "DynamicPhysicBody"/>
             <PlayerControllerComponent prototype = "PlayerPrototype"/>
-            <EventHandlerComponent prototype = "PlayerPrototype"/>
         </components>
     </PlayerPrototype>
+    <ChestPrototype>
+        <components>
+            <MeshComponent prototype = "ChestPrototype"/>
+            <PhysicBodyComponent prototype = "DynamicPhysicBody"/>
+        </components>
+    </ChestPrototype>
     <CollisionSimple>
         <components>
             <PhysicBodyComponent prototype = "CollisionSimpleBody"/>

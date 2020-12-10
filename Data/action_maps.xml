@@ -6,5 +6,6 @@
 		<ActionSignal native_input="kr:D" signal="stop_move_right" />
 		<ActionSignal native_input="kp:A" signal="move_left" />
 		<ActionSignal native_input="kr:A" signal="stop_move_left" />
+		<ActionSignal native_input="kp:Space" signal="player_attack" />
 	</ActionMap>	
 </ActionMaps>

@@ -138,8 +138,8 @@ void MeshComponent::UpdateCollisionParamsFromTile(const tson::Tile* tile)
             const sf::Vector2f objSize = { static_cast<float>(obj.getSize().x), static_cast<float>(obj.getSize().y)};
             m_tileCollisionData->m_vertices.emplace_back(objPos);
             m_tileCollisionData->m_vertices.emplace_back(objPos.x + objSize.x, objPos.y);
-            m_tileCollisionData->m_vertices.emplace_back(objPos.x, objPos.y + objPos.y);
-            m_tileCollisionData->m_vertices.emplace_back(objPos.x + objSize.x, objPos.y + objPos.y);
+            m_tileCollisionData->m_vertices.emplace_back(objPos.x, objPos.y + objSize.y);
+            m_tileCollisionData->m_vertices.emplace_back(objPos.x + objSize.x, objPos.y + objSize.y);
 
             const auto size = getLocalBounds();
             m_tileCollisionData->m_origin.x = size.width / 2;

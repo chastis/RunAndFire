@@ -21,10 +21,11 @@ public:
     void BindToPhysicEngine(PhysicEngine* engine);
     void SetLinearVelocity(float x, float y);
     void ApplyImpulse(float x, float y);
-    float GetMass() const;
 
-    sf::Vector2f GetLinearVelocity() const;
+    [[nodiscard]] float GetMass() const;
+    [[nodiscard]] sf::Vector2f GetLinearVelocity() const;
 
+    Entity* RayCastGetEntity(sf::Vector2f point) const;
     void SetFixtures(sf::Vector2f origin, const std::vector<sf::Vector2f>& vertices);
 protected:
     void PostInitSpecific() override;

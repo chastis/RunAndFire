@@ -8,4 +8,10 @@
         </animation_tiles>
         <collision_tile name = "anim_collision" id = "0"/>
     </PlayerPrototype>
+    <ChestPrototype>
+        <animation_tiles>
+            <animation_tile name = "chests" id = "70"/>
+        </animation_tiles>
+        <collision_tile name = "chests" id = "58"/>
+    </ChestPrototype>
 </MeshPrototype>

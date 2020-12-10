@@ -1,11 +1,11 @@
 <EventHandlerPrototype>
     <Default>
     </Default>
-    <PlayerPrototype>
+    <ChestPrototype>
         <components>
-            <PlayerControllerComponent>
-                <CollisionEntityEvent/>
-            </PlayerControllerComponent>
+            <ChestControllerComponent>
+                <TakeDamageEvent/>
+            </ChestControllerComponent>
         </components>
-    </PlayerPrototype>
+    </ChestPrototype>
 </EventHandlerPrototype>

@@ -25767,7 +25767,7 @@ bool tson::Tile::parse(const nlohmann::json &json, tson::Tileset *tileset, tson:
 	#endif
 	if(json.count("id") > 0)
 	{
-		m_id = json["id"].get<uint32_t>() + 1;
+		m_id = json["id"].get<uint32_t>();// + 1;
 		m_gid = m_id;
 		manageFlipFlagsByIdThenRemoveFlags(m_gid);
 	}
@@ -26530,13 +26530,25 @@ void tson::Tileset::generateMissingTiles()
 	for(auto &tile : m_tiles)
 		tileIds.push_back(tile.getId());
 
-	for(uint32_t i = static_cast<uint32_t>(m_firstgid); i < static_cast<uint32_t>(m_firstgid + m_tileCount); ++i)
+	/*for(uint32_t i = static_cast<uint32_t>(m_firstgid); i < static_cast<uint32_t>(m_firstgid + m_tileCount); ++i)
+	{
+		if(std::count(tileIds.begin(), tileIds.end(), i) == 0)
+		{
+			m_tiles.emplace_back(i, this, m_map);
+		}
+	}*/
+	for(uint32_t i = static_cast<uint32_t>(0); i < static_cast<uint32_t>(m_tileCount); ++i)
 	{
 		if(std::count(tileIds.begin(), tileIds.end(), i) == 0)
 		{
 			m_tiles.emplace_back(i, this, m_map);
 		}
 	}
+
+	std::sort(m_tiles.begin(), m_tiles.end(), [](auto& a, auto& b)
+	{
+	    return a.getId() < b.getId();
+	});
 }
 
 /*!
@@ -26747,7 +26759,8 @@ void tson::Map::processData()
 	m_tileMap.clear();
 	for(auto &tileset : m_tilesets)
 	{
-		std::for_each(tileset.getTiles().begin(), tileset.getTiles().end(), [&](tson::Tile &tile) { m_tileMap[tile.getId()] = &tile; });
+		//std::for_each(tileset.getTiles().begin(), tileset.getTiles().end(), [&](tson::Tile &tile) { m_tileMap[tile.getId()] = &tile; });
+		std::for_each(tileset.getTiles().begin(), tileset.getTiles().end(), [&](tson::Tile &tile) { m_tileMap[tile.getGid()] = &tile; });
 	}
 	std::for_each(m_layers.begin(), m_layers.end(), [&](tson::Layer &layer)
 	{
@@ -27701,6 +27714,7 @@ void tson::Tile::performDataCalculations()
 	m_properties = m_tileset->getProperties(); 
 	m_type = m_tileset->getType();   */    
 
+	m_gid = m_id + m_tileset->getFirstgid(); // MS need ?
 
 	int firstId = m_tileset->getFirstgid(); //First tile id of the tileset
 	int columns = m_tileset->getColumns();
@@ -27735,7 +27749,7 @@ void tson::Tile::performDataCalculations()
 	}
 	else
 	{
-		int gid = (int)getGid() + firstId - 1;
+		int gid = (int)getGid() + firstId;// - 1;
 		if (gid >= firstId && gid <= lastId)
 	    {
 			calc(gid);

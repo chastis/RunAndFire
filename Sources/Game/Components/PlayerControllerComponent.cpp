@@ -26,6 +26,10 @@ void PlayerControllerComponent::Update(float deltaTime)
 
 bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
 {
+    if (signal == ActionSignal("player_attack"))
+    {
+        Attack();
+    }
     if (signal == ActionSignal("player_jump"))
     {
         Jump();
@@ -33,11 +37,13 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
     if (signal == ActionSignal("move_left"))
     {
         ChangeAnimation("anim_run");
+        m_viewDirection = -1.f;
         m_direction += -1.f;
     }
     if (signal == ActionSignal("move_right"))
     {
         ChangeAnimation("anim_run");
+        m_viewDirection = 1.f;
         m_direction += 1.f;
     }
     if (signal == ActionSignal("stop_move_left"))
@@ -67,6 +73,19 @@ void PlayerControllerComponent::PostInitSpecific()
 {
     m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
     ChangeAnimation("anim_idle");
+}
+
+void PlayerControllerComponent::Attack()
+{
+    auto b = GetOwnerRef().getPosition();
+    auto c = GetOwnerRef().getTransform().transformPoint(0.f, 0.f);
+    auto d = GetOwnerRef().getPosition() - GetOwnerRef().getOrigin();
+    sf::Vector2f attackPoint = GetOwnerRef().getPosition() + sf::Vector2f(m_viewDirection, 0.f) * 200.f;
+    auto enemy = m_physicComponent->RayCastGetEntity(attackPoint);
+    if (enemy)
+    {
+        std::cout << enemy->GetPrototype<EntityPrototype>().GetSID();
+    }
 }
 
 void PlayerControllerComponent::Jump()

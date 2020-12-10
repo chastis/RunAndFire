@@ -20,6 +20,7 @@ private:
     void InitFromPrototypeSpecific() override;
     void PostInitSpecific() override;
 
+    void Attack();
     void Jump();
 private:
     sf::Vector2f m_speed;
@@ -27,5 +28,6 @@ private:
     PhysicBodyComponent* m_physicComponent = nullptr;
 
     float m_direction = 0.f;
+    float m_viewDirection = 1.f;
     float m_jumpForce = 0.f;
 };

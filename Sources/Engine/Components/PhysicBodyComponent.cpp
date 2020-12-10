@@ -44,6 +44,11 @@ sf::Vector2f PhysicBodyComponentBase::GetLinearVelocity() const
     return { velocity.x, velocity.y };
 }
 
+Entity* PhysicBodyComponentBase::RayCastGetEntity(sf::Vector2f point) const
+{
+    return m_engine->RayCastGetEntity(GetOwner(), point);
+}
+
 void PhysicBodyComponentBase::SetFixtures(sf::Vector2f origin, const std::vector<sf::Vector2f>& vertices)
 {
     M42_ASSERT(m_body, "there is no body");
@@ -53,7 +58,7 @@ void PhysicBodyComponentBase::SetFixtures(sf::Vector2f origin, const std::vector
     fixtureDef.userData.pointer = (uintptr_t)GetOwner();
 
     std::vector<b2Vec2> b2vertices;
-    const sf::Vector2f shift = GetOwnerRef().getOrigin() - origin;
+    const sf::Vector2f shift =  GetOwnerRef().getOrigin() - origin;
     for (const auto& verticeNode : vertices)
     {
         auto& vertice = b2vertices.emplace_back();
@@ -71,7 +76,7 @@ void PhysicBodyComponentBase::PostInitSpecific()
 {
     M42_ASSERT(m_engine, "Bind physic engine first!");
 
-    auto entityPosition = GetOwnerRef().getPosition();
+    auto entityPosition = GetOwnerRef().getPosition();// - GetOwnerRef().getOrigin();
     m_bodyDef.position.Set(entityPosition.x / Const::PixelPerUnit, entityPosition.y / Const::PixelPerUnit);
     m_body = m_engine->CreateBody(m_bodyDef);
     M42_ASSERT(m_body, "Failed to create b2Body!");
@@ -97,8 +102,6 @@ void PhysicBodyComponent::InitFromPrototypeSpecific()
 {
     const auto& prototype = GetPrototype<PhysicBodyPrototype>();
     m_bodyDef = prototype.GetBodyDefinition();
-    auto entityPosition = GetOwnerRef().getPosition();
-    m_bodyDef.position.Set(entityPosition.x / Const::PixelPerUnit, entityPosition.y / Const::PixelPerUnit);
     for (const auto& fixture : prototype.GetFixtures())
     {
         auto fixtureTemp = *fixture;

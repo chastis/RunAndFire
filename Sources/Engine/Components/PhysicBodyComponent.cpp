@@ -72,9 +72,8 @@ void PhysicBodyComponentBase::SetFixtures(sf::Vector2f origin, const std::vector
     }
     b2PolygonShape shape;
     shape.Set(b2vertices.data(), int32_t(b2vertices.size()));
-    //shape.SetAsBox(vertices[3].x / 2 / Const::PixelPerUnit, vertices[3].y / 2 / Const::PixelPerUnit);
     fixtureDef.shape = &shape;
-    m_body->CreateFixture(&fixtureDef);
+    CreateFixture(fixtureDef);
 }
 
 void PhysicBodyComponentBase::PostInitSpecific()
@@ -96,11 +95,6 @@ void PhysicBodyComponentBase::CreateFixture(const b2FixtureDef& fixtureDef)
 PhysicBodyComponent::PhysicBodyComponent()
 {
     m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<PhysicBodyPrototype>>());
-}
-
-PhysicBodyComponent::~PhysicBodyComponent()
-{
-    m_engine->DestroyBody(m_body);
 }
 
 void PhysicBodyComponent::InitFromPrototypeSpecific()
@@ -150,6 +144,6 @@ void PhysicBodyComponent::InitFromMesh(MeshComponent* mesh)
         fixtureDef.friction = Const::DefaultFriction;
         fixtureDef.userData.pointer = (uintptr_t)GetOwner();
 
-        m_body->CreateFixture(&fixtureDef);
+        CreateFixture(fixtureDef);
     }
 }

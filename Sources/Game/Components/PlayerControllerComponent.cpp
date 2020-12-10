@@ -2,14 +2,9 @@
 #include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Components/MeshComponent.hpp>
 #include <Engine/Entity/Entity.hpp>
-#include <Engine/Physics/Box2D/b2_fixture.h>
+#include <Engine/Physics/Box2D/box2d.h>
 
 PlayerControllerComponent::PlayerControllerComponent()
-{
-    m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<PlayerControllerPrototype>>());
-}
-
-void PlayerControllerComponent::InitFromPrototype()
 {
     m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<PlayerControllerPrototype>>());
 }
@@ -73,7 +68,7 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
 
 void PlayerControllerComponent::PostInitSpecific()
 {
-    m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>(
+    m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
     m_friction = m_physicComponent->GetFixtures()->GetFriction();
     ChangeAnimation("anim_idle");
 }
@@ -90,4 +85,12 @@ void PlayerControllerComponent::Jump()
 {
     float force = m_physicComponent->GetMass() * m_jumpForce;
     m_physicComponent->ApplyImpulse(0, -force);
+}
+
+void PlayerControllerComponent::OnPlayerCollisionStarted(EntityEvents::CollisionStartedEvent& event)
+{
+}
+
+void PlayerControllerComponent::OnPlayerCollisionEnded(EntityEvents::CollisionEndedEvent& event)
+{
 }

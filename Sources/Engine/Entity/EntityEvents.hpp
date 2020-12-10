@@ -6,6 +6,7 @@
 
 class Entity;
 class BaseComponent;
+class b2Contact;
 
 class EntityEventChannel : public EventChannelSingleton<EntityEventChannel> {};
 
@@ -15,14 +16,6 @@ namespace EntityEvents
     {
     public:
         DECLARE_DYNAMIC_TYPE(EntityEvent, Event)
-    };
-
-    class CollisionEntityEvent : public EntityEvent
-    {
-    public:
-        DECLARE_DYNAMIC_TYPE(CollisionEntityEvent, EntityEvent)
-        std::pair<Entity*, Entity*> collidedEntity;
-        sf::FloatRect intersection;
     };
 
     class EntityCreatedEvent : public EntityEvent
@@ -37,5 +30,21 @@ namespace EntityEvents
     public:
         DECLARE_DYNAMIC_TYPE(ComponentCreatedEvent, Event)
         BaseComponent* component = nullptr;
+    };
+
+    class CollisionStartedEvent : public EntityEvent
+    {
+    public:
+        DECLARE_DYNAMIC_TYPE(CollisionStartedEvent, Event)
+        Entity* contacted_entity = nullptr;
+        b2Contact* contact = nullptr;
+    };
+
+    class CollisionEndedEvent : public EntityEvent
+    {
+    public:
+        DECLARE_DYNAMIC_TYPE(CollisionEndedEvent, Event)
+        Entity* contacted_entity = nullptr;
+        b2Contact* contact = nullptr;
     };
 }

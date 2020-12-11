@@ -13,6 +13,8 @@ PhysicEngine::PhysicEngine()
 {
     m_world = new b2World(m_gravity);
     M42_ASSERT(m_world, "Failed to create b2World!");
+
+    m_world->SetContactListener(&m_contactListener);
 }
 
 PhysicEngine::~PhysicEngine()

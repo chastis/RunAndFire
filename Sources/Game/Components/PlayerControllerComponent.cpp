@@ -2,6 +2,7 @@
 #include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Components/MeshComponent.hpp>
 #include <Engine/Entity/Entity.hpp>
+#include <Engine/Physics/Box2D/box2d.h>
 
 PlayerControllerComponent::PlayerControllerComponent()
 {
@@ -19,9 +20,7 @@ void PlayerControllerComponent::InitFromPrototypeSpecific()
 void PlayerControllerComponent::Update(float deltaTime)
 {
     auto velocity = m_physicComponent->GetLinearVelocity();
-    const auto delta = m_speed * m_direction * deltaTime;
-    velocity.x = delta.x;
-    m_physicComponent->SetLinearVelocity(velocity.x, velocity.y);
+    m_physicComponent->SetLinearVelocity(m_speed.x * m_direction * deltaTime, velocity.y);
 }
 
 bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
@@ -39,22 +38,26 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
         ChangeAnimation("anim_run");
         m_viewDirection = -1.f;
         m_direction += -1.f;
+        SetPlayerFriction(0.f);
     }
     if (signal == ActionSignal("move_right"))
     {
         ChangeAnimation("anim_run");
         m_viewDirection = 1.f;
         m_direction += 1.f;
+        SetPlayerFriction(0.f);
     }
     if (signal == ActionSignal("stop_move_left"))
     {
         ChangeAnimation("anim_idle");
         m_direction -= -1.f;
+        SetPlayerFriction(m_friction);
     }
     if (signal == ActionSignal("stop_move_right"))
     {
         ChangeAnimation("anim_idle");
         m_direction -= 1.f;
+        SetPlayerFriction(m_friction);
     }
 
     if (m_direction > 0)
@@ -72,7 +75,16 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
 void PlayerControllerComponent::PostInitSpecific()
 {
     m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
+    m_friction = m_physicComponent->GetFixtures()->GetFriction();
     ChangeAnimation("anim_idle");
+}
+
+void PlayerControllerComponent::SetPlayerFriction(float friction)
+{
+    if (auto fixture = m_physicComponent->GetFixtures())
+    {
+        fixture->SetFriction(friction);
+    }
 }
 
 void PlayerControllerComponent::Attack()
@@ -92,4 +104,12 @@ void PlayerControllerComponent::Jump()
 {
     float force = m_physicComponent->GetMass() * m_jumpForce;
     m_physicComponent->ApplyImpulse(0, -force);
+}
+
+void PlayerControllerComponent::OnPlayerCollisionStarted(EntityEvents::CollisionStartedEvent& event)
+{
+}
+
+void PlayerControllerComponent::OnPlayerCollisionEnded(EntityEvents::CollisionEndedEvent& event)
+{
 }

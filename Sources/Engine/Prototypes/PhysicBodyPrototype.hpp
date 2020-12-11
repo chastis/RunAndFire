@@ -40,6 +40,7 @@ private:
                 auto& fixture = m_fixtures.emplace_back(std::make_unique<b2FixtureDef>());
                 fixture->density = fixtureNode.attribute("density").as_float();
                 fixture->friction = fixtureNode.attribute("friction").as_float();
+                fixture->isSensor = fixtureNode.attribute("is_sensor").as_bool();
 
                 std::vector<b2Vec2> vertices;
                 for (auto verticeNode : fixtureNode.child("vertices").children("vertice"))

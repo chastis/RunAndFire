@@ -1,5 +1,6 @@
 #include <Engine/Physics/Box2D/box2d.h>
 #include <SFML/System/Vector2.hpp>
+#include <Engine/Physics/ContactListener.hpp>
 
 #include <cstdint>
 
@@ -21,6 +22,7 @@ public:
 
     Entity* RayCastGetEntity(Entity* caster, sf::Vector2f point) const;
 private:
+    ContactListener m_contactListener;
     b2Vec2 m_gravity = { 0, 10.f };
     b2World* m_world = nullptr;
     float m_framerate = 1 / 60.f;

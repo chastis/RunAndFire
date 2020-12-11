@@ -1,11 +1,4 @@
 <EventHandlerPrototype>
     <Default>
     </Default>
-    <ChestPrototype>
-        <components>
-            <ChestControllerComponent>
-                <TakeDamageEvent/>
-            </ChestControllerComponent>
-        </components>
-    </ChestPrototype>
 </EventHandlerPrototype>

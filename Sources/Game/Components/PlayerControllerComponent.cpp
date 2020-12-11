@@ -1,12 +1,15 @@
 #include <Game/Components/PlayerControllerComponent.hpp>
+#include <Game/Events/GameEvents.hpp>
 #include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Components/MeshComponent.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Physics/Box2D/box2d.h>
+#include <Engine/EventSystem/EventDispatcher.hpp>
 
 PlayerControllerComponent::PlayerControllerComponent()
 {
     m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<PlayerControllerPrototype>>());
+    m_eventHandler.ConnectHandler(this, &PlayerControllerComponent::OnAnimationNotify);
 }
 
 void PlayerControllerComponent::InitFromPrototypeSpecific()
@@ -27,7 +30,11 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
 {
     if (signal == ActionSignal("player_attack"))
     {
-        Attack();
+        if (GetPlayingAnimationName() != "anim_attack")
+        {
+            ChangeAnimation("anim_attack");
+            SetAnimationRepetition(1);
+        }
     }
     if (signal == ActionSignal("player_jump"))
     {
@@ -89,14 +96,27 @@ void PlayerControllerComponent::SetPlayerFriction(float friction)
 
 void PlayerControllerComponent::Attack()
 {
-    auto b = GetOwnerRef().getPosition();
-    auto c = GetOwnerRef().getTransform().transformPoint(0.f, 0.f);
-    auto d = GetOwnerRef().getPosition() - GetOwnerRef().getOrigin();
-    sf::Vector2f attackPoint = GetOwnerRef().getPosition() + sf::Vector2f(m_viewDirection, 0.f) * 42.f;
-    auto enemy = m_physicComponent->RayCastGetEntity(attackPoint);
-    if (enemy)
+    auto dealDamage = [&](const sf::Vector2f& attackPoint)
     {
-        std::cout << enemy->GetPrototype<EntityPrototype>().GetSID();
+        const auto enemy = m_physicComponent->RayCastGetEntity(attackPoint, true);
+        if (enemy)
+        {
+            auto damageEvent = std::make_shared<GameEvents::TakeDamageEvent>();
+            damageEvent->dealer = GetOwner();
+            damageEvent->damage = 100.f;
+            EventSystem::Broadcast(std::move(damageEvent), enemy);
+            return true;
+        }
+        return false;
+    };
+
+    sf::Vector2f attackPoint = GetOwnerRef().getPosition() + sf::Vector2f(m_viewDirection, 0.f) * 42.f;
+    if (!dealDamage(attackPoint))
+    {
+        if (!dealDamage(attackPoint + sf::Vector2f(0.f, 10.f)))
+        {
+            dealDamage(attackPoint + sf::Vector2f(0.f, -10.f));
+        }
     }
 }
 
@@ -112,4 +132,12 @@ void PlayerControllerComponent::OnPlayerCollisionStarted(EntityEvents::Collision
 
 void PlayerControllerComponent::OnPlayerCollisionEnded(EntityEvents::CollisionEndedEvent& event)
 {
+}
+
+void PlayerControllerComponent::OnAnimationNotify(EntityEvents::AnimationNotifyEvent& event)
+{
+    if (event.animation_name == "anim_attack" && event.notify_name == "HitNotify")
+    {
+        Attack();
+    }
 }

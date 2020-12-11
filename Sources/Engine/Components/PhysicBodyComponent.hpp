@@ -28,14 +28,14 @@ public:
 
     [[nodiscard]] float GetMass() const;
     [[nodiscard]] sf::Vector2f GetLinearVelocity() const;
-    [[nodiscard]] float GetMass() const;
 
     [[nodiscard]] b2Fixture* GetFixtures();
     [[nodiscard]] const b2Fixture* GetFixtures() const;
 
 
-    Entity* RayCastGetEntity(sf::Vector2f point) const;
+    Entity* RayCastGetEntity(sf::Vector2f point, bool fromMeshOrigin = false) const;
     void SetFixtures(sf::Vector2f origin, const std::vector<sf::Vector2f>& vertices);
+    void SetGravityScale(float scale);
 protected:
     void PostInitSpecific() override;
     virtual void CreateFixture(const b2FixtureDef& fixtureDef);

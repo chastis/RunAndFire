@@ -55,9 +55,20 @@ sf::Vector2f PhysicBodyComponentBase::GetLinearVelocity() const
     return { velocity.x, velocity.y };
 }
 
-Entity* PhysicBodyComponentBase::RayCastGetEntity(sf::Vector2f point) const
+Entity* PhysicBodyComponentBase::RayCastGetEntity(sf::Vector2f point, bool fromMeshOrigin) const
 {
-    return m_engine->RayCastGetEntity(GetOwner(), point);
+    const sf::Vector2f casterOriginPosition = GetOwnerRef().getPosition() - GetOwnerRef().getOrigin();
+    sf::Vector2f start = casterOriginPosition;
+    sf::Vector2f finish = point - GetOwnerRef().getOrigin();
+    if (fromMeshOrigin)
+    {
+        if (const auto meshComponent = GetOwnerRef().GetKindOfComponent<MeshComponentBase>())
+        {
+            start += meshComponent->getOrigin();
+            finish += meshComponent->getOrigin();
+        }
+    }
+    return m_engine->RayCastGetEntity(GetOwner(), start, finish);
 }
 
 void PhysicBodyComponentBase::SetFixtures(sf::Vector2f origin, const std::vector<sf::Vector2f>& vertices)
@@ -80,6 +91,11 @@ void PhysicBodyComponentBase::SetFixtures(sf::Vector2f origin, const std::vector
     shape.Set(b2vertices.data(), int32_t(b2vertices.size()));
     fixtureDef.shape = &shape;
     CreateFixture(fixtureDef);
+}
+
+void PhysicBodyComponentBase::SetGravityScale(float scale)
+{
+    m_body->SetGravityScale(scale);
 }
 
 void PhysicBodyComponentBase::PostInitSpecific()

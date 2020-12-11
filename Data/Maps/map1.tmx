@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="2020.11.25" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="12">
+<map version="1.4" tiledversion="2020.11.25" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="14">
  <editorsettings>
   <export target="map1.json" format="json"/>
  </editorsettings>
@@ -9,6 +9,10 @@
  <tileset firstgid="1641" source="../Tiles/anim_collision.tsx"/>
  <tileset firstgid="1642" source="../Tiles/anim_run.tsx"/>
  <tileset firstgid="1650" source="../Tiles/chests.tsx"/>
+ <tileset firstgid="1746" source="../Tiles/hit_forward_1.tsx"/>
+ <tileset firstgid="1753" source="../Tiles/long_bouncer_going.tsx"/>
+ <tileset firstgid="1759" source="../Tiles/long_bouncer_attack.tsx"/>
+ <tileset firstgid="1766" source="../Tiles/hit_forward_1.tsx"/>
  <imagelayer id="4" name="Image Layer 1"/>
  <layer id="5" name="bottom_layer" width="20" height="20">
   <data encoding="csv">
@@ -88,11 +92,16 @@
   <object id="7" name="CollisionSimple" type="Collision" x="222.666" y="177.334" width="88.6667" height="15.3333"/>
  </objectgroup>
  <objectgroup id="3" name="object_layer">
-  <object id="1" name="PlayerPrototype" type="Player" x="44.5" y="192.334" width="25.8333" height="38.3333">
+  <object id="11" name="ChestPrototype" type="Chest" gid="1709" x="273.916" y="160.167" width="32" height="32"/>
+  <object id="12" name="LongBouncerPrototype" type="Enemy" x="171.75" y="169.5" width="25.8333" height="38.3333">
    <properties>
     <property name="Spawn" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="11" name="ChestPrototype" type="Chest" gid="1709" x="272.583" y="175.5" width="32" height="32"/>
+  <object id="13" name="PlayerPrototype" type="Player" x="41.0833" y="190.833" width="25.8333" height="38.3333">
+   <properties>
+    <property name="Spawn" type="bool" value="true"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -35,7 +35,7 @@ namespace EntityEvents
     class CollisionStartedEvent : public EntityEvent
     {
     public:
-        DECLARE_DYNAMIC_TYPE(CollisionStartedEvent, Event)
+        DECLARE_DYNAMIC_TYPE(CollisionStartedEvent, EntityEvent)
         Entity* contacted_entity = nullptr;
         b2Contact* contact = nullptr;
     };
@@ -43,8 +43,23 @@ namespace EntityEvents
     class CollisionEndedEvent : public EntityEvent
     {
     public:
-        DECLARE_DYNAMIC_TYPE(CollisionEndedEvent, Event)
+        DECLARE_DYNAMIC_TYPE(CollisionEndedEvent, EntityEvent)
         Entity* contacted_entity = nullptr;
         b2Contact* contact = nullptr;
+    };
+
+    class AnimationNotifyEvent : public EntityEvent
+    {
+    public:
+        DECLARE_DYNAMIC_TYPE(AnimationNotifyEvent, EntityEvent)
+        std::string notify_name;
+        std::string animation_name;
+    };
+
+    class AnimationEndedEvent : public EntityEvent
+    {
+    public:
+        DECLARE_DYNAMIC_TYPE(AnimationEndedEvent, EntityEvent)
+        std::string animation_name;
     };
 }

@@ -1,5 +1,5 @@
 <ScenePrototype>
     <Default>
     </Default>
-    <Map1 map_path = "Maps/map1.json"  map_scale_x = "3" map_scale_y = "3" debug = "true" />
+    <Map1 map_path = "Maps/map1.json"  map_scale_x = "3" map_scale_y = "3" debug = "false" />
 </ScenePrototype>

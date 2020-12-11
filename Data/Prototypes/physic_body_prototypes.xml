@@ -6,7 +6,7 @@
         <fixtures init_from_mesh="true" />
     </DynamicPhysicBody>
     <WorldObjectPhysicBody>
-        <body_definition is_static="false" lock_rotation="true" />
+        <body_definition is_static="true" lock_rotation="true" />
         <fixtures init_from_mesh="true" />
     </WorldObjectPhysicBody>
     <CollisionSimpleBody>

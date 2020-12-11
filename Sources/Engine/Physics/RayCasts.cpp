@@ -20,6 +20,7 @@ float EntityRayCastCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& poi
             m_data.fraction = fraction;
             m_data.normal = {normal.x, normal.y};
             m_data.point = {point.x * Const::PixelPerUnit, point.y * Const::PixelPerUnit};
+            m_data.point += fixtureOwner->getOrigin();
             return 0.f;
         }
     }

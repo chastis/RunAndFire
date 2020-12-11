@@ -6,12 +6,15 @@
             <MeshComponent prototype = "PlayerPrototype"/>
             <PhysicBodyComponent prototype = "DynamicPhysicBody"/>
             <PlayerControllerComponent prototype = "PlayerPrototype"/>
+            <EventHandlerComponent/>
         </components>
     </PlayerPrototype>
     <ChestPrototype>
         <components>
             <MeshComponent prototype = "ChestPrototype"/>
-            <PhysicBodyComponent prototype = "DynamicPhysicBody"/>
+            <PhysicBodyComponent prototype = "WorldObjectPhysicBody"/>
+            <EventHandlerComponent/>
+            <ChestControllerComponent/>
         </components>
     </ChestPrototype>
     <CollisionSimple>
@@ -19,4 +22,12 @@
             <PhysicBodyComponent prototype = "CollisionSimpleBody"/>
         </components>
     </CollisionSimple>
+    <LongBouncerPrototype>
+        <components>
+            <MeshComponent prototype = "LongBouncerPrototype"/>
+            <PhysicBodyComponent prototype = "DynamicPhysicBody"/>
+            <EventHandlerComponent/>
+            <LongBouncerControllerComponent/>
+        </components>
+    </LongBouncerPrototype>
 </EntityPrototype>

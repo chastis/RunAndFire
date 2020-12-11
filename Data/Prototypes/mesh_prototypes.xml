@@ -5,13 +5,21 @@
         <animation_tiles>
             <animation_tile name = "anim_idle" id = "0"/>
             <animation_tile name = "anim_run" id = "0"/>
+            <animation_tile name = "anim_attack" file = "hit_forward_1" id = "0"/>
         </animation_tiles>
         <collision_tile name = "anim_collision" id = "0"/>
     </PlayerPrototype>
     <ChestPrototype>
         <animation_tiles>
-            <animation_tile name = "chests" id = "70"/>
+            <animation_tile name = "chest_open" file = "chests" id = "70"/>
         </animation_tiles>
-        <collision_tile name = "chests" id = "58"/>
+        <collision_tile name = "chest_collision" file = "chests" id = "58"/>
     </ChestPrototype>
+    <LongBouncerPrototype>
+        <animation_tiles>
+            <animation_tile name = "long_bouncer_going" id = "0"/>
+            <animation_tile name = "long_bouncer_attack" id = "0"/>
+        </animation_tiles>
+        <collision_tile name = "long_bouncer_collision" file = "long_bouncer_going" id = "0"/>
+    </LongBouncerPrototype>
 </MeshPrototype>

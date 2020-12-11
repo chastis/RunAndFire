@@ -40,21 +40,24 @@ void Scene::SceneDebug::DebugInitObject(Entity& entity, const tson::Object& obj)
 
 void Scene::SceneDebug::Draw()
 {
-    const auto& mapScale = m_owner.GetPrototype<ScenePrototype>().GetMapScale();
-
-    for (auto& layer : m_owner.m_layers)
+    if (m_owner.GetPrototype<ScenePrototype>().IsEnableCollisionDebug())
     {
-        for (auto en : layer.objects)
+        const auto& mapScale = m_owner.GetPrototype<ScenePrototype>().GetMapScale();
+
+        for (auto& layer : m_owner.m_layers)
         {
-            for (const auto enMeshComp : en->GetKindOfComponents<MeshComponentBase>())
+            for (auto en : layer.objects)
             {
-                if (auto debugComponent = en->GetComponent<DebugInfoComponent>())
+                for (const auto enMeshComp : en->GetKindOfComponents<MeshComponentBase>())
                 {
-                    sf::Transform enTransform = en->getTransform();
-                    sf::Vector2f shift = (en->getPosition() - en->getOrigin()) * mapScale - en->getPosition() + en->getOrigin();
-                    enTransform = enTransform.translate(shift);
-                    enTransform = enTransform.scale(mapScale);
-                    m_owner.m_renderTarget.lock()->draw(debugComponent->shape, enTransform);
+                    if (auto debugComponent = en->GetComponent<DebugInfoComponent>())
+                    {
+                        sf::Transform enTransform = en->getTransform();
+                        sf::Vector2f shift = (en->getPosition() - en->getOrigin()) * mapScale - en->getPosition() + en->getOrigin();
+                        enTransform = enTransform.translate(shift);
+                        enTransform = enTransform.scale(mapScale);
+                        m_owner.m_renderTarget.lock()->draw(debugComponent->shape, enTransform);
+                    }
                 }
             }
         }

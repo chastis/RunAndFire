@@ -27,11 +27,12 @@ private:
 
     void OnPlayerCollisionStarted(EntityEvents::CollisionStartedEvent& event);
     void OnPlayerCollisionEnded(EntityEvents::CollisionEndedEvent& event);
+    void OnAnimationNotify(EntityEvents::AnimationNotifyEvent& event);
 private:
-    sf::Vector2f m_speed;
 
     PhysicBodyComponent* m_physicComponent = nullptr;
 
+    sf::Vector2f m_speed;
     float m_direction = 0.f;
     float m_viewDirection = 1.f;
     float m_jumpForce = 0.f;

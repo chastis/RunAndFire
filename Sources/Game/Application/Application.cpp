@@ -42,7 +42,13 @@ void Application_Impl::Run()
             std::shared_ptr<Event> applicationEvent(EngineEvents::Create(event));
             EventSystem::Broadcast(applicationEvent, EngineEventChannel::GetInstance());
         }
-        m_engineInstance.Update(frameClock.restart().asSeconds());
+        // todo : rewrite
+        // this is for when move app window, won't cause errors
+        const auto frameTime =  frameClock.restart().asSeconds();
+        if (frameTime < 1.f)
+        {
+            m_engineInstance.Update(frameTime);
+        }
         m_window->clear();
         m_engineInstance.Draw();
         m_window->display();

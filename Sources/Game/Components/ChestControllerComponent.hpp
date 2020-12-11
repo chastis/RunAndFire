@@ -15,4 +15,6 @@ public:
     ChestControllerComponent();
 private:
     void OnTakeDamage(GameEvents::TakeDamageEvent& gameEvent);
+    void OnAnimationEnded(EntityEvents::AnimationEndedEvent& animationEvent);
 };
+

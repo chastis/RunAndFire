@@ -3,10 +3,12 @@
 #include <Engine/Components/MeshComponent.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <Game/Events/GameEvents.hpp>
+#include "Engine/EventSystem/EventDispatcher.hpp"
 
 LongBouncerControllerComponent::LongBouncerControllerComponent()
 {
     m_eventHandler.ConnectHandler(this, &LongBouncerControllerComponent::OnTakeDamage);
+    m_eventHandler.ConnectHandler(this, &LongBouncerControllerComponent::OnAnimationNotifyDamage);
 }
 
 void LongBouncerControllerComponent::Update(float deltaTime)
@@ -19,6 +21,7 @@ void LongBouncerControllerComponent::Update(float deltaTime)
         {
             if (GetPlayingAnimationName() != "long_bouncer_attack")
             {
+                m_enemy = enemy;
                 ChangeAnimation("long_bouncer_attack");
                 SetAnimationRepetition(1);
             }
@@ -59,4 +62,15 @@ void LongBouncerControllerComponent::OnTakeDamage(GameEvents::TakeDamageEvent& g
         meshComponent->setColor(sf::Color::Red);
     }
     SetAnimationRepetition(0);
+}
+
+void LongBouncerControllerComponent::OnAnimationNotifyDamage(EntityEvents::AnimationNotifyEvent& gameEvent)
+{
+    if (gameEvent.animation_name == "long_bouncer_attack" && gameEvent.notify_name == "HitNotify")
+    {
+        auto damageEvent = std::make_shared<GameEvents::TakeDamageEvent>();
+        damageEvent->dealer = GetOwner();
+        damageEvent->damage = 100.f;
+        EventSystem::Broadcast(std::move(damageEvent), m_enemy);
+    }
 }

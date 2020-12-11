@@ -5,11 +5,14 @@
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Physics/Box2D/box2d.h>
 #include <Engine/EventSystem/EventDispatcher.hpp>
+#include <Engine/Engine.hpp>
+#include <Game/Managers/GameManager.hpp>
 
 PlayerControllerComponent::PlayerControllerComponent()
 {
     m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<PlayerControllerPrototype>>());
     m_eventHandler.ConnectHandler(this, &PlayerControllerComponent::OnAnimationNotify);
+    m_eventHandler.ConnectHandler(this, &PlayerControllerComponent::OnTakeDamage);
 }
 
 void PlayerControllerComponent::InitFromPrototypeSpecific()
@@ -140,4 +143,11 @@ void PlayerControllerComponent::OnAnimationNotify(EntityEvents::AnimationNotifyE
     {
         Attack();
     }
+}
+
+void PlayerControllerComponent::OnTakeDamage(GameEvents::TakeDamageEvent& event)
+{
+    auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
+    engine.ChangeGameMode(EGameMode::Menu);
+    engine.GetCurrentScene()->InitFromPrototype("loose");
 }

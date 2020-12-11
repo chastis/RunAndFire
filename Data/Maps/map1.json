@@ -114,8 +114,8 @@
                  "type":"Chest",
                  "visible":true,
                  "width":32,
-                 "x":273.916333333333,
-                 "y":160.166666666667
+                 "x":273.916,
+                 "y":160.167
                 }, 
                 {
                  "height":38.3333,
@@ -131,8 +131,8 @@
                  "type":"Enemy",
                  "visible":true,
                  "width":25.8333,
-                 "x":171.750016666667,
-                 "y":169.500016666667
+                 "x":171.75,
+                 "y":169.5
                 }, 
                 {
                  "height":38.3333,
@@ -148,8 +148,8 @@
                  "type":"Player",
                  "visible":true,
                  "width":25.8333,
-                 "x":41.08335,
-                 "y":190.83335
+                 "x":41.0833,
+                 "y":190.833
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -455,14 +455,14 @@
                      "name":"",
                      "objects":[
                             {
-                             "height":13.1818181818182,
+                             "height":13.1818,
                              "id":2,
                              "name":"Collision",
                              "rotation":0,
                              "type":"Collision",
                              "visible":true,
-                             "width":18.8181818181818,
-                             "x":6.45454545454546,
+                             "width":18.8182,
+                             "x":6.45455,
                              "y":0
                             }],
                      "opacity":1,
@@ -670,55 +670,9 @@
                          "tileid":6
                         }],
                  "id":0
-                }],
-         "tilewidth":64
-        }, 
-        {
-         "columns":7,
-         "firstgid":1766,
-         "image":"Content\/panstarrs\/hit_forward_1.png",
-         "imageheight":64,
-         "imagewidth":448,
-         "margin":0,
-         "name":"hit_forward_1",
-         "spacing":0,
-         "tilecount":7,
-         "tileheight":64,
-         "tiles":[
-                {
-                 "animation":[
-                        {
-                         "duration":100,
-                         "tileid":0
-                        }, 
-                        {
-                         "duration":100,
-                         "tileid":1
-                        }, 
-                        {
-                         "duration":100,
-                         "tileid":2
-                        }, 
-                        {
-                         "duration":100,
-                         "tileid":3
-                        }, 
-                        {
-                         "duration":100,
-                         "tileid":4
-                        }, 
-                        {
-                         "duration":100,
-                         "tileid":5
-                        }, 
-                        {
-                         "duration":100,
-                         "tileid":6
-                        }],
-                 "id":0
                 }, 
                 {
-                 "id":3,
+                 "id":4,
                  "properties":[
                         {
                          "name":"Notify",

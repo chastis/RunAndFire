@@ -7,6 +7,10 @@
 #include <Engine/InputSystem/ActionMap.hpp>
 #include <Game/Prototypes/PlayerControllerPrototype.hpp>
 
+namespace GameEvents {
+    class TakeDamageEvent;
+}
+
 class PhysicBodyComponent;
 
 class PlayerControllerComponent : public ControllerComponent, public InputClient
@@ -28,6 +32,7 @@ private:
     void OnPlayerCollisionStarted(EntityEvents::CollisionStartedEvent& event);
     void OnPlayerCollisionEnded(EntityEvents::CollisionEndedEvent& event);
     void OnAnimationNotify(EntityEvents::AnimationNotifyEvent& event);
+    void OnTakeDamage(GameEvents::TakeDamageEvent& event);
 private:
 
     PhysicBodyComponent* m_physicComponent = nullptr;

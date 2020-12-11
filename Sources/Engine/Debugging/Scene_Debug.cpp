@@ -56,7 +56,7 @@ void Scene::SceneDebug::Draw()
                         sf::Vector2f shift = (en->getPosition() - en->getOrigin()) * mapScale - en->getPosition() + en->getOrigin();
                         enTransform = enTransform.translate(shift);
                         enTransform = enTransform.scale(mapScale);
-                        m_owner.m_renderTarget.lock()->draw(debugComponent->shape, enTransform);
+                        m_owner.m_renderTarget->draw(debugComponent->shape, enTransform);
                     }
                 }
             }

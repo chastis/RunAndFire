@@ -12,4 +12,9 @@
    <frame tileid="6" duration="100"/>
   </animation>
  </tile>
+ <tile id="4">
+  <properties>
+   <property name="Notify" value="HitNotify"/>
+  </properties>
+ </tile>
 </tileset>

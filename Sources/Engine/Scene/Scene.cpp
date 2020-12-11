@@ -17,7 +17,7 @@ Scene::Scene()
 
 Scene::~Scene() = default;
 
-void Scene::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
+void Scene::Initialize(sf::RenderTarget* renderTarget)
 {
     m_renderTarget = renderTarget;
 }
@@ -62,7 +62,7 @@ void Scene::Draw()
                 sf::Vector2f shift = (en->getPosition() - en->getOrigin()) * mapScale - en->getPosition() + en->getOrigin();
                 enTransform = enTransform.translate(shift);
                 enTransform = enTransform.scale(mapScale);
-                m_renderTarget.lock()->draw(*enMeshComp, enTransform);
+                m_renderTarget->draw(*enMeshComp, enTransform);
             }
         }
     }

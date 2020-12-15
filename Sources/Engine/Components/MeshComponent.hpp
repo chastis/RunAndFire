@@ -17,6 +17,9 @@ struct AnimationData
     const tson::Tile* playingTile = nullptr;
     float playingTime = 0.f;
     int32_t animFrameId = 0;
+    int32_t amountPlaying = 0;
+    bool infinityLoop = true;
+    std::string animationName;
 };
 
 struct TileCollisionData
@@ -34,7 +37,11 @@ public:
     void InitFromPrototypeSpecific() override;
     void Update(float deltaTime) override;
     void ChangeAnimation(std::string animationName);
-    const TileCollisionData* GetTileCollisionParamData() const;
+    void SetAnimationRepetitionAmount(int32_t amountPlaying);
+    void SetAnimationRepetitionInfinity();
+
+    [[nodiscard]] const TileCollisionData* GetTileCollisionParamData() const;
+    [[nodiscard]] std::string GetPlayingAnimName() const;
 protected:
     void PostPrototypeInitSpecific() override;
 

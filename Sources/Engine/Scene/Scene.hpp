@@ -29,7 +29,7 @@ public:
     Scene();
     ~Scene();
 
-    void Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget);
+    void Initialize(sf::RenderTarget* renderTarget);
     void Update(float deltaTime);
     void Draw();
 
@@ -39,7 +39,7 @@ private:
     void InitLayer(const tson::Layer& layer);
     void InitTiledLayer(const tson::Layer& layer);
     void InitObjectLayer(const tson::Layer &layer);
-    std::weak_ptr<sf::RenderTarget> m_renderTarget;
+    sf::RenderTarget* m_renderTarget;
     const tson::Map* m_map = nullptr;
     std::vector<Layer> m_layers;
 

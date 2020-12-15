@@ -13,23 +13,6 @@ Engine::Debug::Debug(Engine& owner)
 
 void Engine::Debug::Initialize()
 {
-    return;
-    /*Entity* a = EntityManager::GetInstanceRef().CreateEntity();
-    a->setPosition(150.f, 0.f);
-    a->SetPrototype("PlayerPrototype");
-    a->InitFromPrototype();
-
-    Entity* b = EntityManager::GetInstanceRef().CreateEntity();
-    b->setPosition(150.f, 500.f);
-    b->SetPrototype("GroundPrototype");
-    b->InitFromPrototype();
-
-
-    Entity* c = EntityManager::GetInstanceRef().CreateEntity();
-    c->setPosition(300.f, 300.f);
-    c->SetPrototype("GroundPrototype");
-    c->InitFromPrototype();*/
-
 }
 
 void Engine::Debug::Shutdown()
@@ -38,6 +21,11 @@ void Engine::Debug::Shutdown()
 
 void Engine::Debug::Update(float deltaTime)
 {
+}
+
+void Engine::Debug::Draw()
+{
+    
 }
 
 #endif //DEBUG

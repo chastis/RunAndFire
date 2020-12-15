@@ -15,7 +15,7 @@ public:
     void Shutdown();
 
     void Update(float deltaTime);
-
+    void Draw();
 private:
     Engine& m_owner;
 };

@@ -1,11 +1,4 @@
 <EventHandlerPrototype>
     <Default>
     </Default>
-    <PlayerPrototype>
-        <components>
-            <PlayerControllerComponent>
-                <CollisionEntityEvent/>
-            </PlayerControllerComponent>
-        </components>
-    </PlayerPrototype>
 </EventHandlerPrototype>

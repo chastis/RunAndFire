@@ -7,8 +7,12 @@ EventHandlerComponent::EventHandlerComponent()
     m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<EventHandlerPrototype>>());
 }
 
-void EventHandlerComponent::InitFromPrototypeSpecific()
+void EventHandlerComponent::PostInitSpecific()
 {
+    if (!m_prototypeWrapper->GetBasePrototype())
+    {
+        return;
+    }
     const auto& componentEventsInfo = GetPrototype<EventHandlerPrototype>().GetEventsInfo();
     for (const auto& eventInfo : componentEventsInfo)
     {

@@ -11,7 +11,6 @@
 class MeshComponent;
 class PhysicEngine;
 class b2Body;
-class b2Fixture;
 struct b2FixtureDef;
 
 class PhysicBodyComponentBase : public BaseComponent
@@ -26,14 +25,17 @@ public:
     void BindToPhysicEngine(PhysicEngine* engine);
     void SetLinearVelocity(float x, float y);
     void ApplyImpulse(float x, float y);
-    float GetMass() const;
 
-    b2Fixture* GetFixtures();
-    const b2Fixture* GetFixtures() const;
+    [[nodiscard]] float GetMass() const;
+    [[nodiscard]] sf::Vector2f GetLinearVelocity() const;
 
-    sf::Vector2f GetLinearVelocity() const;
+    [[nodiscard]] b2Fixture* GetFixtures();
+    [[nodiscard]] const b2Fixture* GetFixtures() const;
 
+
+    Entity* RayCastGetEntity(sf::Vector2f point, bool fromMeshOrigin = false) const;
     void SetFixtures(sf::Vector2f origin, const std::vector<sf::Vector2f>& vertices);
+    void SetGravityScale(float scale);
 protected:
     void PostInitSpecific() override;
     virtual void CreateFixture(const b2FixtureDef& fixtureDef);

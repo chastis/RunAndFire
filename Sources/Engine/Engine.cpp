@@ -28,7 +28,7 @@ Engine::~Engine()
     m_eventHandler.DisconnectAll();
 }
 
-void Engine::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
+void Engine::Initialize(sf::RenderTarget* renderTarget)
 {
     m_renderTargetWeak = renderTarget;
     m_physicEngine.SetFramerate(1.f / 60.f);
@@ -44,6 +44,9 @@ void Engine::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
 void Engine::Draw()
 {
     m_scenes.top()->Draw();
+#if defined(DEBUG)
+    m_debug->Draw();
+#endif //DEBUG
 }
 
 void Engine::Shutdown()
@@ -59,14 +62,21 @@ void Engine::ChangeGameMode(EGameMode newMode)
     switch (newMode)
     {
     case EGameMode::Game:
-        {
-            InputManager::GetInstanceRef().PushActionMap("game_input");
-            auto scene = std::make_unique<Scene>();
-            scene->Initialize(m_renderTargetWeak);
-            m_scenes.push(std::move(scene));
-        }
-    case EGameMode::Menu: break;
-    default: ;
+    {
+        InputManager::GetInstanceRef().PushActionMap("game_input");
+        auto scene = std::make_unique<Scene>();
+        scene->Initialize(m_renderTargetWeak);
+        m_scenes.push(std::move(scene));
+        break;
+    }
+    case EGameMode::Menu:
+    {
+        auto scene = std::make_unique<Scene>();
+        scene->Initialize(m_renderTargetWeak);
+        m_scenes.push(std::move(scene));
+        break;
+    }
+    default:;
     }
 }
 

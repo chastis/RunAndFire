@@ -12,7 +12,7 @@ public:
     SceneDebug(Scene& owner);
 
     void DebugInitObject(Entity& entity, const tson::Object& obj);
-
+    void Draw();
 private:
     Scene& m_owner;
 };

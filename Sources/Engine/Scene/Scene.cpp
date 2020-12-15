@@ -12,13 +12,12 @@ Scene::Scene()
     : m_debug(*this)
 #endif
 {
-
     m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<ScenePrototype>>());
 }
 
 Scene::~Scene() = default;
 
-void Scene::Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget)
+void Scene::Initialize(sf::RenderTarget* renderTarget)
 {
     m_renderTarget = renderTarget;
 }
@@ -63,10 +62,13 @@ void Scene::Draw()
                 sf::Vector2f shift = (en->getPosition() - en->getOrigin()) * mapScale - en->getPosition() + en->getOrigin();
                 enTransform = enTransform.translate(shift);
                 enTransform = enTransform.scale(mapScale);
-                m_renderTarget.lock()->draw(*enMeshComp, enTransform);
+                m_renderTarget->draw(*enMeshComp, enTransform);
             }
         }
     }
+#if defined(DEBUG)
+    m_debug->Draw();
+#endif //DEBUG
 }
 
 void Scene::InitLayer(const tson::Layer& layer)
@@ -141,20 +143,22 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
             static_cast<float>(obj.getPosition().x + obj.getSize().x / 2),
             static_cast<float>(obj.getPosition().y + obj.getSize().y / 2) };
         entity->setPosition({ position.x, position.y });
-        entity->InitFromPrototype(obj.getName());
 
         const bool isCollision = obj.getType() == "Collision";
+        if (isCollision)
+        {
+            entity->setOrigin(obj.getSize().x / 2.f, obj.getSize().y / 2.f);
+        }
+        
+        entity->InitFromPrototype(obj.getName());
+        entity->PostInitComponents();
 
         #if defined(DEBUG)
         m_debug->DebugInitObject(*entity, obj);
         #endif //DEBUG
 
-        if (isCollision)
-        {
-            entity->setOrigin(obj.getSize().x / 2.f, obj.getSize().y / 2.f);
-        }
+        
 
-        entity->PostInitComponents();
 
         auto physComp = entity->GetComponent<PhysicBodyComponent>();
         if (physComp && isCollision)

@@ -27,7 +27,6 @@ void ComponentFactory::RegisterTypes()
     m_creators[MeshComponent::GetStaticType()] = []() { return new MeshComponent; };
     m_creators[MeshComponentBase::GetStaticType()] = []() { return new MeshComponentBase; };
 #if defined(DEBUG)
-    m_creators[CircleShapeComponent::GetStaticType()] = []() { return new CircleShapeComponent; };
-    m_creators[EntityControllerComponent::GetStaticType()] = []() { return new EntityControllerComponent; };
+    m_creators[DebugInfoComponent::GetStaticType()] = []() { return new DebugInfoComponent; };
 #endif //DEBUG
 }

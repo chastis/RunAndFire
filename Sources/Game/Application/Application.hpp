@@ -24,7 +24,7 @@ private:
 private:
     std::shared_ptr<sf::RenderWindow> m_window;
 
-    Engine m_engineInstance;
+    std::unique_ptr<Engine> m_engineInstance;
     EventHandler m_applicationEventHandler;
 };
 

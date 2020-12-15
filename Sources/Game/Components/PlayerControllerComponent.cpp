@@ -1,12 +1,18 @@
 #include <Game/Components/PlayerControllerComponent.hpp>
+#include <Game/Events/GameEvents.hpp>
 #include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Components/MeshComponent.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Physics/Box2D/box2d.h>
+#include <Engine/EventSystem/EventDispatcher.hpp>
+#include <Engine/Engine.hpp>
+#include <Game/Managers/GameManager.hpp>
 
 PlayerControllerComponent::PlayerControllerComponent()
 {
     m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<PlayerControllerPrototype>>());
+    m_eventHandler.ConnectHandler(this, &PlayerControllerComponent::OnAnimationNotify);
+    m_eventHandler.ConnectHandler(this, &PlayerControllerComponent::OnTakeDamage);
 }
 
 void PlayerControllerComponent::InitFromPrototypeSpecific()
@@ -25,6 +31,14 @@ void PlayerControllerComponent::Update(float deltaTime)
 
 bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
 {
+    if (signal == ActionSignal("player_attack"))
+    {
+        if (GetPlayingAnimationName() != "anim_attack")
+        {
+            ChangeAnimation("anim_attack");
+            SetAnimationRepetition(1);
+        }
+    }
     if (signal == ActionSignal("player_jump"))
     {
         Jump();
@@ -32,12 +46,14 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
     if (signal == ActionSignal("move_left"))
     {
         ChangeAnimation("anim_run");
+        m_viewDirection = -1.f;
         m_direction += -1.f;
         SetPlayerFriction(0.f);
     }
     if (signal == ActionSignal("move_right"))
     {
         ChangeAnimation("anim_run");
+        m_viewDirection = 1.f;
         m_direction += 1.f;
         SetPlayerFriction(0.f);
     }
@@ -81,6 +97,32 @@ void PlayerControllerComponent::SetPlayerFriction(float friction)
     }
 }
 
+void PlayerControllerComponent::Attack()
+{
+    auto dealDamage = [&](const sf::Vector2f& attackPoint)
+    {
+        const auto enemy = m_physicComponent->RayCastGetEntity(attackPoint, true);
+        if (enemy)
+        {
+            auto damageEvent = std::make_shared<GameEvents::TakeDamageEvent>();
+            damageEvent->dealer = GetOwner();
+            damageEvent->damage = 100.f;
+            EventSystem::Broadcast(std::move(damageEvent), enemy);
+            return true;
+        }
+        return false;
+    };
+
+    sf::Vector2f attackPoint = GetOwnerRef().getPosition() + sf::Vector2f(m_viewDirection, 0.f) * 42.f;
+    if (!dealDamage(attackPoint))
+    {
+        if (!dealDamage(attackPoint + sf::Vector2f(0.f, 10.f)))
+        {
+            dealDamage(attackPoint + sf::Vector2f(0.f, -10.f));
+        }
+    }
+}
+
 void PlayerControllerComponent::Jump()
 {
     float force = m_physicComponent->GetMass() * m_jumpForce;
@@ -93,4 +135,19 @@ void PlayerControllerComponent::OnPlayerCollisionStarted(EntityEvents::Collision
 
 void PlayerControllerComponent::OnPlayerCollisionEnded(EntityEvents::CollisionEndedEvent& event)
 {
+}
+
+void PlayerControllerComponent::OnAnimationNotify(EntityEvents::AnimationNotifyEvent& event)
+{
+    if (event.animation_name == "anim_attack" && event.notify_name == "HitNotify")
+    {
+        Attack();
+    }
+}
+
+void PlayerControllerComponent::OnTakeDamage(GameEvents::TakeDamageEvent& event)
+{
+    auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
+    engine.ChangeGameMode(EGameMode::Menu);
+    engine.GetCurrentScene()->InitFromPrototype("loose");
 }

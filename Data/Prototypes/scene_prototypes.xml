@@ -2,4 +2,6 @@
     <Default>
     </Default>
     <Map1 map_path = "Maps/map1.json"  map_scale_x = "3" map_scale_y = "3" debug = "false" />
+    <win map_path = "Maps/win.json"  map_scale_x = "3" map_scale_y = "3" debug = "false" />
+    <loose map_path = "Maps/loose.json"  map_scale_x = "3" map_scale_y = "3" debug = "false" />
 </ScenePrototype>

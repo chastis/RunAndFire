@@ -13,10 +13,10 @@ class EventHandlerComponent : public BaseComponent
 public:
     EventHandlerComponent();
 
-    void InitFromPrototypeSpecific() override;
     void Update(float deltaTime) override;
     void DispatchEvent(Event& entityEvent);
     void ConnectHandler(EventHandler& handler);
 private:
+    void PostInitSpecific() override;
     EventChannel m_channel;
 };

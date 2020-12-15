@@ -5,6 +5,7 @@
 struct TileInfo
 {
     std::string name;
+    std::string file;
     int32_t id = 0;
     void Parse(const pugi::xml_node& node)
     {
@@ -15,6 +16,14 @@ struct TileInfo
         else
         {
             M42_ASSERT(false, "There is no value for mesh_path");
+        }
+        if (const auto value = node.attribute("file"))
+        {
+            file = value.as_string();
+        }
+        else
+        {
+            file = name;
         }
         if (const auto value = node.attribute("id"))
         {

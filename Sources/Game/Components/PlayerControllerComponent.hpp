@@ -7,6 +7,10 @@
 #include <Engine/InputSystem/ActionMap.hpp>
 #include <Game/Prototypes/PlayerControllerPrototype.hpp>
 
+namespace GameEvents {
+    class TakeDamageEvent;
+}
+
 class PhysicBodyComponent;
 
 class PlayerControllerComponent : public ControllerComponent, public InputClient
@@ -22,16 +26,20 @@ private:
     void PostInitSpecific() override;
     void SetPlayerFriction(float friction);
 
+    void Attack();
     void Jump();
 
     void OnPlayerCollisionStarted(EntityEvents::CollisionStartedEvent& event);
     void OnPlayerCollisionEnded(EntityEvents::CollisionEndedEvent& event);
+    void OnAnimationNotify(EntityEvents::AnimationNotifyEvent& event);
+    void OnTakeDamage(GameEvents::TakeDamageEvent& event);
 private:
-    sf::Vector2f m_speed;
 
     PhysicBodyComponent* m_physicComponent = nullptr;
 
+    sf::Vector2f m_speed;
     float m_direction = 0.f;
+    float m_viewDirection = 1.f;
     float m_jumpForce = 0.f;
     float m_friction = 0.f;
 };

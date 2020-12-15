@@ -15,6 +15,7 @@ void PhysicBodyComponentBase::Update(float deltaTime)
     sf::Transformable* m_ownerTransform = GetOwner();
     auto bodyPosition = m_body->GetPosition();
     m_ownerTransform->setPosition(bodyPosition.x * Const::PixelPerUnit, bodyPosition.y * Const::PixelPerUnit);
+    m_ownerTransform->move(m_ownerTransform->getOrigin());
     m_ownerTransform->setRotation(m_body->GetAngle() * 180 / b2_pi);
 }
 
@@ -54,6 +55,22 @@ sf::Vector2f PhysicBodyComponentBase::GetLinearVelocity() const
     return { velocity.x, velocity.y };
 }
 
+Entity* PhysicBodyComponentBase::RayCastGetEntity(sf::Vector2f point, bool fromMeshOrigin) const
+{
+    const sf::Vector2f casterOriginPosition = GetOwnerRef().getPosition() - GetOwnerRef().getOrigin();
+    sf::Vector2f start = casterOriginPosition;
+    sf::Vector2f finish = point - GetOwnerRef().getOrigin();
+    if (fromMeshOrigin)
+    {
+        if (const auto meshComponent = GetOwnerRef().GetKindOfComponent<MeshComponentBase>())
+        {
+            start += meshComponent->getOrigin();
+            finish += meshComponent->getOrigin();
+        }
+    }
+    return m_engine->RayCastGetEntity(GetOwner(), start, finish);
+}
+
 void PhysicBodyComponentBase::SetFixtures(sf::Vector2f origin, const std::vector<sf::Vector2f>& vertices)
 {
     M42_ASSERT(m_body, "there is no body");
@@ -63,7 +80,7 @@ void PhysicBodyComponentBase::SetFixtures(sf::Vector2f origin, const std::vector
     fixtureDef.userData.pointer = (uintptr_t)GetOwner();
 
     std::vector<b2Vec2> b2vertices;
-    const sf::Vector2f shift = GetOwnerRef().getOrigin() - origin;
+    const sf::Vector2f shift = -origin;//GetOwnerRef().getOrigin() - origin;
     for (const auto& verticeNode : vertices)
     {
         auto& vertice = b2vertices.emplace_back();
@@ -76,11 +93,16 @@ void PhysicBodyComponentBase::SetFixtures(sf::Vector2f origin, const std::vector
     CreateFixture(fixtureDef);
 }
 
+void PhysicBodyComponentBase::SetGravityScale(float scale)
+{
+    m_body->SetGravityScale(scale);
+}
+
 void PhysicBodyComponentBase::PostInitSpecific()
 {
     M42_ASSERT(m_engine, "Bind physic engine first!");
 
-    auto entityPosition = GetOwnerRef().getPosition();
+    auto entityPosition = GetOwnerRef().getPosition() - GetOwnerRef().getOrigin();
     m_bodyDef.position.Set(entityPosition.x / Const::PixelPerUnit, entityPosition.y / Const::PixelPerUnit);
     m_body = m_engine->CreateBody(m_bodyDef);
     M42_ASSERT(m_body, "Failed to create b2Body!");
@@ -101,8 +123,6 @@ void PhysicBodyComponent::InitFromPrototypeSpecific()
 {
     const auto& prototype = GetPrototype<PhysicBodyPrototype>();
     m_bodyDef = prototype.GetBodyDefinition();
-    auto entityPosition = GetOwnerRef().getPosition();
-    m_bodyDef.position.Set(entityPosition.x / Const::PixelPerUnit, entityPosition.y / Const::PixelPerUnit);
     for (const auto& fixture : prototype.GetFixtures())
     {
         auto fixtureTemp = *fixture;

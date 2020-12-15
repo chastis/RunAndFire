@@ -1,6 +1,13 @@
 #include <Engine/Physics/PhysicEngine.hpp>
-
+#include <Engine/Physics/RayCasts.hpp>
 #include <Utility/Debugging/Assert.hpp>
+#include <Engine/Entity/Entity.hpp>
+#include <Engine/Static/Const.hpp>
+#include <Engine/Components/MeshComponent.hpp>
+
+#if defined(DEBUG)
+#include <Engine/Debugging/EntityComponents_Debug.hpp>
+#endif // DEBUG
 
 PhysicEngine::PhysicEngine()
 {
@@ -41,4 +48,20 @@ void PhysicEngine::DestroyBody(b2Body* body)
 void PhysicEngine::Update(std::uint32_t velocityIterations, std::uint32_t positionIterations)
 {
     m_world->Step(m_framerate, velocityIterations, positionIterations);
+}
+
+Entity* PhysicEngine::RayCastGetEntity(Entity* caster, sf::Vector2f start, sf::Vector2f finish) const
+{
+    if (!caster || !m_world)
+    {
+        M42_ASSERT(false, "there are some nullptr's right here");
+        return nullptr;
+    }
+    EntityRayCastCallback callback(caster);
+
+    const b2Vec2 b2start = {start.x / Const::PixelPerUnit, start.y /  Const::PixelPerUnit};
+    const b2Vec2 b2finish = {finish.x / Const::PixelPerUnit, finish.y / Const::PixelPerUnit};
+    m_world->RayCast(&callback, b2start, b2finish);
+
+    return callback.m_data.entity;
 }

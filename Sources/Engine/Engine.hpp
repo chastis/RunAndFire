@@ -28,7 +28,7 @@ public:
     Engine();
     ~Engine();
 
-    void Initialize(const std::weak_ptr<sf::RenderTarget>& renderTarget);
+    void Initialize(sf::RenderTarget* renderTarget);
     void Draw();
     void Shutdown();
     void ChangeGameMode(EGameMode newMode);
@@ -37,7 +37,7 @@ public:
 private:
     void OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event);
 private:
-    std::weak_ptr<sf::RenderTarget> m_renderTargetWeak;
+    sf::RenderTarget* m_renderTargetWeak;
     std::stack<std::unique_ptr<Scene>> m_scenes;
     PhysicEngine m_physicEngine;
     EventHandler m_eventHandler;

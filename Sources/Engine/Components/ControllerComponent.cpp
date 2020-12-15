@@ -3,11 +3,6 @@
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Static/Misc.hpp>
 
-void ControllerComponent::ConnectEvent(TypeId eventType)
-{
-
-}
-
 void ControllerComponent::SetMeshScale(sf::Vector2f scale)
 {
     SetMeshScale(scale.x, scale.y);
@@ -28,4 +23,30 @@ void ControllerComponent::ChangeAnimation(const std::string& animationName)
     {
         meshComponent->ChangeAnimation(animationName);
     }
+}
+
+void ControllerComponent::SetAnimationRepetition(int32_t amount)
+{
+    auto meshComponent = GetOwnerRef().GetComponent<MeshComponent>();
+    if (meshComponent)
+    {
+        if (amount == -1)
+        {
+            meshComponent->SetAnimationRepetitionInfinity();
+        }
+        else
+        {
+            meshComponent->SetAnimationRepetitionAmount(amount);
+        }
+    }
+}
+
+std::string ControllerComponent::GetPlayingAnimationName()
+{
+    const auto meshComponent = GetOwnerRef().GetComponent<MeshComponent>();
+    if (meshComponent)
+    {
+        return meshComponent->GetPlayingAnimName();
+    }
+    return "";
 }

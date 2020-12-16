@@ -150,6 +150,24 @@
                  "width":25.8333,
                  "x":41.0833,
                  "y":190.833
+                }, 
+                {
+                 "height":19,
+                 "id":14,
+                 "name":"TextPrototype",
+                 "rotation":0,
+                 "text":
+                    {
+                     "fontfamily":"MS Serif",
+                     "pixelsize":17,
+                     "text":"Level 1",
+                     "wrap":true
+                    },
+                 "type":"Text",
+                 "visible":true,
+                 "width":83,
+                 "x":15.1666666666667,
+                 "y":77.8333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -158,7 +176,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":14,
+ "nextobjectid":15,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"2020.11.25",

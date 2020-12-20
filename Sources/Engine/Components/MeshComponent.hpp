@@ -1,16 +1,9 @@
 #pragma once
 
+#include <Engine/Components/DrawableComponent.hpp>
 #include <Engine/Components/BaseComponent.hpp>
 #include <Engine/Prototypes/MeshPrototype.hpp>
 #include <Engine/Map/tileson.hpp>
-#include <SFML/Graphics/Sprite.hpp>
-
-class MeshComponentBase : public BaseComponent, public sf::Sprite
-{
-    DECLARE_DYNAMIC_TYPE(MeshComponentBase, BaseComponent)
-protected:
-    void PostPrototypeInitSpecific() override;
-};
 
 struct AnimationData
 {

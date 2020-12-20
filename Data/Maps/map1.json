@@ -152,22 +152,30 @@
                  "y":190.833
                 }, 
                 {
-                 "height":19,
+                 "height":40.3333,
                  "id":14,
                  "name":"TextPrototype",
+                 "properties":[
+                        {
+                         "name":"FontPath",
+                         "type":"string",
+                         "value":"Fonts\/MS Serif.ttf"
+                        }],
                  "rotation":0,
                  "text":
                     {
+                     "bold":true,
+                     "color":"#3b7f5d",
                      "fontfamily":"MS Serif",
                      "pixelsize":17,
-                     "text":"Level 1",
+                     "text":"Level 1\nBegin of the Journey",
                      "wrap":true
                     },
                  "type":"Text",
                  "visible":true,
-                 "width":83,
-                 "x":15.1666666666667,
-                 "y":77.8333333333333
+                 "width":167.667,
+                 "x":5.83337,
+                 "y":67.1666
                 }],
          "opacity":1,
          "type":"objectgroup",

@@ -24,6 +24,14 @@ void Entity::InitFromPrototypeSpecific()
     }
 }
 
+void Entity::InitFromTileObjectSpecific()
+{
+    for (const auto& componentIt : m_components)
+    {
+        componentIt->InitFromTileObject(GetTileObject());
+    }
+}
+
 BaseComponent* Entity::AddComponent(const TypeId& typeId)
 {
     const auto& factory = DynamicTypeFactory::GetInstanceRef().GetFactoryRef<ComponentFactory>();

@@ -23,6 +23,12 @@ std::vector<char> FileManager_Impl::ReadFile(const std::string& filepath)
     return data;
 }
 
+std::string FileManager_Impl::GetFullFilePath(const std::string& relativePath)
+{
+    std::filesystem::path absolutePath = ConstructFilePath(relativePath);
+    return absolutePath.generic_string();
+}
+
 void FileManager_Impl::SetWorkingDirectory(const std::filesystem::path& workingDirectory)
 {
     m_workingDirectory = workingDirectory;

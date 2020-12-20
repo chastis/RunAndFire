@@ -124,7 +124,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="7" name="collision_layer" visible="0">
+ <objectgroup id="7" name="collision_layer" visible="0" locked="1">
   <object id="5" name="CollisionSimple" type="Collision" x="12.6667" y="240" width="88" height="14.6667"/>
   <object id="6" name="CollisionSimple" type="Collision" x="145.333" y="209.333" width="44" height="14.6667"/>
   <object id="7" name="CollisionSimple" type="Collision" x="222.666" y="177.334" width="88.6667" height="15.3333"/>
@@ -141,8 +141,12 @@
     <property name="Spawn" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="14" name="TextPrototype" type="Text" x="15.1667" y="77.8333" width="83" height="19">
-   <text fontfamily="MS Serif" pixelsize="17" wrap="1">Level 1</text>
+  <object id="14" name="TextPrototype" type="Text" x="5.83337" y="67.1666" width="167.667" height="40.3333">
+   <properties>
+    <property name="FontPath" value="Fonts/MS Serif.ttf"/>
+   </properties>
+   <text fontfamily="MS Serif" pixelsize="17" wrap="1" color="#3b7f5d" bold="1">Level 1
+Begin of the Journey</text>
   </object>
  </objectgroup>
 </map>

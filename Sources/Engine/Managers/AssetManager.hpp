@@ -5,6 +5,7 @@
 #include <Engine/Map/tileson.hpp>
 #include <Utility/Core/Singleton.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include <map>
 
 class AssetManager_Impl
@@ -21,6 +22,8 @@ public:
     bool LoadAsset<tson::Map>(const std::string& assetPath);
     template <>
     bool LoadAsset<tson::Tileset>(const std::string& assetPath);
+    template <>
+    bool LoadAsset<sf::Font>(const std::string& assetPath);
 private:
     template <class T>
     [[nodiscard]] std::map<std::string, std::unique_ptr<T>>* GetContainer();
@@ -30,6 +33,8 @@ private:
     [[nodiscard]] std::map<std::string, std::unique_ptr<tson::Map>>* GetContainer();
     template <>
     [[nodiscard]] std::map<std::string, std::unique_ptr<tson::Tileset>>* GetContainer();
+    template <>
+    [[nodiscard]] std::map<std::string, std::unique_ptr<sf::Font>>* GetContainer();
 
     AssetManager_Impl();
     ~AssetManager_Impl();
@@ -37,6 +42,7 @@ private:
     std::map<std::string, std::unique_ptr<sf::Texture>> m_textures;
     std::map<std::string, std::unique_ptr<tson::Map>> m_maps;
     std::map<std::string, std::unique_ptr<tson::Tileset>> m_tileset;
+    std::map<std::string, std::unique_ptr<sf::Font>> m_fonts;
     friend class Singleton<AssetManager_Impl>;
 };
 
@@ -93,6 +99,12 @@ inline std::map<std::string, std::unique_ptr<tson::Tileset>>* AssetManager_Impl:
 }
 
 template <>
+inline std::map<std::string, std::unique_ptr<sf::Font>>* AssetManager_Impl::GetContainer()
+{
+    return &m_fonts;
+}
+
+template <>
 inline bool AssetManager_Impl::LoadAsset<sf::Texture>(const std::string& assetPath)
 {
     auto newTexture = std::make_unique<sf::Texture>();
@@ -104,6 +116,22 @@ inline bool AssetManager_Impl::LoadAsset<sf::Texture>(const std::string& assetPa
         return true;
     }
     M42_ASSERT(false, "can't open a texture");
+    return false;
+}
+
+template <>
+inline bool AssetManager_Impl::LoadAsset<sf::Font>(const std::string& assetPath)
+{
+    auto newFont = std::make_unique<sf::Font>();
+
+    std::string fullPath = FileManager::GetInstanceRef().GetFullFilePath(assetPath);
+
+    if (newFont->loadFromFile(fullPath))
+    {
+        m_fonts[assetPath] = std::move(newFont);
+        return true;
+    }
+    M42_ASSERT(false, "can't open a font");
     return false;
 }
 

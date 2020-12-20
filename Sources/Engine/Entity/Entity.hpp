@@ -1,6 +1,7 @@
 #pragma once
 #include <Engine/Prototypes/PrototypeableInterface.hpp>
 #include <Engine/Prototypes/EntityPrototype.hpp>
+#include <Engine/Map/TileObjectInterface.hpp>
 #include <Utility/Core/Noncopyable.hpp>
 #include <Utility/Ref/ReferenceCountable.hpp>
 #include <Utility/Types/DynamicType.hpp>
@@ -11,7 +12,7 @@ class BaseComponent;
 
 using UID = size_t;
 
-class Entity final : public sf::Transformable, public Noncopyable, public IPrototypeable, public ReferenceCountable<DefaultThreadPolicy>
+class Entity final : public sf::Transformable, public Noncopyable, public IPrototypeable, public ITileObject, public ReferenceCountable<DefaultThreadPolicy>
 {
 public:
     Entity();
@@ -40,6 +41,7 @@ public:
     void Update(float deltaTime);
 private:
     void InitFromPrototypeSpecific() override;
+    void InitFromTileObjectSpecific() override;
 
     std::vector<std::unique_ptr<BaseComponent>> m_components;
     UID m_UID = 0;

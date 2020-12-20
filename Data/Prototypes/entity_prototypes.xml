@@ -30,4 +30,9 @@
             <LongBouncerControllerComponent/>
         </components>
     </LongBouncerPrototype>
+    <TextPrototype>
+        <components>
+            <TextComponent/>
+        </components>
+    </TextPrototype>
 </EntityPrototype>

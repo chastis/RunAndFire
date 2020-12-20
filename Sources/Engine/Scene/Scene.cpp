@@ -6,6 +6,7 @@
 #include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Prototypes/ScenePrototype.hpp>
 #include <Engine/Debugging/Scene_Debug.hpp>
+#include "Engine/Components/TextComponent.hpp"
 
 Scene::Scene()
 #if defined(DEBUG)
@@ -56,13 +57,13 @@ void Scene::Draw()
     {
         for (auto en : layer.objects)
         {
-            for (const auto enMeshComp : en->GetKindOfComponents<MeshComponentBase>())
+            for (const auto enDrawComp : en->GetKindOfComponents<DrawableComponentBase>())
             {
                 sf::Transform enTransform = en->getTransform();
                 sf::Vector2f shift = (en->getPosition() - en->getOrigin()) * mapScale - en->getPosition() + en->getOrigin();
                 enTransform = enTransform.translate(shift);
                 enTransform = enTransform.scale(mapScale);
-                m_renderTarget->draw(*enMeshComp, enTransform);
+                m_renderTarget->draw(enDrawComp->GetDrawable(), enTransform);
             }
         }
     }
@@ -149,16 +150,14 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
         {
             entity->setOrigin(obj.getSize().x / 2.f, obj.getSize().y / 2.f);
         }
-        
+
         entity->InitFromPrototype(obj.getName());
+        entity->InitFromTileObject(obj);
         entity->PostInitComponents();
 
         #if defined(DEBUG)
         m_debug->DebugInitObject(*entity, obj);
         #endif //DEBUG
-
-        
-
 
         auto physComp = entity->GetComponent<PhysicBodyComponent>();
         if (physComp && isCollision)

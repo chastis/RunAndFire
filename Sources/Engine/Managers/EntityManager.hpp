@@ -10,6 +10,7 @@ class EntityManager_Impl
 {
 public:
     [[nodiscard]] std::vector<Entity*> GetEntities();
+    [[nodiscard]] Entity* GetEntityBySID(const std::string& sid);
     [[nodiscard]] Entity* CreateEntity();
     void DeleteAllEntities();
 private:

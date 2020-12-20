@@ -41,6 +41,11 @@ void TextComponent::InitFromTileObjectSpecific()
         const tson::Colori& color = text.color.value();
         setFillColor(sf::Color(color.r, color.g, color.b, color.a));
     }
+    else
+    {
+        // Black is default color for TiledEditor
+        setFillColor(sf::Color::Black);
+    }
     m_tileBounds.x = static_cast<float>(obj.getSize().x);
     m_tileBounds.y = static_cast<float>(obj.getSize().y);
 }

@@ -135,7 +135,7 @@ void PhysicBodyComponent::InitFromPrototypeSpecific()
 void PhysicBodyComponent::PostInitSpecific()
 {
     PhysicBodyComponentBase::PostInitSpecific();
-    if (m_prototypeWrapper &&  GetPrototype<PhysicBodyPrototype>().ShouldInitFromMesh())
+    if (m_prototypeWrapper && GetPrototype<PhysicBodyPrototype>().ShouldInitFromMesh())
     {
         auto meshComponent = GetOwnerRef().GetComponent<MeshComponent>();
         M42_ASSERT(meshComponent, "No mesh to initialize physic component!");

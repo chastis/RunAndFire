@@ -13,9 +13,11 @@
 #include <Engine/Prototypes/EventHandlerPrototype.hpp>
 #include <Engine/Prototypes/ScenePrototype.hpp>
 #include <Game/Prototypes/PlayerControllerPrototype.hpp>
+#include <Game/Prototypes/UITilePrototype.hpp>
 #include <Game/Components/PlayerControllerComponent.hpp>
 #include <Game/Components/ChestControllerComponent.hpp>
 #include <Game/Components/LongBouncerControllerComponent.hpp>
+#include <Game/Components/UITileComponent.hpp>
 
 void GameManager_Impl::Initialize()
 {
@@ -36,10 +38,12 @@ void GameManager_Impl::Initialize()
     InitPrototypes<MeshPrototypes>("Prototypes/mesh_prototypes.xml");
     InitPrototypes<EventHandlerPrototypes>("Prototypes/event_handler_prototypes.xml");
     InitPrototypes<ScenePrototypes>("Prototypes/scene_prototypes.xml");
+    InitPrototypes<UITilePrototypes>("Prototypes/uitile_prototypes.xml");
 
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<PlayerControllerComponent>();
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<ChestControllerComponent>();
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<LongBouncerControllerComponent>();
+    DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<UITileComponent>();
 
     m_engineEventHandler.JoinChannel<EngineEventChannel>();
     m_engineEventHandler.ConnectHandler(this, &GameManager_Impl::OnInputEvent);

@@ -29,9 +29,11 @@ class IPrototypeable
 public:
     void InitFromPrototype(const std::string& prototypeName);
     void InitFromPrototype(size_t prototypeID);
+    bool IsPrototypeExist() const;
     
     template <class T>
     const T& GetPrototype() const;
+
 protected:
     virtual void InitFromPrototypeSpecific() {};
     virtual void PostPrototypeInitSpecific() {};

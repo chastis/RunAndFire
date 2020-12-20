@@ -31,16 +31,26 @@ public:
     void Initialize(sf::RenderTarget* renderTarget);
     void Draw();
     void Shutdown();
-    void ChangeGameMode(EGameMode newMode);
     void Update(float deltaTime);
+    void RequestChangeGameMode(EGameMode gameMode, const std::string& input, const std::string& map);
     Scene* GetCurrentScene();
+    sf::RenderTarget* GetRenderTarget() const;
 private:
     void OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event);
+    void ChangeGameMode(EGameMode newMode, const std::string& input);
 private:
     sf::RenderTarget* m_renderTargetWeak;
     std::stack<std::unique_ptr<Scene>> m_scenes;
     PhysicEngine m_physicEngine;
     EventHandler m_eventHandler;
+
+    struct RequestParam
+    {
+        std::string map;
+        std::string input;
+        EGameMode gameMode;
+    };
+    std::optional<RequestParam> m_requestedData;
 
 #if defined(DEBUG)
     class Debug;

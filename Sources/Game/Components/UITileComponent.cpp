@@ -7,24 +7,112 @@
 #include <Engine/EventSystem/EventDispatcher.hpp>
 #include <Engine/Engine.hpp>
 #include <Game/Managers/GameManager.hpp>
-#include <Game/Prototypes/UITileControllerPrototype.hpp>
+#include <Game/Prototypes/UITilePrototype.hpp>
+#include <Engine/Managers/EntityManager.hpp>
+#include <Engine/Components/TextComponent.hpp>
 
 UITileComponent::UITileComponent()
 {
     m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<UITilePrototype>>());
 }
 
-void UITileComponent::InitFromPrototypeSpecific()
+void UITileComponent::Update(float deltaTime)
 {
-
+    auto textComp = GetOwnerRef().GetComponent<TextComponent>();
+    if (textComp)
+    {
+        if (m_active)
+        {
+            textComp->setOutlineThickness(0.5f);
+        }
+        else
+        {
+            textComp->setOutlineThickness(0.f);
+        }
+    }
+    
 }
 
-bool UITileComponent::HandleInput(const ActionSignal& signal)
+void UITileComponent::InitFromPrototypeSpecific()
 {
-    return false;  
+    const auto& prototype = GetPrototype<UITilePrototype>();
+    m_nextSID = prototype.GetNext();
+    m_prevSID = prototype.GetPrev();
+    m_active = prototype.IsActive();
+
+    if (prototype.GetAction() == "start")
+    {
+        m_action = [&]()
+        {
+            auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
+            engine.RequestChangeGameMode(EGameMode::Game, "game_input", "Map1");
+        };
+    }
+    else if (prototype.GetAction() == "exit")
+    {
+        m_action = [&]()
+        {
+            std::shared_ptr<Event> applicationEvent = std::make_shared<EngineEvents::Closed>();
+            EventSystem::Broadcast(applicationEvent, EngineEventChannel::GetInstance());
+        };
+    }
 }
 
 void UITileComponent::PostInitSpecific()
 {
+    auto textComp = GetOwnerRef().GetComponent<TextComponent>();
+    if (textComp)
+    {
+        textComp->setOutlineColor(sf::Color::Magenta);
+    }
+    else
+    {
+        M42_ASSERT(false, "");
+    }
+}
 
+bool UITileComponent::HandleInput(const ActionSignal& signal)
+{
+    if (!m_active)
+    {
+        return false;
+    }
+    if (signal == ActionSignal("ui_action"))
+    {
+        m_action();
+    }
+    if (signal == ActionSignal("ui_next"))
+    {
+        Entity* NextEntity = EntityManager::GetInstanceRef().GetEntityBySID(m_nextSID);
+        if (NextEntity)
+        {
+            auto uiTileComp = NextEntity->GetComponent<UITileComponent>();
+            if (uiTileComp)
+            {
+                uiTileComp->ToggleActive(true);
+                ToggleActive(false);
+                return true;
+            }
+        }
+    }
+    if (signal == ActionSignal("ui_prev"))
+    {
+        Entity* NextEntity = EntityManager::GetInstanceRef().GetEntityBySID(m_prevSID);
+        if (NextEntity)
+        {
+            auto uiTileComp = NextEntity->GetComponent<UITileComponent>();
+            if (uiTileComp)
+            {
+                uiTileComp->ToggleActive(true);
+                ToggleActive(false);
+                return true;
+            }
+        }
+    }
+    return false;  
+}
+
+void UITileComponent::ToggleActive(bool active)
+{
+    m_active = active;
 }

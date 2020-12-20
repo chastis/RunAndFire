@@ -35,4 +35,16 @@
             <TextComponent/>
         </components>
     </TextPrototype>
+    <UIStart>
+        <components>
+            <TextComponent/>
+            <UITileComponent prototype = "UIStart"/>
+        </components>
+    </UIStart>
+    <UIExit>
+        <components>
+            <TextComponent/>
+            <UITileComponent prototype = "UIExit"/>
+        </components>
+    </UIExit>
 </EntityPrototype>

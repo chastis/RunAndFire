@@ -13,8 +13,14 @@ class UITileComponent : public BaseComponent, public InputClient
 public:
     UITileComponent();
 
+    void Update(float deltaTime) override;
     bool HandleInput(const ActionSignal& signal) override;
+    void ToggleActive(bool active);
 private:
     void InitFromPrototypeSpecific() override;
     void PostInitSpecific() override;
+    std::string m_nextSID;
+    std::string m_prevSID;
+    std::function<void()> m_action;
+    bool m_active = false;
 };

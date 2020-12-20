@@ -13,6 +13,22 @@ std::vector<Entity*> EntityManager_Impl::GetEntities()
     return entities;
 }
 
+Entity* EntityManager_Impl::GetEntityBySID(const std::string& sid)
+{
+    for (auto& it : m_entities)
+    {
+        if (!it.second->IsPrototypeExist())
+        {
+            continue;
+        }
+        if (it.second->GetPrototype<EntityPrototype>().GetSID() == sid)
+        {
+            return it.second.Get();
+        }
+    }
+    return nullptr;
+}
+
 Entity* EntityManager_Impl::CreateEntity()
 {
     auto newEntityIt = m_entities.emplace(m_currentUID, MakeIntrusive<Entity>());

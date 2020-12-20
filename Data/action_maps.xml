@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <ActionMaps>
+	<ActionMap name="ui_input" passthrough="false">
+		<ActionSignal native_input="kp:W" signal="ui_prev" />
+		<ActionSignal native_input="kp:S" signal="ui_next" />
+		<ActionSignal native_input="kp:Enter" signal="ui_action" />
+	</ActionMap>
 	<ActionMap name="game_input" passthrough="false">
 		<ActionSignal native_input="kp:W" signal="player_jump" />
 		<ActionSignal native_input="kp:D" signal="move_right" />

@@ -34,8 +34,6 @@ void Engine::Initialize(sf::RenderTarget* renderTarget)
     m_physicEngine.SetFramerate(1.f / 60.f);
     m_physicEngine.SetGravity(0, Const::G);
 
-    ChangeGameMode(EGameMode::Game);
-
 #if defined(DEBUG)
     m_debug->Initialize();
 #endif //DEBUG
@@ -57,31 +55,37 @@ void Engine::Shutdown()
 #endif //DEBUG
 }
 
-void Engine::ChangeGameMode(EGameMode newMode)
+void Engine::ChangeGameMode(EGameMode newMode, const std::string& input)
 {
-    switch (newMode)
+    if (!input.empty())
     {
-    case EGameMode::Game:
-    {
-        InputManager::GetInstanceRef().PushActionMap("game_input");
-        auto scene = std::make_unique<Scene>();
-        scene->Initialize(m_renderTargetWeak);
-        m_scenes.push(std::move(scene));
-        break;
+        InputManager::GetInstanceRef().PushActionMap(input);
     }
-    case EGameMode::Menu:
-    {
-        auto scene = std::make_unique<Scene>();
-        scene->Initialize(m_renderTargetWeak);
-        m_scenes.push(std::move(scene));
-        break;
-    }
-    default:;
-    }
+    auto scene = std::make_unique<Scene>();
+    scene->Initialize(m_renderTargetWeak);
+    m_scenes.push(std::move(scene));
+}
+
+void Engine::RequestChangeGameMode(EGameMode gameMode, const std::string& input, const std::string& map)
+{
+    RequestParam param;
+    param.gameMode = gameMode;
+    param.map = map;
+    param.input = input;
+    m_requestedData = param;
 }
 
 void Engine::Update(float deltaTime)
 {
+    if (m_requestedData.has_value())
+    {
+        ChangeGameMode(m_requestedData.value().gameMode, m_requestedData.value().input);
+        if (m_requestedData.value().map != "" && GetCurrentScene())
+        {
+            GetCurrentScene()->InitFromPrototype(m_requestedData.value().map);
+        }
+        m_requestedData.reset();
+    }
     m_physicEngine.Update();
     if (!m_scenes.empty())
     {
@@ -99,6 +103,11 @@ Scene* Engine::GetCurrentScene()
         return nullptr;
     }
     return m_scenes.top().get();
+}
+
+sf::RenderTarget* Engine::GetRenderTarget() const
+{
+    return m_renderTargetWeak;
 }
 
 void Engine::OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event)

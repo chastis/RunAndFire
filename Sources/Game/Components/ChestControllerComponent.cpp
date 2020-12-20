@@ -26,7 +26,6 @@ void ChestControllerComponent::OnAnimationEnded(EntityEvents::AnimationEndedEven
     if (animationEvent.animation_name == "chest_open")
     {
         auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
-        engine.ChangeGameMode(EGameMode::Menu);
-        engine.GetCurrentScene()->InitFromPrototype("win");
+        engine.RequestChangeGameMode(EGameMode::Menu, "ui_input", "Win");
     }
 }

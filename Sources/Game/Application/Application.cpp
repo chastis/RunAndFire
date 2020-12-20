@@ -25,7 +25,8 @@ void Application_Impl::Initialize()
 
     m_engineInstance = std::make_unique<Engine>();
     m_engineInstance->Initialize(m_window.get());
-    m_engineInstance->GetCurrentScene()->InitFromPrototype("Map1");
+    m_engineInstance->RequestChangeGameMode(EGameMode::Menu, "ui_input", "Menu");
+    //m_engineInstance->GetCurrentScene()->InitFromPrototype("Menu");
 
     GameManager::GetInstanceRef().SetEngineInstance(m_engineInstance.get());
 
@@ -67,7 +68,7 @@ void Application_Impl::Run()
         // todo : rewrite
         // this is for when move app window, won't cause errors
         const auto frameTime =  frameClock.restart().asSeconds();
-        if (frameTime < 1.f && m_engineInstance && m_engineInstance->GetCurrentScene())
+        if (frameTime < 1.f && m_engineInstance)
         {
             m_engineInstance->Update(frameTime);
         }

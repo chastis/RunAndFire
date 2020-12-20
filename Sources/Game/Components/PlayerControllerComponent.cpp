@@ -148,6 +148,5 @@ void PlayerControllerComponent::OnAnimationNotify(EntityEvents::AnimationNotifyE
 void PlayerControllerComponent::OnTakeDamage(GameEvents::TakeDamageEvent& event)
 {
     auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
-    engine.ChangeGameMode(EGameMode::Menu);
-    engine.GetCurrentScene()->InitFromPrototype("loose");
+    engine.RequestChangeGameMode(EGameMode::Menu, "ui_input", "Loose");
 }

@@ -53,8 +53,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":3.33333333333331,
-                 "x":316.666666666667,
+                 "width":3.33333,
+                 "x":316.667,
                  "y":320
                 }],
          "opacity":1,
@@ -89,8 +89,8 @@
                  "type":"",
                  "visible":true,
                  "width":106.167,
-                 "x":10.4308966666667,
-                 "y":158.799333333333
+                 "x":10.4309,
+                 "y":158.799
                 }, 
                 {
                  "height":37,
@@ -113,11 +113,11 @@
                  "type":"",
                  "visible":true,
                  "width":103.667,
-                 "x":10.6666466666667,
+                 "x":10.6666,
                  "y":245.167
                 }, 
                 {
-                 "height":115.666666666667,
+                 "height":115.667,
                  "id":14,
                  "name":"TextPrototype",
                  "properties":[
@@ -131,13 +131,13 @@
                     {
                      "color":"#00c590",
                      "pixelsize":30,
-                     "text":"RAN \n      AND \n            FIRE",
+                     "text":"RUN \n      AND \n            FIRE",
                      "wrap":true
                     },
                  "type":"",
                  "visible":true,
-                 "width":171.500333333333,
-                 "x":130.9165,
+                 "width":171.5,
+                 "x":130.916,
                  "y":17.5
                 }, 
                 {
@@ -161,8 +161,8 @@
                  "type":"",
                  "visible":true,
                  "width":106.167,
-                 "x":10.2498333333333,
-                 "y":202.833333333333
+                 "x":10.2498,
+                 "y":202.833
                 }],
          "opacity":1,
          "type":"objectgroup",

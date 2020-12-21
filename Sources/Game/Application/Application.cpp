@@ -18,7 +18,7 @@ void Application_Impl::Initialize()
     GameManager::GetInstanceRef().Initialize();
 
     m_window = std::make_shared<sf::RenderWindow>();
-    m_window->create(sf::VideoMode(960, 960), "RUN & FIRE & 2");
+    m_window->create(sf::VideoMode(960, 960), "RUN AND FIRE");
     m_window->setKeyRepeatEnabled(false); // https://www.sfml-dev.org/tutorials/2.5/window-events.php
     m_window->setFramerateLimit(60);
 

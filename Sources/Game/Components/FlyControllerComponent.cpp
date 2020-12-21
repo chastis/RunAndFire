@@ -13,15 +13,32 @@ FlyControllerComponent::FlyControllerComponent()
 
 void FlyControllerComponent::Update(float deltaTime)
 {
+    if (m_alive)
+    {
+        const auto velocity = m_physicComponent->GetLinearVelocity();
+        m_physicComponent->SetLinearVelocity(velocity.x, 10.f * m_direction * deltaTime);
+        m_movingTime += deltaTime;
+        if (m_movingTime >= 2.f)
+        {
+            m_movingTime = 0.f;
+            m_direction *= -1.f;
+        }
+    }
 }
 
 void FlyControllerComponent::PostInitSpecific()
 {
     m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
+    m_physicComponent->SetGravityScale(0.f);
 }
 
 void FlyControllerComponent::OnTakeDamage(GameEvents::TakeDamageEvent& gameEvent)
 {
+    if (!m_alive)
+    {
+        return;
+    }
+    m_alive = false;
     m_physicComponent->SetGravityScale(1.f);
     m_physicComponent->GetBody()->SetType(b2BodyType::b2_staticBody);
     auto meshComponent = GetOwnerRef().GetComponent<MeshComponent>();

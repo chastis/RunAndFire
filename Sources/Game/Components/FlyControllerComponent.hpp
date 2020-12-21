@@ -20,6 +20,8 @@ private:
     void PostInitSpecific() override;
     void OnTakeDamage(GameEvents::TakeDamageEvent& gameEvent);
     void OnAnimationNotifyDamage(EntityEvents::AnimationNotifyEvent& gameEvent);
-
+    bool m_alive = true;
+    float m_direction = 1.f;
+    float m_movingTime = 0.f;
     PhysicBodyComponent* m_physicComponent = nullptr;
 };

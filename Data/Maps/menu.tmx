@@ -103,7 +103,7 @@
    <properties>
     <property name="FontPath" value="Fonts/MS Serif.ttf"/>
    </properties>
-   <text pixelsize="30" wrap="1" color="#00c590">RAN 
+   <text pixelsize="30" wrap="1" color="#00c590">RUN 
       AND 
             FIRE</text>
   </object>

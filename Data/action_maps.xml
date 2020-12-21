@@ -6,7 +6,8 @@
 		<ActionSignal native_input="kp:Enter" signal="ui_action" />
 	</ActionMap>
 	<ActionMap name="game_input" passthrough="false">
-		<ActionSignal native_input="kp:W" signal="player_jump" />
+		<ActionSignal native_input="kp:W" signal="player_jump_start" />
+		<ActionSignal native_input="kr:W" signal="player_jump_stop" />
 		<ActionSignal native_input="kp:D" signal="move_right" />
 		<ActionSignal native_input="kr:D" signal="stop_move_right" />
 		<ActionSignal native_input="kp:A" signal="move_left" />

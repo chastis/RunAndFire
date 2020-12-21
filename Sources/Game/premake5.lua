@@ -49,7 +49,18 @@ project "RunAndFire"
 
     filter "configurations:Release"
         kind "WindowedApp"
-        defines { "NDEBUG", "RELEASE", "PUGIXML_NO_EXCEPTIONS", "WORKING_DIRECTORY=".."\"Data\"" }
+        defines { "NDEBUG", "RELEASE", "PUGIXML_NO_EXCEPTIONS",  "WORKING_DIRECTORY=".."\"%{wks.location}/../Data\"" }
+        optimize "On"
+        runtime "Release"
+
+        links
+        {
+            "sfml-main"
+        }
+
+    filter "configurations:Dist"
+        kind "WindowedApp"
+        defines { "NDEBUG", "DIST", "PUGIXML_NO_EXCEPTIONS", "WORKING_DIRECTORY=".."\"Data\"" }
         optimize "On"
         runtime "Release"
 

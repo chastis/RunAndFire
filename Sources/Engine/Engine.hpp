@@ -32,12 +32,12 @@ public:
     void Draw();
     void Shutdown();
     void Update(float deltaTime);
-    void RequestChangeGameMode(EGameMode gameMode, const std::string& input, const std::string& map);
+    void RequestChangeScene(const std::string& map, bool isNew = true);
     Scene* GetCurrentScene();
     sf::RenderTarget* GetRenderTarget() const;
 private:
     void OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event);
-    void ChangeGameMode(EGameMode newMode, const std::string& input);
+    void ChangeScene(const std::string& scenePrototype);
 private:
     sf::RenderTarget* m_renderTargetWeak;
     std::stack<std::unique_ptr<Scene>> m_scenes;
@@ -47,8 +47,7 @@ private:
     struct RequestParam
     {
         std::string map;
-        std::string input;
-        EGameMode gameMode;
+        bool isNew = false;
     };
     std::optional<RequestParam> m_requestedData;
 

@@ -17,7 +17,7 @@ private:
     EntityManager_Impl();
     ~EntityManager_Impl();
 
-    std::map<UID, IntrusivePtr<Entity>> m_entities;
+    std::map<UID, std::unique_ptr<Entity>> m_entities;
     UID m_currentUID = 0;
     friend class Singleton<EntityManager_Impl>;
 };

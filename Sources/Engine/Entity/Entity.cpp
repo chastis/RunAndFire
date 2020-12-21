@@ -9,7 +9,12 @@ Entity::Entity()
 {
     m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<EntityPrototype>>());
 }
-Entity::~Entity() = default;
+Entity::~Entity()
+{
+    m_UID = -1;
+    std::vector<std::unique_ptr<BaseComponent>> preDeleted = std::move(m_components);
+    m_components.clear();
+}
 
 void Entity::InitFromPrototypeSpecific()
 {

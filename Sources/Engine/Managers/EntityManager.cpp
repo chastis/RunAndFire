@@ -8,7 +8,7 @@ std::vector<Entity*> EntityManager_Impl::GetEntities()
     std::vector<Entity*> entities;
     for (auto& it : m_entities)
     {
-        entities.push_back(it.second.Get());
+        entities.push_back(it.second.get());
     }
     return entities;
 }
@@ -23,7 +23,7 @@ Entity* EntityManager_Impl::GetEntityBySID(const std::string& sid)
         }
         if (it.second->GetPrototype<EntityPrototype>().GetSID() == sid)
         {
-            return it.second.Get();
+            return it.second.get();
         }
     }
     return nullptr;
@@ -31,10 +31,10 @@ Entity* EntityManager_Impl::GetEntityBySID(const std::string& sid)
 
 Entity* EntityManager_Impl::CreateEntity()
 {
-    auto newEntityIt = m_entities.emplace(m_currentUID, MakeIntrusive<Entity>());
+    auto newEntityIt = m_entities.emplace(m_currentUID, std::make_unique<Entity>());
     newEntityIt.first->second->m_UID = m_currentUID++;
 
-    auto createdEntity = newEntityIt.first->second.Get();
+    auto createdEntity = newEntityIt.first->second.get();
 
     auto entityCreatedEvent = std::make_shared<EntityEvents::EntityCreatedEvent>();
     entityCreatedEvent->entity = createdEntity;

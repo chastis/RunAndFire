@@ -6,6 +6,7 @@
 #include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Entity/EntityEvents.hpp>
 #include <Engine/Entity/Entity.hpp>
+#include <Engine/Prototypes/ScenePrototype.hpp>
 
 #if defined(DEBUG)
 #include <Engine/Debugging/Engine_Debug.hpp>
@@ -55,23 +56,21 @@ void Engine::Shutdown()
 #endif //DEBUG
 }
 
-void Engine::ChangeGameMode(EGameMode newMode, const std::string& input)
+void Engine::ChangeScene(const std::string& scenePrototype)
 {
-    if (!input.empty())
-    {
-        InputManager::GetInstanceRef().PushActionMap(input);
-    }
     auto scene = std::make_unique<Scene>();
     scene->Initialize(m_renderTargetWeak);
+    scene->InitFromPrototype(scenePrototype);
+    const auto& input = scene->GetPrototype<ScenePrototype>().GetInput();
     m_scenes.push(std::move(scene));
+    InputManager::GetInstanceRef().PushActionMap(input);
 }
 
-void Engine::RequestChangeGameMode(EGameMode gameMode, const std::string& input, const std::string& map)
+void Engine::RequestChangeScene(const std::string& map, bool isNew)
 {
     RequestParam param;
-    param.gameMode = gameMode;
     param.map = map;
-    param.input = input;
+    param.isNew = isNew;
     m_requestedData = param;
 }
 
@@ -79,11 +78,12 @@ void Engine::Update(float deltaTime)
 {
     if (m_requestedData.has_value())
     {
-        ChangeGameMode(m_requestedData.value().gameMode, m_requestedData.value().input);
-        if (m_requestedData.value().map != "" && GetCurrentScene())
+        if (m_requestedData.value().isNew && !m_scenes.empty())
         {
-            GetCurrentScene()->InitFromPrototype(m_requestedData.value().map);
+            EntityManager::GetInstanceRef().DeleteAllEntities();
+            m_scenes.pop();
         }
+        ChangeScene(m_requestedData.value().map);
         m_requestedData.reset();
     }
     m_physicEngine.Update();

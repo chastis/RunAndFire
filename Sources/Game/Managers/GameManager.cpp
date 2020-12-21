@@ -18,6 +18,7 @@
 #include <Game/Components/ChestControllerComponent.hpp>
 #include <Game/Components/LongBouncerControllerComponent.hpp>
 #include <Game/Components/UITileComponent.hpp>
+#include <Game/Components/FlyControllerComponent.hpp>
 
 void GameManager_Impl::Initialize()
 {
@@ -44,6 +45,7 @@ void GameManager_Impl::Initialize()
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<ChestControllerComponent>();
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<LongBouncerControllerComponent>();
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<UITileComponent>();
+    DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<FlyControllerComponent>();
 
     m_engineEventHandler.JoinChannel<EngineEventChannel>();
     m_engineEventHandler.ConnectHandler(this, &GameManager_Impl::OnInputEvent);

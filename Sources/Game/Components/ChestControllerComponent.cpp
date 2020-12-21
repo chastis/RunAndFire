@@ -5,6 +5,7 @@
 #include <Game/Events/GameEvents.hpp>
 #include <Game/Managers/GameManager.hpp>
 #include <Engine/Engine.hpp>
+#include "Engine/Prototypes/ScenePrototype.hpp"
 
 ChestControllerComponent::ChestControllerComponent()
 {
@@ -26,6 +27,14 @@ void ChestControllerComponent::OnAnimationEnded(EntityEvents::AnimationEndedEven
     if (animationEvent.animation_name == "chest_open")
     {
         auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
-        engine.RequestChangeGameMode(EGameMode::Menu, "ui_input", "Win");
+        const auto& next_map = engine.GetCurrentScene()->GetPrototype<ScenePrototype>().GetNextMap();
+        if (next_map.has_value())
+        {
+            engine.RequestChangeScene(next_map.value());
+        }
+        else
+        {
+            engine.RequestChangeScene("Menu");
+        }
     }
 }

@@ -25,6 +25,14 @@ public:
         {
             m_enableCollisionDebug = value.as_bool();
         }
+        if (const auto value = node.attribute("next_map"))
+        {
+            m_nextMap = value.as_string();
+        }
+        if (const auto value = node.attribute("input"))
+        {
+            m_input = value.as_string();
+        }
     }
     [[nodiscard]] const std::string& GetMapPath() const
     {
@@ -34,6 +42,14 @@ public:
     {
         return m_mapScale;
     }
+    [[nodiscard]] const std::optional<std::string>& GetNextMap() const
+    {
+        return m_nextMap;
+    }
+    [[nodiscard]] const std::string& GetInput() const
+    {
+        return m_input;
+    }
     [[nodiscard]] bool IsEnableCollisionDebug() const
     {
         return m_enableCollisionDebug;
@@ -41,6 +57,8 @@ public:
 protected:
     std::string m_mapPath;
     sf::Vector2f m_mapScale;
+    std::string m_input;
+    std::optional<std::string> m_nextMap;
     bool m_enableCollisionDebug = false;
 };
 

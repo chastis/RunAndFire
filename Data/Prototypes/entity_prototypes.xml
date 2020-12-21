@@ -47,4 +47,24 @@
             <UITileComponent prototype = "UIExit"/>
         </components>
     </UIExit>
+    <UIBackToMenu>
+        <components>
+            <TextComponent/>
+            <UITileComponent prototype = "UIBackToMenu"/>
+        </components>
+    </UIBackToMenu>
+    <UITutorial>
+        <components>
+            <TextComponent/>
+            <UITileComponent prototype = "UITutorial"/>
+        </components>
+    </UITutorial>
+    <FlyPrototype>
+        <components>
+            <MeshComponent prototype = "FlyPrototype"/>
+            <PhysicBodyComponent prototype = "DynamicPhysicBody"/>
+            <EventHandlerComponent/>
+            <FlyControllerComponent/>
+        </components>
+    </FlyPrototype>
 </EntityPrototype>

@@ -23,7 +23,7 @@ void UITileComponent::Update(float deltaTime)
     {
         if (m_active)
         {
-            textComp->setOutlineThickness(0.5f);
+            textComp->setOutlineThickness(1.f);
         }
         else
         {
@@ -45,7 +45,15 @@ void UITileComponent::InitFromPrototypeSpecific()
         m_action = [&]()
         {
             auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
-            engine.RequestChangeGameMode(EGameMode::Game, "game_input", "Map1");
+            engine.RequestChangeScene("Map1");
+        };
+    }
+    if (prototype.GetAction() == "tutorial")
+    {
+        m_action = [&]()
+        {
+            auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
+            engine.RequestChangeScene("Tutorial");
         };
     }
     else if (prototype.GetAction() == "exit")
@@ -56,6 +64,14 @@ void UITileComponent::InitFromPrototypeSpecific()
             EventSystem::Broadcast(applicationEvent, EngineEventChannel::GetInstance());
         };
     }
+    else if (prototype.GetAction() == "to_menu")
+    {
+        m_action = [&]()
+        {
+            auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
+            engine.RequestChangeScene("Menu");
+        };
+    }
 }
 
 void UITileComponent::PostInitSpecific()
@@ -63,7 +79,7 @@ void UITileComponent::PostInitSpecific()
     auto textComp = GetOwnerRef().GetComponent<TextComponent>();
     if (textComp)
     {
-        textComp->setOutlineColor(sf::Color::Magenta);
+        textComp->setOutlineColor(sf::Color(156, 60, 194));
     }
     else
     {
@@ -89,8 +105,8 @@ bool UITileComponent::HandleInput(const ActionSignal& signal)
             auto uiTileComp = NextEntity->GetComponent<UITileComponent>();
             if (uiTileComp)
             {
-                uiTileComp->ToggleActive(true);
                 ToggleActive(false);
+                uiTileComp->ToggleActive(true);
                 return true;
             }
         }
@@ -103,8 +119,8 @@ bool UITileComponent::HandleInput(const ActionSignal& signal)
             auto uiTileComp = NextEntity->GetComponent<UITileComponent>();
             if (uiTileComp)
             {
-                uiTileComp->ToggleActive(true);
                 ToggleActive(false);
+                uiTileComp->ToggleActive(true);
                 return true;
             }
         }

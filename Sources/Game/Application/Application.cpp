@@ -25,9 +25,8 @@ void Application_Impl::Initialize()
 
     m_engineInstance = std::make_unique<Engine>();
     m_engineInstance->Initialize(m_window.get());
-    m_engineInstance->RequestChangeGameMode(EGameMode::Menu, "ui_input", "Menu");
-    //m_engineInstance->GetCurrentScene()->InitFromPrototype("Menu");
-
+    m_engineInstance->RequestChangeScene("Menu");
+    
     GameManager::GetInstanceRef().SetEngineInstance(m_engineInstance.get());
 
     m_applicationEventHandler.JoinChannel<EngineEventChannel>();
@@ -47,28 +46,15 @@ void Application_Impl::Run()
             EventSystem::Broadcast(applicationEvent, EngineEventChannel::GetInstance());
         }
         
-
-        // todo : goto ui
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         {
-            m_engineInstance.release();// = std::make_unique<Engine>();
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
-        {
-            if (!m_engineInstance || !m_engineInstance->GetCurrentScene())
-            {
-                m_engineInstance  = std::make_unique<Engine>(); 
-                m_engineInstance->Initialize(m_window.get());
-                m_engineInstance->GetCurrentScene()->InitFromPrototype("Map1");
-                GameManager::GetInstanceRef().SetEngineInstance(m_engineInstance.get());
-            }
-            
+            m_engineInstance->RequestChangeScene("Menu");
         }
 
         // todo : rewrite
         // this is for when move app window, won't cause errors
         const auto frameTime =  frameClock.restart().asSeconds();
-        if (frameTime < 1.f && m_engineInstance)
+        if (frameTime < 1.f)
         {
             m_engineInstance->Update(frameTime);
         }

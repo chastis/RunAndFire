@@ -16,6 +16,10 @@ void EventChannel::AddHandler(EventHandler* handler)
 
 void EventChannel::RemoveHandler(EventHandler* handler)
 {
+    if (m_listeners.empty())
+    {
+        return;
+    }
     auto handlerIt = std::find(m_listeners.begin(), m_listeners.end(), handler);
     if (handlerIt != m_listeners.end())
     {

@@ -10,9 +10,9 @@
 
 class BaseComponent;
 
-using UID = size_t;
+using UID = int32_t;
 
-class Entity final : public sf::Transformable, public Noncopyable, public IPrototypeable, public ITileObject, public ReferenceCountable<DefaultThreadPolicy>
+class Entity final : public sf::Transformable, public Noncopyable, public IPrototypeable, public ITileObject
 {
 public:
     Entity();

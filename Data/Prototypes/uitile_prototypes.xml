@@ -1,0 +1,8 @@
+<UITilePrototype>
+    <Default>
+    </Default>
+    <UIStart action = "start"  next = "UITutorial" prev = "UIExit" active = "true"/>
+    <UITutorial action = "tutorial"  next = "UIExit" prev = "UIStart"/>
+    <UIExit action = "exit"  next = "UIStart" prev = "UITutorial"/>
+    <UIBackToMenu action = "to_menu"  next = "UIBackToMenu" prev = "UIBackToMenu" active = "true"/>
+</UITilePrototype>

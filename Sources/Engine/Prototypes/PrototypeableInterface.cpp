@@ -42,3 +42,8 @@ void IPrototypeable::InitFromPrototype(size_t prototypeID)
     }
     PostPrototypeInitSpecific();
 }
+
+bool IPrototypeable::IsPrototypeExist() const
+{
+    return m_prototypeWrapper.get() && m_prototypeWrapper->GetBasePrototype();
+}

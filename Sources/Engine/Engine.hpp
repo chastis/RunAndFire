@@ -31,16 +31,30 @@ public:
     void Initialize(sf::RenderTarget* renderTarget);
     void Draw();
     void Shutdown();
-    void ChangeGameMode(EGameMode newMode);
     void Update(float deltaTime);
+    void RequestChangeScene(const std::string& map, bool isNew = true);
     Scene* GetCurrentScene();
+    float GetGameTime() const;
+    sf::RenderTarget* GetRenderTarget() const;
+    void SetDeltaTimeModifier(float modifier);
+
 private:
     void OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event);
+    void ChangeScene(const std::string& scenePrototype);
 private:
     sf::RenderTarget* m_renderTargetWeak;
     std::stack<std::unique_ptr<Scene>> m_scenes;
     PhysicEngine m_physicEngine;
     EventHandler m_eventHandler;
+
+    struct RequestParam
+    {
+        std::string map;
+        bool isNew = false;
+    };
+    std::optional<RequestParam> m_requestedData;
+    float m_deltaTimeModifier = 1.f;
+    float m_gameTime = 0.f;
 
 #if defined(DEBUG)
     class Debug;

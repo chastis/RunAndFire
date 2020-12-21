@@ -6,6 +6,8 @@
 #include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Prototypes/ScenePrototype.hpp>
 #include <Engine/Debugging/Scene_Debug.hpp>
+#include <Engine/Components/TextComponent.hpp>
+#include <Engine/Static/Misc.hpp>
 
 Scene::Scene()
 #if defined(DEBUG)
@@ -56,19 +58,62 @@ void Scene::Draw()
     {
         for (auto en : layer.objects)
         {
-            for (const auto enMeshComp : en->GetKindOfComponents<MeshComponentBase>())
+            for (const auto enDrawComp : en->GetKindOfComponents<DrawableComponentBase>())
             {
                 sf::Transform enTransform = en->getTransform();
                 sf::Vector2f shift = (en->getPosition() - en->getOrigin()) * mapScale - en->getPosition() + en->getOrigin();
                 enTransform = enTransform.translate(shift);
                 enTransform = enTransform.scale(mapScale);
-                m_renderTarget->draw(*enMeshComp, enTransform);
+                m_renderTarget->draw(enDrawComp->GetDrawable(), enTransform);
             }
         }
     }
 #if defined(DEBUG)
     m_debug->Draw();
 #endif //DEBUG
+}
+
+void Scene::UpdateViewport(sf::Vector2f center)
+{
+    const auto& mapScale = GetPrototype<ScenePrototype>().GetMapScale();
+    const sf::Vector2f& currentViewportCenter = m_renderTarget->getView().getCenter();
+    const sf::Vector2f& currentViewportSize = m_renderTarget->getView().getSize();
+    const sf::Vector2f unscaledViewportCenter = {
+        currentViewportCenter.x / mapScale.x, 
+        currentViewportCenter.y / mapScale.y };
+    const sf::Vector2f unscaledViewportSize = {
+        currentViewportSize.x / mapScale.x, 
+        currentViewportSize.y / mapScale.y };
+    const sf::Vector2f viewportHalfSize = unscaledViewportSize / 2.f;
+    const sf::Vector2f start = center - viewportHalfSize;
+    const sf::Vector2f end = center + viewportHalfSize;
+    sf::Vector2f shift;
+    if (start.x < m_fullSceneSize.left)
+    {
+        shift.x = m_fullSceneSize.left;
+    }
+    else if (end.x > m_fullSceneSize.left + m_fullSceneSize.width)
+    {
+        shift.x = m_fullSceneSize.left + m_fullSceneSize.width - unscaledViewportSize.x;
+    }
+    else
+    {
+        shift.x = start.x;
+    }
+    if (start.y < m_fullSceneSize.top)
+    {
+        shift.y = m_fullSceneSize.top;
+    }
+    else if (end.y > m_fullSceneSize.top + m_fullSceneSize.height)
+    {
+        shift.y = m_fullSceneSize.top + m_fullSceneSize.height - unscaledViewportSize.y;
+    }
+    else
+    {
+        shift.y = start.y;
+    }
+    shift = {shift.x * mapScale.x, shift.y * mapScale.y};
+    m_renderTarget->setView(sf::View({shift.x, shift.y, currentViewportSize.x, currentViewportSize.y}));
 }
 
 void Scene::InitLayer(const tson::Layer& layer)
@@ -115,10 +160,20 @@ void Scene::InitTiledLayer(const tson::Layer& layer)
 
         auto meshComp = entity->AddComponent<MeshComponentBase>();
         meshComp->setTexture(*texture);
+
         const tson::Rect drawingRect = tileObject.getDrawingRect();
         meshComp->setTextureRect({ drawingRect.x, drawingRect.y, drawingRect.width, drawingRect.height });
 
-        const tson::Vector2f position = tileObject.getPosition();
+        tson::Vector2f position = tileObject.getPosition();
+        sf::Vector2f tileSize = { static_cast<float>(layer.getMap()->getTileSize().x), static_cast<float>(layer.getMap()->getTileSize().y) };
+        if (!Misc::IsNearlyEqual(tileSize.x, static_cast<float>(drawingRect.width)))
+        {
+            position.x = tileSize.x * position.x / drawingRect.width;
+        }
+        if (!Misc::IsNearlyEqual(tileSize.y, static_cast<float>(drawingRect.height)))
+        {
+            position.y = tileSize.y * (position.y / drawingRect.height - (drawingRect.height / tileSize.y) + 1);
+        }
         entity->setPosition({ position.x + drawingRect.width / 2, position.y + drawingRect.height / 2 });
         entity->PostInitComponents();
 
@@ -138,6 +193,16 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
             continue;
         }
 
+        if (obj.getType() == "Viewport")
+        {
+            m_fullSceneSize = {
+                static_cast<float>(obj.getPosition().x), 
+                static_cast<float>(obj.getPosition().y), 
+                static_cast<float>(obj.getSize().x), 
+                static_cast<float>(obj.getSize().y) };
+            continue;
+        }
+
         Entity* entity = EntityManager::GetInstanceRef().CreateEntity();
         const sf::Vector2f position = {
             static_cast<float>(obj.getPosition().x + obj.getSize().x / 2),
@@ -149,16 +214,14 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
         {
             entity->setOrigin(obj.getSize().x / 2.f, obj.getSize().y / 2.f);
         }
-        
+
         entity->InitFromPrototype(obj.getName());
+        entity->InitFromTileObject(obj);
         entity->PostInitComponents();
 
         #if defined(DEBUG)
         m_debug->DebugInitObject(*entity, obj);
         #endif //DEBUG
-
-        
-
 
         auto physComp = entity->GetComponent<PhysicBodyComponent>();
         if (physComp && isCollision)

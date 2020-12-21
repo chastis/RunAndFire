@@ -4,15 +4,6 @@
 #include <Engine/Entity/EntityEvents.hpp>
 #include <Engine/EventSystem/EventDispatcher.hpp>
 
-void MeshComponentBase::PostPrototypeInitSpecific()
-{
-    auto& entity = GetOwnerRef();
-    const auto size = getLocalBounds();
-    entity.setOrigin(size.width / 2, size.height / 2);
-    setOrigin(size.width / 2, size.height / 2);
-    setPosition(size.width / 2, size.height / 2);
-}
-
 MeshComponent::MeshComponent()
 {
     m_prototypeWrapper = std::move(std::make_unique<IPrototypeWrapper<MeshPrototype>>());

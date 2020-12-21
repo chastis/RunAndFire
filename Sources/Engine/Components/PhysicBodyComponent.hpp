@@ -36,6 +36,7 @@ public:
     Entity* RayCastGetEntity(sf::Vector2f point, bool fromMeshOrigin = false) const;
     void SetFixtures(sf::Vector2f origin, const std::vector<sf::Vector2f>& vertices);
     void SetGravityScale(float scale);
+    b2Body* GetBody() const;
 protected:
     void PostInitSpecific() override;
     virtual void CreateFixture(const b2FixtureDef& fixtureDef);

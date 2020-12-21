@@ -13,9 +13,15 @@
 #include <Engine/Prototypes/EventHandlerPrototype.hpp>
 #include <Engine/Prototypes/ScenePrototype.hpp>
 #include <Game/Prototypes/PlayerControllerPrototype.hpp>
+#include <Game/Prototypes/UITilePrototype.hpp>
 #include <Game/Components/PlayerControllerComponent.hpp>
 #include <Game/Components/ChestControllerComponent.hpp>
 #include <Game/Components/LongBouncerControllerComponent.hpp>
+#include <Game/Components/UITileComponent.hpp>
+#include <Game/Components/FlyControllerComponent.hpp>
+#include <SFML/Audio/Music.hpp>
+#include <Engine/Components/TextComponent.hpp>
+#include <Engine/Engine.hpp>
 
 void GameManager_Impl::Initialize()
 {
@@ -36,13 +42,17 @@ void GameManager_Impl::Initialize()
     InitPrototypes<MeshPrototypes>("Prototypes/mesh_prototypes.xml");
     InitPrototypes<EventHandlerPrototypes>("Prototypes/event_handler_prototypes.xml");
     InitPrototypes<ScenePrototypes>("Prototypes/scene_prototypes.xml");
+    InitPrototypes<UITilePrototypes>("Prototypes/uitile_prototypes.xml");
 
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<PlayerControllerComponent>();
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<ChestControllerComponent>();
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<LongBouncerControllerComponent>();
+    DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<UITileComponent>();
+    DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<FlyControllerComponent>();
 
     m_engineEventHandler.JoinChannel<EngineEventChannel>();
     m_engineEventHandler.ConnectHandler(this, &GameManager_Impl::OnInputEvent);
+    m_engineEventHandler.ConnectHandler(this, &GameManager_Impl::OnSceneStarted);
 }
 
 void GameManager_Impl::Destroy()
@@ -68,4 +78,33 @@ void GameManager_Impl::OnInputEvent(EngineEvents::InputApplicationEvent& event)
 {
     auto inputEvent = std::make_unique<InputSystemEvent>(event.event);
     EventSystem::Broadcast(std::move(inputEvent), InputSystemEventChannel::GetInstance());
+}
+
+void GameManager_Impl::OnSceneStarted(EngineEvents::SceneStarted& event)
+{
+    static sf::Music music;
+    if (event.prototype == "Win")
+    {
+        Entity* timeText = EntityManager::GetInstanceRef().GetEntityBySID("TimeTextPrototype");
+        if (timeText)
+        {
+            TextComponent* textComponent = timeText->GetComponent<TextComponent>();
+            if (textComponent)
+            {
+                textComponent->setString(textComponent->getString() + " " + std::to_string(GameManager::GetInstanceRef().GetEngineInstanceRef().GetGameTime() - m_gameStartTimestamp));
+            }
+        }
+    }
+    else if (event.prototype == "Map1")
+    {
+        m_gameStartTimestamp = GameManager::GetInstanceRef().GetEngineInstanceRef().GetGameTime();
+        // todo Sound manager
+	    music.openFromFile(FileManager::GetInstanceRef().GetFullFilePath("Sound/ambient.wav"));
+	    music.play();
+	    music.setLoop(true);
+    }
+    else if (event.prototype == "Menu")
+    {
+        music.stop();
+    }
 }

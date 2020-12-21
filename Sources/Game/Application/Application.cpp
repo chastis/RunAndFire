@@ -23,10 +23,10 @@ void Application_Impl::Initialize()
     m_window->setFramerateLimit(60);
 
     m_engineInstance = std::make_unique<Engine>();
+    GameManager::GetInstanceRef().SetEngineInstance(m_engineInstance.get());
     m_engineInstance->Initialize(m_window.get());
     m_engineInstance->RequestChangeScene("Menu");
     
-    GameManager::GetInstanceRef().SetEngineInstance(m_engineInstance.get());
 
     m_applicationEventHandler.JoinChannel<EngineEventChannel>();
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnClosedEvent);

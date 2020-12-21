@@ -35,6 +35,11 @@
             <TextComponent/>
         </components>
     </TextPrototype>
+    <TimeTextPrototype>
+        <components>
+            <TextComponent/>
+        </components>
+    </TimeTextPrototype>
     <UIStart>
         <components>
             <TextComponent/>

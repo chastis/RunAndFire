@@ -34,7 +34,10 @@ public:
     void Update(float deltaTime);
     void RequestChangeScene(const std::string& map, bool isNew = true);
     Scene* GetCurrentScene();
+    float GetGameTime() const;
     sf::RenderTarget* GetRenderTarget() const;
+    void SetDeltaTimeModifier(float modifier);
+
 private:
     void OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event);
     void ChangeScene(const std::string& scenePrototype);
@@ -50,6 +53,8 @@ private:
         bool isNew = false;
     };
     std::optional<RequestParam> m_requestedData;
+    float m_deltaTimeModifier = 1.f;
+    float m_gameTime = 0.f;
 
 #if defined(DEBUG)
     class Debug;

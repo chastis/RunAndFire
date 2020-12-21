@@ -6,6 +6,8 @@
 #include <Engine/InputSystem/ActionMap.hpp>
 #include <Engine/Entity/EntityEvents.hpp>
 
+class MeshComponent;
+
 class ControllerComponent : public BaseComponent
 {
     DECLARE_DYNAMIC_TYPE(ControllerComponent, BaseComponent)
@@ -15,5 +17,8 @@ public:
     void ChangeAnimation(const std::string& animationName);
     void SetAnimationRepetition(int32_t amount);
     std::string GetPlayingAnimationName();
+protected:
+    void PostInitSpecific() override;
     sf::Vector2f m_velocity;
+    MeshComponent* m_meshComponent = nullptr;
 };

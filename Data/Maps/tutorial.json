@@ -56,20 +56,20 @@
                  "rotation":0,
                  "type":"Collision",
                  "visible":true,
-                 "width":349.333333333333,
-                 "x":3.33333333291108e-05,
-                 "y":249.333333333333
+                 "width":349.333,
+                 "x":3.33333e-05,
+                 "y":249.333
                 }, 
                 {
-                 "height":201.333366666667,
+                 "height":201.333,
                  "id":15,
                  "name":"CollisionSimple",
                  "rotation":0,
                  "type":"Collision",
                  "visible":true,
                  "width":11.333,
-                 "x":1.33349999999997,
-                 "y":35.9999833333333
+                 "x":1.3335,
+                 "y":36
                 }, 
                 {
                  "height":201.333,
@@ -79,8 +79,8 @@
                  "type":"Collision",
                  "visible":true,
                  "width":11.333,
-                 "x":317.000166666667,
-                 "y":43.0001666666667
+                 "x":317,
+                 "y":43.0002
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -102,7 +102,7 @@
                  "type":"Chest",
                  "visible":true,
                  "width":32,
-                 "x":280.582666666667,
+                 "x":280.583,
                  "y":224.167
                 }, 
                 {
@@ -119,7 +119,7 @@
                  "type":"Enemy",
                  "visible":true,
                  "width":25.8333,
-                 "x":155.083333333333,
+                 "x":155.083,
                  "y":205.5
                 }, 
                 {
@@ -137,10 +137,10 @@
                  "visible":true,
                  "width":25.8333,
                  "x":35.0833,
-                 "y":194.166333333333
+                 "y":194.166
                 }, 
                 {
-                 "height":22.9999666666667,
+                 "height":23,
                  "id":14,
                  "name":"TextPrototype",
                  "properties":[
@@ -161,12 +161,12 @@
                     },
                  "type":"Text",
                  "visible":true,
-                 "width":88.3336666666667,
-                 "x":18.5000366666667,
+                 "width":88.3337,
+                 "x":18.5,
                  "y":21.1666
                 }, 
                 {
-                 "height":42.9999666666667,
+                 "height":43,
                  "id":17,
                  "name":"TextPrototype",
                  "properties":[
@@ -181,15 +181,15 @@
                      "bold":true,
                      "color":"#550000",
                      "fontfamily":"MS Serif",
-                     "pixelsize":17,
-                     "text":"Press WASD \nto move",
+                     "pixelsize":13,
+                     "text":"Press WASD \n    to move",
                      "wrap":true
                     },
                  "type":"Text",
                  "visible":true,
-                 "width":101.000366666667,
-                 "x":21.83315,
-                 "y":121.83335
+                 "width":89,
+                 "x":18.4998,
+                 "y":132.5
                 }, 
                 {
                  "height":43,
@@ -207,15 +207,15 @@
                      "bold":true,
                      "color":"#550000",
                      "fontfamily":"MS Serif",
-                     "pixelsize":17,
-                     "text":"Press SPACE \nto attack",
+                     "pixelsize":13,
+                     "text":"Press SPACE \n    to attack",
                      "wrap":true
                     },
                  "type":"Text",
                  "visible":true,
                  "width":101,
-                 "x":121.5,
-                 "y":57.8333333333333
+                 "x":120.833,
+                 "y":52.5
                 }, 
                 {
                  "height":43,
@@ -233,15 +233,52 @@
                      "bold":true,
                      "color":"#550000",
                      "fontfamily":"MS Serif",
-                     "pixelsize":17,
-                     "text":"Break chest \nfor next level",
+                     "pixelsize":13,
+                     "text":" Break chest \nfor next level",
+                     "wrap":true
+                    },
+                 "type":"Text",
+                 "visible":true,
+                 "width":89.6667,
+                 "x":224.166,
+                 "y":135.167
+                }, 
+                {
+                 "height":43,
+                 "id":20,
+                 "name":"TextPrototype",
+                 "properties":[
+                        {
+                         "name":"FontPath",
+                         "type":"string",
+                         "value":"Fonts\/MS Serif.ttf"
+                        }],
+                 "rotation":0,
+                 "text":
+                    {
+                     "bold":true,
+                     "color":"#550000",
+                     "fontfamily":"MS Serif",
+                     "pixelsize":13,
+                     "text":"     Press F \nto jump in time",
                      "wrap":true
                     },
                  "type":"Text",
                  "visible":true,
                  "width":101,
-                 "x":208.833333333333,
-                 "y":122.5
+                 "x":120.167,
+                 "y":97.8333
+                }, 
+                {
+                 "height":320,
+                 "id":21,
+                 "name":"Viewport",
+                 "rotation":0,
+                 "type":"Viewport",
+                 "visible":true,
+                 "width":320,
+                 "x":0,
+                 "y":0
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -250,7 +287,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":20,
+ "nextobjectid":22,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"2020.11.25",

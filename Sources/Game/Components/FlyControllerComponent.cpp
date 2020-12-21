@@ -28,6 +28,7 @@ void FlyControllerComponent::Update(float deltaTime)
 
 void FlyControllerComponent::PostInitSpecific()
 {
+    ControllerComponent::PostInitSpecific();
     m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
     m_physicComponent->SetGravityScale(0.f);
 }

@@ -17,8 +17,9 @@ public:
 private:
     Engine* m_engineInstance = nullptr;
     EventHandler m_engineEventHandler;
-
+    float m_gameStartTimestamp = 0.f;
     void OnInputEvent(EngineEvents::InputApplicationEvent& event);
+    void OnSceneStarted(EngineEvents::SceneStarted& event);
     template <class T>
     void InitPrototypes(const std::string& fileName);
     GameManager_Impl() = default;

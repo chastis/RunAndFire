@@ -7,6 +7,8 @@
 #include <Engine/Entity/EntityEvents.hpp>
 #include <Engine/Entity/Entity.hpp>
 #include <Engine/Prototypes/ScenePrototype.hpp>
+#include <Engine/EventSystem/EventDispatcher.hpp>
+#include <Engine/EngineEvents.hpp>
 
 #if defined(DEBUG)
 #include <Engine/Debugging/Engine_Debug.hpp>
@@ -61,9 +63,14 @@ void Engine::ChangeScene(const std::string& scenePrototype)
     auto scene = std::make_unique<Scene>();
     scene->Initialize(m_renderTargetWeak);
     scene->InitFromPrototype(scenePrototype);
+    scene->UpdateViewport({0.f, 0.f});
     const auto& input = scene->GetPrototype<ScenePrototype>().GetInput();
     m_scenes.push(std::move(scene));
     InputManager::GetInstanceRef().PushActionMap(input);
+
+    auto sceneCreatedEvent = std::make_shared<EngineEvents::SceneStarted>();
+    sceneCreatedEvent->prototype = scenePrototype;
+    EventSystem::Broadcast(std::move(sceneCreatedEvent), EngineEventChannel::GetInstance());
 }
 
 void Engine::RequestChangeScene(const std::string& map, bool isNew)
@@ -76,6 +83,7 @@ void Engine::RequestChangeScene(const std::string& map, bool isNew)
 
 void Engine::Update(float deltaTime)
 {
+    m_gameTime += deltaTime;
     if (m_requestedData.has_value())
     {
         if (m_requestedData.value().isNew && !m_scenes.empty())
@@ -89,10 +97,10 @@ void Engine::Update(float deltaTime)
     m_physicEngine.Update();
     if (!m_scenes.empty())
     {
-        m_scenes.top()->Update(deltaTime);
+        m_scenes.top()->Update(deltaTime * m_deltaTimeModifier);
     }
 #if defined(DEBUG)
-    m_debug->Update(deltaTime);
+    m_debug->Update(deltaTime * m_deltaTimeModifier);
 #endif //DEBUG
 }
 
@@ -105,9 +113,19 @@ Scene* Engine::GetCurrentScene()
     return m_scenes.top().get();
 }
 
+float Engine::GetGameTime() const
+{
+    return m_gameTime;
+}
+
 sf::RenderTarget* Engine::GetRenderTarget() const
 {
     return m_renderTargetWeak;
+}
+
+void Engine::SetDeltaTimeModifier(float modifier)
+{
+    m_deltaTimeModifier = modifier;
 }
 
 void Engine::OnComponentCreatedEvent(EntityEvents::ComponentCreatedEvent& event)

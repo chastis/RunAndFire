@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="2020.11.25" orientation="orthogonal" renderorder="right-down" width="40" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="20">
+<map version="1.4" tiledversion="2020.11.25" orientation="orthogonal" renderorder="right-down" width="40" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="22">
  <editorsettings>
   <export target="tutorial.json" format="json"/>
  </editorsettings>
@@ -114,26 +114,34 @@
    </properties>
    <text fontfamily="MS Serif" pixelsize="22" wrap="1" color="#55aaff" bold="1">Tutorial</text>
   </object>
-  <object id="17" name="TextPrototype" type="Text" x="21.8331" y="121.833" width="101" height="43">
+  <object id="17" name="TextPrototype" type="Text" x="18.4998" y="132.5" width="89" height="43">
    <properties>
     <property name="FontPath" value="Fonts/MS Serif.ttf"/>
    </properties>
-   <text fontfamily="MS Serif" pixelsize="17" wrap="1" color="#550000" bold="1">Press WASD 
-to move</text>
+   <text fontfamily="MS Serif" pixelsize="13" wrap="1" color="#550000" bold="1">Press WASD 
+    to move</text>
   </object>
-  <object id="18" name="TextPrototype" type="Text" x="121.5" y="57.8333" width="101" height="43">
+  <object id="18" name="TextPrototype" type="Text" x="120.833" y="52.5" width="101" height="43">
    <properties>
     <property name="FontPath" value="Fonts/MS Serif.ttf"/>
    </properties>
-   <text fontfamily="MS Serif" pixelsize="17" wrap="1" color="#550000" bold="1">Press SPACE 
-to attack</text>
+   <text fontfamily="MS Serif" pixelsize="13" wrap="1" color="#550000" bold="1">Press SPACE 
+    to attack</text>
   </object>
-  <object id="19" name="TextPrototype" type="Text" x="208.833" y="122.5" width="101" height="43">
+  <object id="19" name="TextPrototype" type="Text" x="224.166" y="135.167" width="89.6667" height="43">
    <properties>
     <property name="FontPath" value="Fonts/MS Serif.ttf"/>
    </properties>
-   <text fontfamily="MS Serif" pixelsize="17" wrap="1" color="#550000" bold="1">Break chest 
+   <text fontfamily="MS Serif" pixelsize="13" wrap="1" color="#550000" bold="1"> Break chest 
 for next level</text>
   </object>
+  <object id="20" name="TextPrototype" type="Text" x="120.167" y="97.8333" width="101" height="43">
+   <properties>
+    <property name="FontPath" value="Fonts/MS Serif.ttf"/>
+   </properties>
+   <text fontfamily="MS Serif" pixelsize="13" wrap="1" color="#550000" bold="1">     Press F 
+to jump in time</text>
+  </object>
+  <object id="21" name="Viewport" type="Viewport" x="0" y="0" width="320" height="320"/>
  </objectgroup>
 </map>

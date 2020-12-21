@@ -32,7 +32,7 @@ public:
     void Initialize(sf::RenderTarget* renderTarget);
     void Update(float deltaTime);
     void Draw();
-
+    void UpdateViewport(sf::Vector2f center);
 private:
     void InitFromPrototypeSpecific() override;
 
@@ -42,7 +42,7 @@ private:
     sf::RenderTarget* m_renderTarget;
     const tson::Map* m_map = nullptr;
     std::vector<Layer> m_layers;
-
+    sf::FloatRect m_fullSceneSize;
     #if defined(DEBUG)
     class SceneDebug;
     FastPimpl<SceneDebug, 8, 8> m_debug;

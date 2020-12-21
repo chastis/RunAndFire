@@ -73,6 +73,49 @@ void Scene::Draw()
 #endif //DEBUG
 }
 
+void Scene::UpdateViewport(sf::Vector2f center)
+{
+    const auto& mapScale = GetPrototype<ScenePrototype>().GetMapScale();
+    const sf::Vector2f& currentViewportCenter = m_renderTarget->getView().getCenter();
+    const sf::Vector2f& currentViewportSize = m_renderTarget->getView().getSize();
+    const sf::Vector2f unscaledViewportCenter = {
+        currentViewportCenter.x / mapScale.x, 
+        currentViewportCenter.y / mapScale.y };
+    const sf::Vector2f unscaledViewportSize = {
+        currentViewportSize.x / mapScale.x, 
+        currentViewportSize.y / mapScale.y };
+    const sf::Vector2f viewportHalfSize = unscaledViewportSize / 2.f;
+    const sf::Vector2f start = center - viewportHalfSize;
+    const sf::Vector2f end = center + viewportHalfSize;
+    sf::Vector2f shift;
+    if (start.x < m_fullSceneSize.left)
+    {
+        shift.x = m_fullSceneSize.left;
+    }
+    else if (end.x > m_fullSceneSize.left + m_fullSceneSize.width)
+    {
+        shift.x = m_fullSceneSize.left + m_fullSceneSize.width - unscaledViewportSize.x;
+    }
+    else
+    {
+        shift.x = start.x;
+    }
+    if (start.y < m_fullSceneSize.top)
+    {
+        shift.y = m_fullSceneSize.top;
+    }
+    else if (end.y > m_fullSceneSize.top + m_fullSceneSize.height)
+    {
+        shift.y = m_fullSceneSize.top + m_fullSceneSize.height - unscaledViewportSize.y;
+    }
+    else
+    {
+        shift.y = start.y;
+    }
+    shift = {shift.x * mapScale.x, shift.y * mapScale.y};
+    m_renderTarget->setView(sf::View({shift.x, shift.y, currentViewportSize.x, currentViewportSize.y}));
+}
+
 void Scene::InitLayer(const tson::Layer& layer)
 {
     switch (layer.getType())
@@ -147,6 +190,16 @@ void Scene::InitObjectLayer(const tson::Layer& layer)
         const auto& propIt = prop.find("Spawn");
         if (propIt != prop.end() && propIt->second.getValue<bool>() == false)
         {
+            continue;
+        }
+
+        if (obj.getType() == "Viewport")
+        {
+            m_fullSceneSize = {
+                static_cast<float>(obj.getPosition().x), 
+                static_cast<float>(obj.getPosition().y), 
+                static_cast<float>(obj.getSize().x), 
+                static_cast<float>(obj.getSize().y) };
             continue;
         }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="2020.11.25" orientation="orthogonal" renderorder="right-down" width="40" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="7">
+<map version="1.4" tiledversion="2020.11.25" orientation="orthogonal" renderorder="right-down" width="40" height="33" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="8">
  <editorsettings>
   <export target="win.json" format="json"/>
  </editorsettings>
@@ -118,12 +118,11 @@
 </data>
  </layer>
  <objectgroup id="2" name="Object Layer 1">
-  <object id="1" name="TextPrototype" type="Text" x="70.1665" y="21.1667" width="193.667" height="83.6666">
+  <object id="1" name="TextPrototype" type="Text" x="70.1665" y="21.1667" width="193.667" height="54.1666">
    <properties>
     <property name="FontPath" value="Fonts/MS Serif.ttf"/>
    </properties>
    <text fontfamily="MS Serif" pixelsize="22" wrap="1" color="#3b7f5d">This is end for now!
-
         You WIN</text>
   </object>
   <object id="2" name="UIBackToMenu" x="103.583" y="272.833" width="136.167" height="23">
@@ -150,6 +149,12 @@ Special BIG Thanks
    <properties>
     <property name="Spawn" type="bool" value="false"/>
    </properties>
+  </object>
+  <object id="7" name="TimeTextPrototype" type="Text" x="79.1665" y="78.4167" width="193.667" height="18.1666">
+   <properties>
+    <property name="FontPath" value="Fonts/MS Serif.ttf"/>
+   </properties>
+   <text fontfamily="MS Serif" pixelsize="17" wrap="1" color="#3b7f5d">Your time is:</text>
   </object>
  </objectgroup>
 </map>

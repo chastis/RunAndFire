@@ -32,10 +32,29 @@ void PlayerControllerComponent::Update(float deltaTime)
         auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
         engine.RequestChangeScene("Loose");
     }
+    if (m_isTravelingTime)
+    {
+        m_timeTravelTime += deltaTime;
+        if (m_timeTravelTime >= 2.f)
+        {
+            m_timeTravelTime = 0.f;
+            m_physicComponent->GetBody()->SetEnabled(true);
+            m_isTravelingTime = false;
+            m_meshComponent->setColor(sf::Color::White);
+            auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
+            engine.SetDeltaTimeModifier(1.f);
+        }
+    }
+    auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
+    engine.GetCurrentScene()->UpdateViewport(GetOwnerRef().getPosition());
 }
 
 bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
 {
+    if (m_isTravelingTime)
+    {
+        return false;
+    }
     if (signal == ActionSignal("player_attack"))
     {
         if (GetPlayingAnimationName() != "anim_attack")
@@ -44,35 +63,46 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
             SetAnimationRepetition(1);
         }
     }
-    if (signal == ActionSignal("player_jump"))
+    else if (signal == ActionSignal("player_jump"))
     {
         Jump();
     }
-    if (signal == ActionSignal("move_left"))
+    else if (signal == ActionSignal("move_left"))
     {
         ChangeAnimation("anim_run");
         m_viewDirection = -1.f;
         m_direction += -1.f;
         SetPlayerFriction(0.f);
     }
-    if (signal == ActionSignal("move_right"))
+    else if (signal == ActionSignal("move_right"))
     {
         ChangeAnimation("anim_run");
         m_viewDirection = 1.f;
         m_direction += 1.f;
         SetPlayerFriction(0.f);
     }
-    if (signal == ActionSignal("stop_move_left"))
+    else if (signal == ActionSignal("stop_move_left"))
     {
         ChangeAnimation("anim_idle");
         m_direction -= -1.f;
         SetPlayerFriction(m_friction);
     }
-    if (signal == ActionSignal("stop_move_right"))
+    else if (signal == ActionSignal("stop_move_right"))
     {
         ChangeAnimation("anim_idle");
         m_direction -= 1.f;
         SetPlayerFriction(m_friction);
+    }
+    else if (signal == ActionSignal("player_time_control"))
+    {
+        m_meshComponent->setColor(sf::Color::Blue);
+        m_physicComponent->GetBody()->SetEnabled(false);
+        m_isTravelingTime = true;
+        auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
+        engine.SetDeltaTimeModifier(2.f);
+        ChangeAnimation("anim_idle");
+        m_direction = 0.f;
+        SetPlayerFriction(0.f);
     }
 
     if (m_direction > 0)
@@ -89,6 +119,7 @@ bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)
 
 void PlayerControllerComponent::PostInitSpecific()
 {
+    ControllerComponent::PostInitSpecific();
     m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
     m_friction = m_physicComponent->GetFixtures()->GetFriction();
     ChangeAnimation("anim_idle");

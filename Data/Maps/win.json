@@ -52,7 +52,7 @@
          "name":"Object Layer 1",
          "objects":[
                 {
-                 "height":83.6666,
+                 "height":54.1666,
                  "id":1,
                  "name":"TextPrototype",
                  "properties":[
@@ -67,7 +67,7 @@
                      "color":"#3b7f5d",
                      "fontfamily":"MS Serif",
                      "pixelsize":22,
-                     "text":"This is end for now!\n\n        You WIN",
+                     "text":"This is end for now!\n        You WIN",
                      "wrap":true
                     },
                  "type":"Text",
@@ -142,6 +142,31 @@
                  "width":0,
                  "x":320.667,
                  "y":2.66667
+                }, 
+                {
+                 "height":18.1666,
+                 "id":7,
+                 "name":"TimeTextPrototype",
+                 "properties":[
+                        {
+                         "name":"FontPath",
+                         "type":"string",
+                         "value":"Fonts\/MS Serif.ttf"
+                        }],
+                 "rotation":0,
+                 "text":
+                    {
+                     "color":"#3b7f5d",
+                     "fontfamily":"MS Serif",
+                     "pixelsize":17,
+                     "text":"Your time is:",
+                     "wrap":true
+                    },
+                 "type":"Text",
+                 "visible":true,
+                 "width":193.667,
+                 "x":79.1665,
+                 "y":78.4167
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -150,7 +175,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":7,
+ "nextobjectid":8,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"2020.11.25",

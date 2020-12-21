@@ -107,5 +107,12 @@ namespace EngineEvents
         DECLARE_DYNAMIC_TYPE(MouseLeft, EngineEvent)
     };
 
+    class SceneStarted : public EngineEvent
+    {
+    public:
+        DECLARE_DYNAMIC_TYPE(SceneStarted, EngineEvent)
+        std::string prototype;
+    };
+
     EngineEvent* Create(const sf::Event& event);
 }

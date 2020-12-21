@@ -23978,6 +23978,7 @@ size_t tson::PropertyCollection::getSize() const
 #define TILESON_TEXT_HPP
 
 #include <string>
+#include <optional>
 
 namespace tson
 {
@@ -23994,6 +23995,9 @@ namespace tson
 			//Just make it simple
 			std::string text;
 			bool wrap{};
+		    std::optional<int> pixelsize;
+		    std::optional<std::string> fontfamily;
+		    std::optional<tson::Colori> color;
 	};
 }
 
@@ -24133,7 +24137,16 @@ bool tson::Object::parse(const nlohmann::json &json)
 		m_position = {json["x"].get<int>(), json["y"].get<int>()}; else allFound = false;
 
 	if(json.count("text") > 0)
+	{
 		m_text = {json["text"]["text"].get<std::string>(), json["text"]["wrap"].get<bool>()}; //Optional
+		if (json["text"].count("fontfamily")>0)
+			m_text.fontfamily = json["text"]["fontfamily"].get<std::string>();
+		if (json["text"].count("pixelsize")>0)
+			m_text.pixelsize = json["text"]["pixelsize"].get<int>();
+		if(json["text"].count("color") > 0) 
+			m_text.color = tson::Colori(json["text"]["color"].get<std::string>());
+	}
+	    
 
 	setObjectTypeByJson(json);
 

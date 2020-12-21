@@ -98,6 +98,11 @@ void PhysicBodyComponentBase::SetGravityScale(float scale)
     m_body->SetGravityScale(scale);
 }
 
+b2Body* PhysicBodyComponentBase::GetBody() const
+{
+    return m_body;
+}
+
 void PhysicBodyComponentBase::PostInitSpecific()
 {
     M42_ASSERT(m_engine, "Bind physic engine first!");
@@ -135,7 +140,7 @@ void PhysicBodyComponent::InitFromPrototypeSpecific()
 void PhysicBodyComponent::PostInitSpecific()
 {
     PhysicBodyComponentBase::PostInitSpecific();
-    if (m_prototypeWrapper &&  GetPrototype<PhysicBodyPrototype>().ShouldInitFromMesh())
+    if (m_prototypeWrapper && GetPrototype<PhysicBodyPrototype>().ShouldInitFromMesh())
     {
         auto meshComponent = GetOwnerRef().GetComponent<MeshComponent>();
         M42_ASSERT(meshComponent, "No mesh to initialize physic component!");

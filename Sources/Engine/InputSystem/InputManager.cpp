@@ -58,7 +58,11 @@ void InputManager_Impl::DispatchSignalToListeners(ActionSignal signal)
 {
     for (auto listener : m_clients)
     {
-        listener->HandleInput(signal);
+        const bool requestSTop = listener->HandleInput(signal);
+        if (requestSTop)
+        {
+            break;
+        }
     }
 }
 
@@ -69,6 +73,10 @@ std::string InputManager_Impl::GetNativeInput(const ActionSignalInput& input)
     if (input.value >= 0 && input.value < sf::Keyboard::Key::KeyCount)
     {
         keyValue = KeyValues[input.value];
+    }
+    if (keyValue == "Unknown")
+    {
+        M42_ASSERT(false,"");
     }
     return GetActionInputEventPrefix(input.type) + ":"s + keyValue;
 }

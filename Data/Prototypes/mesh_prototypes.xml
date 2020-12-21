@@ -22,4 +22,10 @@
         </animation_tiles>
         <collision_tile name = "long_bouncer_collision" file = "long_bouncer_going" id = "0"/>
     </LongBouncerPrototype>
+    <FlyPrototype>
+        <animation_tiles>
+            <animation_tile name = "fly_going" id = "0"/>
+        </animation_tiles>
+        <collision_tile name = "fly_collision" file = "fly_going" id = "0"/>
+    </FlyPrototype>
 </MeshPrototype>

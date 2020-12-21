@@ -10,43 +10,31 @@ void ControllerComponent::SetMeshScale(sf::Vector2f scale)
 
 void ControllerComponent::SetMeshScale(float x, float y)
 {
-    auto meshComponent = GetOwnerRef().GetKindOfComponent<MeshComponentBase>();
-    if (meshComponent)
-    {
-        meshComponent->setScale(x, y);
-    }
+    m_meshComponent->setScale(x, y);
 }
 void ControllerComponent::ChangeAnimation(const std::string& animationName)
 {
-    auto meshComponent = GetOwnerRef().GetComponent<MeshComponent>();
-    if (meshComponent)
-    {
-        meshComponent->ChangeAnimation(animationName);
-    }
+    m_meshComponent->ChangeAnimation(animationName);
 }
 
 void ControllerComponent::SetAnimationRepetition(int32_t amount)
 {
-    auto meshComponent = GetOwnerRef().GetComponent<MeshComponent>();
-    if (meshComponent)
+    if (amount == -1)
     {
-        if (amount == -1)
-        {
-            meshComponent->SetAnimationRepetitionInfinity();
-        }
-        else
-        {
-            meshComponent->SetAnimationRepetitionAmount(amount);
-        }
+        m_meshComponent->SetAnimationRepetitionInfinity();
+    }
+    else
+    {
+        m_meshComponent->SetAnimationRepetitionAmount(amount);
     }
 }
 
 std::string ControllerComponent::GetPlayingAnimationName()
 {
-    const auto meshComponent = GetOwnerRef().GetComponent<MeshComponent>();
-    if (meshComponent)
-    {
-        return meshComponent->GetPlayingAnimName();
-    }
-    return "";
+    return m_meshComponent->GetPlayingAnimName();
+}
+
+void ControllerComponent::PostInitSpecific()
+{
+    m_meshComponent = GetOwnerRef().GetComponent<MeshComponent>();
 }

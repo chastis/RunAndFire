@@ -23,13 +23,13 @@ void Scene::SceneDebug::DebugInitObject(Entity& entity, const tson::Object& obj)
             const sf::IntRect drawingRect = { 0, 0, obj.getSize().x, obj.getSize().y };
             meshComp->setTextureRect(drawingRect);
         }
-
-
-        if (obj.getType() == "Player" || obj.getType() == "Chest")
+        else
+        //if (obj.getType() == "Player" || obj.getType() == "Chest")
         {
-            const auto baseMeshComp = entity.GetKindOfComponent<MeshComponentBase>();
-            const auto baseBounds = baseMeshComp->getLocalBounds();
+            const auto baseMeshComp = entity.GetKindOfComponent<DrawableComponentBase>();
+            const auto baseBounds = baseMeshComp->GetLocalBounds();
             auto meshComp = entity.AddComponent<MeshComponentBase>();
+            meshComp->setPosition(baseBounds.left, baseBounds.top);
             const sf::Texture* texture = AssetManager::GetInstanceRef().GetAsset<sf::Texture>("Content/red.png");
             meshComp->setTexture(*texture);
             meshComp->setTextureRect(static_cast<sf::IntRect>(baseBounds));

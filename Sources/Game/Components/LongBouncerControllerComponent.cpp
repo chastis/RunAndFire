@@ -32,10 +32,15 @@ void LongBouncerControllerComponent::Update(float deltaTime)
         }
         const sf::Vector2f tracePoint = GetOwnerRef().getPosition() + sf::Vector2f(0.f, 100.f);
         auto floor = m_physicComponent->RayCastGetEntity(tracePoint, true);
-        if (!floor)
+        if (!floor && m_fondFloor)
         {
             m_direction *= -1;
             SetMeshScale({m_direction, 1.f});
+            m_fondFloor = false;
+        }
+        else
+        {
+            m_fondFloor = true;
         }
 
         auto velocity = m_physicComponent->GetLinearVelocity();
@@ -45,6 +50,7 @@ void LongBouncerControllerComponent::Update(float deltaTime)
 
 void LongBouncerControllerComponent::PostInitSpecific()
 {
+    ControllerComponent::PostInitSpecific();
     m_physicComponent = GetOwnerRef().GetComponent<PhysicBodyComponent>();
     m_speed = sf::Vector2f(30.f, 0.f);
     m_physicComponent->SetGravityScale(0.f);

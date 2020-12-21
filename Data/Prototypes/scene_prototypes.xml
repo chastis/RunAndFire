@@ -1,7 +1,11 @@
 <ScenePrototype>
-    <Default>
-    </Default>
-    <Map1 map_path = "Maps/map1.json"  map_scale_x = "3" map_scale_y = "3" debug = "false" />
-    <win map_path = "Maps/win.json"  map_scale_x = "3" map_scale_y = "3" debug = "false" />
-    <loose map_path = "Maps/loose.json"  map_scale_x = "3" map_scale_y = "3" debug = "false" />
+    <Default/>
+    <DefaultUI map_scale_x = "3" map_scale_y = "3" debug = "false" input = "ui_input"/>
+    <DefaultGame map_scale_x = "3" map_scale_y = "3" debug = "false" input = "game_input" />
+    <Map1 map_path = "Maps/map2.json" parent = "DefaultGame"  next_map = "Map2"/>
+    <Map2 map_path = "Maps/map1.json"  parent = "DefaultGame" next_map = "Win"/>
+    <Tutorial map_path = "Maps/tutorial.json"  parent = "DefaultGame" next_map = "Menu"/>
+    <Menu map_path = "Maps/menu.json"  parent = "DefaultUI" />
+    <Win map_path = "Maps/win.json"  parent = "DefaultUI" />
+    <Loose map_path = "Maps/loose.json"  parent = "DefaultUI" />
 </ScenePrototype>

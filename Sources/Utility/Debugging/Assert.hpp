@@ -3,6 +3,7 @@
 #include <sstream>
 #define NOMINMAX
 #include <windows.h> //TODO: move to platform folder
+#include <iostream>
 
 //#TODO : make crossplatform
 #if defined(DEBUG)
@@ -25,5 +26,6 @@
             }                                                                                                       \
         } while(0)
 #else
-#define M42_ASSERT(cond, message)
+#define M42_ASSERT(cond, message) \
+    std::cout << message << "\n"; 
 #endif //DEBUG

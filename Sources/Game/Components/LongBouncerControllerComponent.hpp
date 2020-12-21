@@ -26,4 +26,5 @@ private:
     Entity* m_enemy = nullptr;
     float m_direction = 0.f;
     bool m_alive = true;
+    bool m_fondFloor = false;
 };

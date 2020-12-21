@@ -42,4 +42,6 @@ private:
     float m_viewDirection = 1.f;
     float m_jumpForce = 0.f;
     float m_friction = 0.f;
+    bool m_isTravelingTime = false;
+    float m_timeTravelTime = 0.f;
 };

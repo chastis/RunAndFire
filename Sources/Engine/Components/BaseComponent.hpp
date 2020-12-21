@@ -1,13 +1,14 @@
 #pragma once
 
 #include <Engine/Prototypes/PrototypeableInterface.hpp>
+#include <Engine/Map/TileObjectInterface.hpp>
 #include <Engine/EventSystem/EventHandler.hpp>
 #include <Utility/Types/DynamicType.hpp>
 #include <Utility/Core/Noncopyable.hpp>
 
 class Entity;
 
-class BaseComponent : public DynamicType, public Noncopyable, public IPrototypeable
+class BaseComponent : public DynamicType, public Noncopyable, public IPrototypeable, public ITileObject
 {
     DECLARE_DYNAMIC_TYPE(BaseComponent, DynamicType)
 public:

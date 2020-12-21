@@ -544,7 +544,7 @@ Glyph Font::loadGlyph(Uint32 codePoint, unsigned int characterSize, bool bold, f
         return glyph;
 
     // Load the glyph corresponding to the code point
-    FT_Int32 flags = FT_LOAD_TARGET_NORMAL;// | FT_LOAD_FORCE_AUTOHINT;
+    FT_Int32 flags = FT_LOAD_TARGET_NORMAL;
     if (outlineThickness != 0)
         flags |= FT_LOAD_NO_BITMAP;
     if (FT_Load_Char(face, codePoint, flags) != 0)
@@ -576,7 +576,7 @@ Glyph Font::loadGlyph(Uint32 codePoint, unsigned int characterSize, bool bold, f
     }
 
     // Convert the glyph to a bitmap (i.e. rasterize it)
-    volatile auto my_err = FT_Glyph_To_Bitmap(&glyphDesc, FT_RENDER_MODE_NORMAL, 0, 1);
+    FT_Glyph_To_Bitmap(&glyphDesc, FT_RENDER_MODE_NORMAL, 0, 1);
     FT_Bitmap& bitmap = reinterpret_cast<FT_BitmapGlyph>(glyphDesc)->bitmap;
 
     // Apply bold if necessary -- fallback technique using bitmap (lower quality)

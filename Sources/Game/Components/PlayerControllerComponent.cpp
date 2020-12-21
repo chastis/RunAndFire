@@ -27,6 +27,11 @@ void PlayerControllerComponent::Update(float deltaTime)
 {
     auto velocity = m_physicComponent->GetLinearVelocity();
     m_physicComponent->SetLinearVelocity(m_speed.x * m_direction * deltaTime, velocity.y);
+    if (GetOwnerRef().getPosition().y >= 1000.f)
+    {
+        auto& engine = GameManager::GetInstanceRef().GetEngineInstanceRef();
+        engine.RequestChangeScene("Loose");
+    }
 }
 
 bool PlayerControllerComponent::HandleInput(const ActionSignal& signal)

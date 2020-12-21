@@ -6,7 +6,8 @@
 #include <Engine/Components/PhysicBodyComponent.hpp>
 #include <Engine/Prototypes/ScenePrototype.hpp>
 #include <Engine/Debugging/Scene_Debug.hpp>
-#include "Engine/Components/TextComponent.hpp"
+#include <Engine/Components/TextComponent.hpp>
+#include <Engine/Static/Misc.hpp>
 
 Scene::Scene()
 #if defined(DEBUG)
@@ -116,10 +117,20 @@ void Scene::InitTiledLayer(const tson::Layer& layer)
 
         auto meshComp = entity->AddComponent<MeshComponentBase>();
         meshComp->setTexture(*texture);
+
         const tson::Rect drawingRect = tileObject.getDrawingRect();
         meshComp->setTextureRect({ drawingRect.x, drawingRect.y, drawingRect.width, drawingRect.height });
 
-        const tson::Vector2f position = tileObject.getPosition();
+        tson::Vector2f position = tileObject.getPosition();
+        sf::Vector2f tileSize = { static_cast<float>(layer.getMap()->getTileSize().x), static_cast<float>(layer.getMap()->getTileSize().y) };
+        if (!Misc::IsNearlyEqual(tileSize.x, static_cast<float>(drawingRect.width)))
+        {
+            position.x = tileSize.x * position.x / drawingRect.width;
+        }
+        if (!Misc::IsNearlyEqual(tileSize.y, static_cast<float>(drawingRect.height)))
+        {
+            position.y = tileSize.y * (position.y / drawingRect.height - (drawingRect.height / tileSize.y) + 1);
+        }
         entity->setPosition({ position.x + drawingRect.width / 2, position.y + drawingRect.height / 2 });
         entity->PostInitComponents();
 

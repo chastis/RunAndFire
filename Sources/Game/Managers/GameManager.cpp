@@ -19,6 +19,7 @@
 #include <Game/Components/LongBouncerControllerComponent.hpp>
 #include <Game/Components/UITileComponent.hpp>
 #include <Game/Components/FlyControllerComponent.hpp>
+#include <SFML/Audio/Music.hpp>
 
 void GameManager_Impl::Initialize()
 {
@@ -46,6 +47,13 @@ void GameManager_Impl::Initialize()
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<LongBouncerControllerComponent>();
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<UITileComponent>();
     DynamicTypeFactory::GetInstanceRef().GetFactory<ComponentFactory>()->AddCustomType<FlyControllerComponent>();
+
+    // todo Sound manager
+    static sf::Music music;
+	music.openFromFile(FileManager::GetInstanceRef().GetFullFilePath("Sound/ambient.wav"));
+	music.play();
+	music.setLoop(true);
+
 
     m_engineEventHandler.JoinChannel<EngineEventChannel>();
     m_engineEventHandler.ConnectHandler(this, &GameManager_Impl::OnInputEvent);

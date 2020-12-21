@@ -4,7 +4,6 @@
 #include <Engine/EventSystem/EventDispatcher.hpp>
 #include <Engine/InputSystem/InputEvent.hpp>
 #include <Engine/Managers/EntityManager.hpp>
-
 #include <SFML/Graphics.hpp>
 
 Application_Impl::Application_Impl()
@@ -32,6 +31,7 @@ void Application_Impl::Initialize()
     m_applicationEventHandler.JoinChannel<EngineEventChannel>();
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnClosedEvent);
     m_applicationEventHandler.ConnectHandler(this, &Application_Impl::OnResizedEvent);
+
 }
 
 void Application_Impl::Run()

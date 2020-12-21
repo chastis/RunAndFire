@@ -1,5 +1,5 @@
 workspace "RunAndFire"
-    configurations { "Debug", "Release" }
+    configurations { "Debug", "Release", "Dist"}
     architecture "x64"
     startproject "RunAndFire"
     platforms { "Win64" }
@@ -33,6 +33,7 @@ workspace "RunAndFire"
     
     postbuildcommands {
         "{COPY} %{wks.location}../Data " .. TARGET_DIR .. "/Data",
+        "{COPY} %{wks.location}/SFML/Sources/extlibs/bin/x64 " .. TARGET_DIR
     }
 
     include "Engine"

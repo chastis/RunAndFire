@@ -27,7 +27,13 @@ private:
     void SetPlayerFriction(float friction);
 
     void Attack();
+
+    bool CanJump() const;
     void Jump();
+
+    void UpdateMoving(float deltaTime);
+    void UpdateTravelingTime(float deltaTime);
+    void UpdateOutOfBounds();
 
     void OnPlayerCollisionStarted(EntityEvents::CollisionStartedEvent& event);
     void OnPlayerCollisionEnded(EntityEvents::CollisionEndedEvent& event);
@@ -42,6 +48,12 @@ private:
     float m_viewDirection = 1.f;
     float m_jumpForce = 0.f;
     float m_friction = 0.f;
-    bool m_isTravelingTime = false;
     float m_timeTravelTime = 0.f;
+
+    float m_fallMultiplier = 2.5f;
+    float m_lowJumpMultiplier = 2.f;
+
+    bool m_isTravelingTime = false;
+    bool m_isColliding = false;
+    bool m_jumping = false;
 };

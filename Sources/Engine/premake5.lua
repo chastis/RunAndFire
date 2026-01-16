@@ -48,3 +48,16 @@ project "Engine"
             "sfml-system-s",
             "sfml-audio-s",
         }
+
+    filter "configurations:Dist"
+        defines { "NDEBUG", "DIST" }
+        optimize "On"
+        runtime "Release"
+
+        links
+        {
+            "sfml-graphics-s",
+            "sfml-window-s",
+            "sfml-system-s",
+            "sfml-audio-s",
+        }
